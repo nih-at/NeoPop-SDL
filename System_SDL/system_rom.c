@@ -61,7 +61,7 @@ system_rom_load(char *filename)
 	*fn++ = '\0';
 
     /* don't copy extension */
-    strncpy(rom.filename, fn, min(sizeof(strncpy), strlen(fn)-5));
+    strncpy(rom.filename, fn, min(sizeof(rom.filename), strlen(fn)-5));
 
     rom_loaded();
     system_rom_changed();

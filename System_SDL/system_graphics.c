@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.18 2004/07/14 09:48:30 dillo Exp $ */
+/* $NiH: system_graphics.c,v 1.19 2004/07/14 10:15:38 dillo Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -62,11 +62,18 @@ static BOOL system_graphics_mag_smooth(void);
 static Uint32 rgb_lookup[16*16*16];
 /* lookup table for YUV overlay pixels */
 static Uint32 yuv_lookup[16*16*16];
+/* lookup table for hqx pseudo-YUV */
+Uint32 hqx_lookup[16*16*16];
+
+/* frame buffer for smoothed magnification */
+static Uint16 magfb[SCREEN_WIDTH*SCREEN_HEIGHT*9];
 
 BOOL
 system_graphics_init(void)
 {
     int i;
+    int y, u, v;
+    int r, g, b;
 
     if (use_yuv) {
 	SDL_Rect **mode;
@@ -111,15 +118,22 @@ system_graphics_init(void)
 	}
     }
 	    
-    if (use_yuv) {
-	int y, u, v;
-	int r, g, b;
+    for (i=0; i<16*16*16; i++) {
+	r = CONV4TO8(i&0xf);
+	g = CONV4TO8((i>>4)&0xf);
+	b = CONV4TO8(i>>8);
 
-	for (i=0; i<16*16*16; i++) {
-	    r = CONV4TO8(i&0xf);
-	    g = CONV4TO8((i>>4)&0xf);
-	    b = CONV4TO8(i>>8);
+	/* RGB, display format */
+	rgb_lookup[i] = SDL_MapRGB(disp->format, r, g, b);
 
+	/* hqx pseudo-YUV */
+	y = (r + g + b) >> 2;
+	u = 128 + ((r - b) >> 2);
+	v = 128 + ((-r + 2 * g - b) >> 3);
+	hqx_lookup[i] = (y<<16)|(u<<8)|v;
+	
+	/* real YUV */
+	if (use_yuv) {
 	    /* see http://www.fourcc.org/fccyvrgb.php#mikes_answer */
 	    
 	    y = (((r * 16982) + (g * 32828) + (b * 6475)) >> 16) + 16;
@@ -133,13 +147,6 @@ system_graphics_init(void)
 #endif
 	}
     }
-
-    if (use_yuv < YUV_ALWAYS)
-	for (i=0; i<16*16*16; i++)
-	    rgb_lookup[i] = SDL_MapRGB(disp->format,
-				       CONV4TO8(i&0xf),
-				       CONV4TO8((i>>4)&0xf),
-				       CONV4TO8(i>>8));
 
     /* set window caption */
     SDL_WM_SetCaption(PROGRAM_NAME, NULL);
@@ -405,17 +412,15 @@ system_graphics_mag_smooth(void)
 /*
   convert framebuffer.
     T: type of pixels
-    S: size of pixels (in bytes)
     F: magnification factor
     P: pointer to pixels b
 */
-#define LOOP(T, S, F, P)	{		\
+#define LOOP(T, F, P)	{			\
     T *line;					\
 						\
     line = (T *)P;				\
-    fbp = cfb;					\
-    for (y=0; y<SCREEN_HEIGHT; y++) {		\
-	for (x=0; x<SCREEN_WIDTH*F; x+=F)	\
+    for (y=0; y<h; y++) {			\
+	for (x=0; x<w*F; x+=F)			\
 	    SET##F;				\
 	line += pitch*F;			\
     }						\
@@ -430,13 +435,13 @@ system_graphics_mag_smooth(void)
         pitch = disp->pitch/S;			\
 	switch(graphics_mag_actual) {		\
 	case 1:					\
-	    LOOP(T, S, 1, disp->pixels);	\
+	    LOOP(T, 1, disp->pixels);		\
 	    break;				\
 	case 2:					\
-	    LOOP(T, S, 2, disp->pixels);	\
+	    LOOP(T, 2, disp->pixels);		\
 	    break;				\
 	case 3:					\
-	    LOOP(T, S, 3, disp->pixels);	\
+	    LOOP(T, 3, disp->pixels);		\
 	    break;				\
 	}
 
@@ -444,7 +449,7 @@ void
 system_graphics_update(void)
 {
     Uint32 *lookup;
-    int x, y, pitch;
+    int x, y, pitch, w, h;
     _u16 *fbp;
 
     /* handle screen size changes */
@@ -459,31 +464,72 @@ system_graphics_update(void)
 	    graphics_mag_actual = graphics_mag_req;
     }
 
+    fbp = cfb;
+    w = SCREEN_WIDTH;
+    h = SCREEN_HEIGHT;
+
     if (use_yuv_now) {
 	SDL_LockYUVOverlay(over);
 	pitch = over->pitches[0]/4;
 	lookup = yuv_lookup;
-	LOOP(Uint32, 4, 1, over->pixels[0]);
+	LOOP(Uint32, 1, over->pixels[0]);
 	SDL_UnlockYUVOverlay(over);
 
 	SDL_DisplayYUVOverlay(over, (fs_mode ? &orect_fs : &orect_win));
     }
     else {
 	lookup = rgb_lookup;
-	switch (disp->format->BytesPerPixel) {
-	case 1:
-	    SWITCH(Uint8, 1);
-	    break;
-	    
-	case 2:
-	    SWITCH(Uint16, 2);
-	    break;
-	    
-	case 4:
-	    SWITCH(Uint32, 4);
-	    break;
+	if (graphics_mag_actual > 1 && graphics_mag_smooth) {
+	    w *= graphics_mag_actual;
+	    h *= graphics_mag_actual;
+
+	    switch (graphics_mag_actual) {
+	    case 2:
+		HQ2x((Uint8 *)cfb, SCREEN_WIDTH*sizeof(Uint16),
+		     (Uint8 *)magfb, SCREEN_WIDTH*2*sizeof(Uint16),
+		     SCREEN_WIDTH, SCREEN_HEIGHT);
+		break;
+#if 0
+	    case 3:
+		HQ3x((Uint8 *)cfb, SCREEN_WIDTH, (Uint8 *)magfb, w,
+		     SCREEN_WIDTH, SCREEN_HEIGHT);
+		break;
+#endif
+	    }
+
+	    fbp = magfb;
+	    switch (disp->format->BytesPerPixel) {
+	    case 1:
+		pitch = disp->pitch;
+		LOOP(Uint8, 1, disp->pixels);
+		break;
+		
+	    case 2:
+		pitch = disp->pitch/2;
+		LOOP(Uint16, 1, disp->pixels);
+		break;
+		
+	    case 4:
+		pitch = disp->pitch/4;
+		LOOP(Uint32, 1, disp->pixels);
+		break;
+	    }
+	}
+	else {
+	    switch (disp->format->BytesPerPixel) {
+	    case 1:
+		SWITCH(Uint8, 1);
+		break;
+		
+	    case 2:
+		SWITCH(Uint16, 2);
+		break;
+		
+	    case 4:
+		SWITCH(Uint32, 4);
+		break;
+	    }
 	}
 	SDL_Flip(disp);
     }
-
 }

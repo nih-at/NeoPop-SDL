@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.20 2004/07/10 02:29:20 dillo Exp $ */
+/* $NiH: system_input.c,v 1.21 2004/07/11 23:32:11 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -282,12 +282,15 @@ handle_event(enum neopop_event ev, int type)
 	    
 	case NPEV_GUI_SMOOTH_OFF:
 	    graphics_mag_smooth = 0;
+	    system_osd("smootn off");
 	    break;
 	case NPEV_GUI_SMOOTH_ON:
 	    graphics_mag_smooth = 1;
+	    system_osd("smootn on");
 	    break;
 	case NPEV_GUI_SMOOTH_TOGGLE:
 	    graphics_mag_smooth = !graphics_mag_smooth;
+	    system_osd("smootn %s", graphics_mag_smooth ? "on" : "off");
 	    break;
 	    
 	case NPEV_GUI_STATE_LOAD:

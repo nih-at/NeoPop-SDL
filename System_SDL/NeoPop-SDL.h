@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.14 2004/07/14 09:48:29 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.15 2004/07/14 10:15:38 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -193,6 +193,8 @@ void system_sound_update(int);
 void system_state_load(void);
 void system_state_save(void);
 
+void HQ2x(const Uint8 *, Uint32, Uint8 *, Uint32, int, int);
+
 extern int do_exit;
 extern int paused;
 extern int have_sound;
@@ -208,6 +210,8 @@ extern char *state_dir;
 extern char *flash_dir;
 extern int use_rom_name;
 extern int state_slot;
+
+extern Uint32 hqx_lookup[16*16*16];
 
 extern enum neopop_event bindings[];
 extern const char *comms_names[];

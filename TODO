@@ -1,6 +1,5 @@
 bugs:
 + update NEWS and ChangeLog
-+ take a look at defaults for flash-dir, state-dir, screenshot-dir
 . sound loss on macppc (emulation too slow)
 . get exactly one frame's worth of DAC data each frame
 . convert DAC sound ourselves (SDL is broken)

@@ -4,7 +4,7 @@ AM_CFLAGS=	-D__cdecl= @SDL_CFLAGS@ -Wall
 LDADD=		@SDL_LIBS@
 
 # gmake support
-VPATH=$(top_srcdir)/Core:$(top_srcdir)/Core/TLCS-900h:$(top_srcdir)/Core/z80:$(top_srcdir)/SDL
+VPATH=$(top_srcdir)/Core:$(top_srcdir)/Core/TLCS-900h:$(top_srcdir)/Core/z80:$(top_srcdir)/System_SDL
 
 # BSD make support
 .PATH=${VPATH}

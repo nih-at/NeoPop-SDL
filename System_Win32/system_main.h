@@ -52,7 +52,7 @@
 #define __SYSTEM_MAIN__
 //=============================================================================
 
-#define NEOPOP_WIN32_VERSION	"Win32 v1.06"
+#define NEOPOP_WIN32_VERSION	"Win32 v1.06b"
 
 extern HWND g_hWnd;
 extern HMENU g_menu;

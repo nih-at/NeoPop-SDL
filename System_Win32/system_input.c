@@ -48,6 +48,10 @@ it's also now possible to compile this without C++ also! = faster.
 09 SEP 2002 - neopop_uk
 =======================================
 - Added adaptoid support.
+ 
+11 SEP 2002 - neopop_uk
+=======================================
+- Fixed adaptoid support.
 
 //---------------------------------------------------------------------------
 */
@@ -356,10 +360,10 @@ void system_input_update(void)
 		//Adaptoid D-Pad
 		if (adaptoid)
 		{
-			if (js.rgbButtons[11] & 0x80)	up = 1;
-			if (js.rgbButtons[12] & 0x80)	down = 1;
-			if (js.rgbButtons[13] & 0x80)	left = 1;
-			if (js.rgbButtons[14] & 0x80)	right = 1;
+			if (js.rgbButtons[10] & 0x80)	up = 1;
+			if (js.rgbButtons[11] & 0x80)	down = 1;
+			if (js.rgbButtons[12] & 0x80)	left = 1;
+			if (js.rgbButtons[13] & 0x80)	right = 1;
 		}
 
 		//Buttons

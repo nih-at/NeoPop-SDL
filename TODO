@@ -5,15 +5,16 @@ bugs:
 . comm: send and handle pause/unpause packets
 . test comm support
 . osd handling during pause sucks
+. add HQx credits
 
 regressions:
-. readd smooth
-. update man page (especially for config file)
+. update man page
+. document key and event names (rc ``map'' arguments)
 
 features:
-. osd for fullscreen, smooth
-. option: yuv for fullscreen, rgb for windowed
-. option: yuv only if hardware accelerated
+. hqx i386 asm versions
+. configure: test for altivec
+. osd for fullscreen
 . movie captures
 . reset game
 . change emulation speed (run faster/slower)

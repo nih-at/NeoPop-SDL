@@ -38,3 +38,8 @@ map joy 1 axis 1 pos = joy right
 map joy 1 button 1 = joy button a
 map joy 1 button 2 = joy button b
 map joy 1 button 6 = joy option
+
+map joy 1 hat 1 up = joy up
+map joy 1 hat 1 down = joy down
+map joy 1 hat 1 left = joy left
+map joy 1 hat 1 right = joy right

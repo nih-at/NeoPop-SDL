@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.11 2004/06/20 23:48:04 dillo Exp $ */
+/* $NiH: system_input.c,v 1.12 2004/06/22 22:04:34 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -20,6 +20,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
+/* #define KEY_DEBUG */
 
 #include <errno.h>
 #include <ctype.h>
@@ -56,6 +58,9 @@ enum npks_shift {
     NPKS_NKEY
 };
 
+#define NPKS_UP			0	/* key being pressed */
+#define NPKS_DOWN		1	/* key being released */
+
 #define NPKS_KEY_BASE		0
 #define NPKS_KEY_SIZE		SDLK_LAST
 #define NPKS_JOY_BASE		(NPKS_KEY_BASE+NPKS_NKEY*NPKS_KEY_SIZE)
@@ -77,9 +82,24 @@ enum npks_shift {
 #define NPKS_JOY_BUTTON(n, i)	(NPKS_JOY(n)+NPKS_JOY_BUTTON_OFFSET+(i))
 
 enum neopop_event bindings[NPKS_SIZE];
-int joy_pressed[NPKS_JOY_SIZE];
 
-#define JOY_PRESSED(k)	(joy_pressed[(k)-NPKS_JOY_BASE])
+int joy_axis[NPKS_NJOY*NPKS_JOY_NAXIS];
+int joy_hat[NPKS_NJOY*NPKS_JOY_NHAT];
+
+#define JOY_AXIS(n, k)	(joy_axis[(n)*NPKS_JOY_NAXIS+(k)])
+#define JOY_HAT(n, k)	(joy_hat[(n)*NPKS_JOY_NHAT+(k)])
+
+static const char *shift_name[] = {
+    "", "C-", "M-"
+};
+const char *axis_name[] = {
+    "neg", "pos"
+};
+const char *hat_name[] = {
+    "up", "down", "left", "right"
+};
+
+#define NAME_SIZE(x)	(sizeof(x)/sizeof((x)[0]))
 
 #define JOYPORT_ADDR	0x6F82
 
@@ -89,16 +109,15 @@ const char *npev_name(enum neopop_event ev);
 int npev_parse(const char *name, char **end);
 const char *npks_name(int k);
 int npks_parse(const char *name, char **end);
+void emit_key(int k, int down);
 
 
 void
 system_input_update(void)
 {
-    int k, down;
     SDL_Event evt;
 
     while(SDL_PollEvent(&evt)) {
-	k = -1;
 	switch(evt.type) {
 	case SDL_QUIT:
 	    do_exit = 1;
@@ -126,73 +145,100 @@ system_input_update(void)
 			c = NPKS_SH_NONE;
 		    break;
 		}
-		k = NPKS_KEY(c, evt.key.keysym.sym);
-		down = (evt.type == SDL_KEYDOWN);
+		emit_key(NPKS_KEY(c, evt.key.keysym.sym), 
+			 (evt.type == SDL_KEYDOWN ? NPKS_DOWN : NPKS_UP));
 	    }
 	    break;
 	    
 	case SDL_JOYAXISMOTION:
-	    k = NPKS_JOY_AXIS(evt.jaxis.which, evt.jaxis.axis);
+	    { 
+		int k, pos, opos;
 
-	    down = 1;
-	    if (evt.jaxis.value < -10922) {
-		if (JOY_PRESSED(k))
-		    k = -1;
+		if (evt.jaxis.which >= NPKS_NJOY
+		    || evt.jaxis.axis >= NPKS_JOY_NAXIS)
+		    break;
+
+		if (evt.jaxis.value < -10922)
+		    pos = -1;
+		else if (evt.jaxis.value > 10922)
+		    pos = 1;
 		else
-		    JOY_PRESSED(k) = 1;
-	    }
-	    else if (evt.jaxis.value > 10922) {
-		k++;
-		if (JOY_PRESSED(k))
-		    k = -1;
-		else
-		    JOY_PRESSED(k) = 1;
-	    }
-	    else {
-		down = 0;
-		if (JOY_PRESSED(k))
-		    JOY_PRESSED(k) = 0;
-		else if (JOY_PRESSED(k+1)) {
-		    k++;
-		    JOY_PRESSED(k) = 0;
-		}		    
-		else 
-		    k = -1;
+		    pos = 0;
+
+		opos = JOY_AXIS(evt.jaxis.which, evt.jaxis.axis);
+		if (pos == opos)
+		    break;
+		JOY_AXIS(evt.jaxis.which, evt.jaxis.axis) = pos;
+
+		k = NPKS_JOY_AXIS(evt.jaxis.which, evt.jaxis.axis);
+
+		switch (pos) {
+		case -1:
+		    if (opos == 1)
+			emit_key(k+1, NPKS_UP);
+		    emit_key(k, NPKS_DOWN);
+		    break;
+
+		case 0:
+		    if (opos == -1)
+			emit_key(k, NPKS_UP);
+		    if (opos == 1)
+			emit_key(k+1, NPKS_UP);
+		    break;
+
+		case 1:
+		    if (opos == -1)
+			emit_key(k, NPKS_UP);
+		    emit_key(k+1, NPKS_DOWN);
+		    break;
+		}
 	    }
 	    break;
 	    
         case SDL_JOYBUTTONUP:
         case SDL_JOYBUTTONDOWN:
-	    k = NPKS_JOY_BUTTON(evt.jbutton.which, evt.jbutton.button);
-	    down = (evt.type == SDL_JOYBUTTONDOWN);
-	    if (JOY_PRESSED(k)) {
-		if (down)
-		    k = -1;
-		else
-		    JOY_PRESSED(k) = 0;
-	    }
-	    else {
-		if (down)
-		    JOY_PRESSED(k) = 1;
-		else
-		    k = -1;
-	    }
+	    if (evt.jbutton.which >= NPKS_NJOY
+		|| evt.jbutton.button >= NPKS_JOY_NBUTTON)
+		break;
+	    
+	    emit_key(NPKS_JOY_BUTTON(evt.jbutton.which,
+				     evt.jbutton.button),
+		     (evt.type == SDL_JOYBUTTONDOWN ? NPKS_DOWN : NPKS_UP));
 	    break;
 
-	/* XXX: SDL_JOYHAT */
+	case SDL_JOYHATMOTION:
+	    {
+		int pos, opos, k;
+		
+		if (evt.jhat.which >= NPKS_NJOY
+		    || evt.jhat.hat >= NPKS_JOY_NHAT)
+		break;
+	    
+		pos = evt.jhat.value;
+		opos = JOY_HAT(evt.jhat.which, evt.jhat.hat);
+		if (pos == opos)
+		    break;
+		JOY_HAT(evt.jhat.which, evt.jhat.hat) = pos;
+
+		k = NPKS_JOY_HAT(evt.jhat.which, evt.jhat.hat);
+
+		if ((pos^opos) & SDL_HAT_UP)
+		    emit_key(k, ((pos & SDL_HAT_UP) ? NPKS_DOWN : NPKS_UP));
+		if ((pos^opos) & SDL_HAT_DOWN)
+		    emit_key(k+1,
+			     ((pos & SDL_HAT_DOWN) ? NPKS_DOWN : NPKS_UP));
+		if ((pos^opos) & SDL_HAT_LEFT)
+		    emit_key(k+2,
+			     ((pos & SDL_HAT_LEFT) ? NPKS_DOWN : NPKS_UP));
+		if ((pos^opos) & SDL_HAT_RIGHT)
+		    emit_key(k+3,
+			     ((pos & SDL_HAT_RIGHT) ? NPKS_DOWN : NPKS_UP));
+	    }
+	    break;
 	    
 	default:
 	    /* ignore */
 	    break;
-	}
-
-	if (k != -1) {
-#ifdef KEY_DEBUG
-	    printf("key %s (%d) %s == %s\n",
-		   npks_name(k), k, (down ? "down" : "up"),
-		   npev_name(bindings[k]));
-#endif
-	    handle_event(bindings[k], down);
 	}
     }
 }
@@ -200,9 +246,23 @@ system_input_update(void)
 
 
 void
-handle_event(enum neopop_event ev, int down)
+emit_key(int k, int type)
 {
-    if (down) {
+#ifdef KEY_DEBUG
+    printf("key %s (%d) %s == %s\n",
+	   npks_name(k), k,
+	   (type == NPKS_DOWN ? "down" : "up"),
+	   npev_name(bindings[k]));
+#endif
+    handle_event(bindings[k], type);
+}
+
+
+
+void
+handle_event(enum neopop_event ev, int type)
+{
+    if (type == NPKS_DOWN) {
 	switch (ev) {
 	case NPEV_NONE:
 	    break;
@@ -308,10 +368,6 @@ handle_event(enum neopop_event ev, int down)
 const char *
 npks_name(int k)
 {
-    static const char *shift_name[] = {
-	"", "C-", "M-"
-    };
-
     static char b[8192];
     int n;
 
@@ -328,9 +384,12 @@ npks_name(int k)
 
 	if (k < NPKS_JOY_HAT_OFFSET)
 	    snprintf(b, sizeof(b), "joy %d axis %d %s",
-		     n+1, (k/2)+1, (k%2 ? "pos" : "neg"));
-	else if (k < NPKS_JOY_BUTTON_OFFSET)
-	    snprintf(b, sizeof(b), "joy %d hat", n+1);
+		     n+1, (k/2)+1, axis_name[k%2]);
+	else if (k < NPKS_JOY_BUTTON_OFFSET) {
+	    k -= NPKS_JOY_HAT_OFFSET;
+	    snprintf(b, sizeof(b), "joy %d hat %d %s",
+		     n+1, (k/4)+1, hat_name[k%4]);
+	}
 	else {
 	    k -= NPKS_JOY_BUTTON_OFFSET;
 	    snprintf(b, sizeof(b), "joy %d button %d", n+1, k+1);
@@ -365,19 +424,28 @@ npks_parse(const char *name, char **end)
 	    if (k < 0 || k >= NPKS_JOY_NAXIS)
 		return -1;
 	    
-	    p += strspn(p, " \t");
-	    if (strncasecmp(p, "pos", 3) == 0)
-		i = 1;
-	    else if (strncasecmp(p, "neg", 3) == 0)
-		i = 0;
-	    else
+	    if ((i=find_name(p, (char **)&p,
+			     axis_name, NAME_SIZE(axis_name))) == -1)
 		return -1;
-
-	    p += 3;
 
 	    if (end)
 		*end = (char *)p;
 	    return NPKS_JOY_AXIS(n, k) + i;
+	}
+	else if (strncasecmp(p, "hat", 3) == 0) {
+	    p += 3;
+
+	    k = strtoul(p, (char **)&p, 10)-1;
+	    if (k < 0 || k >= NPKS_JOY_NBUTTON)
+		return -1;
+
+	    if ((i=find_name(p, (char **)&p,
+			     hat_name, NAME_SIZE(hat_name))) == -1)
+		return -1;
+
+	    if (end)
+		*end = (char *)p;
+	    return NPKS_JOY_HAT(n, k) + i;
 	}
 	else if (strncasecmp(p, "button", 6) == 0) {
 	    p += 6;

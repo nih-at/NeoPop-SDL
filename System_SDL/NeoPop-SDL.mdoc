@@ -1,4 +1,4 @@
-.\" $NiH: NeoPop-SDL.mdoc,v 1.15 2004/07/22 09:38:41 dillo Exp $
+.\" $NiH: NeoPop-SDL.mdoc,v 1.16 2004/07/22 10:10:39 dillo Exp $
 .\"
 .\" Copyright (c) 2003, 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -284,7 +284,13 @@ and
 .An Max Horn
 provided the HQx scaling routines.
 .Sh BUGS
-Please see the
+Network play does not work.
+.Pp
+.Nm
+crashes if it tries to use YUV overlay but another application is
+already using an YUV overlay.
+.Pp
+Also, please see the
 .Pa DOCDIR/bugs-core.html
 and
 .Pa DOCDIR/TODO

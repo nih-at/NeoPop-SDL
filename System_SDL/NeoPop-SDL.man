@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: NeoPop-SDL.mdoc,v 1.7 2003/10/19 20:23:35 wiz Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.7 2003/10/19 20:23:35 wiz Exp $
+.\" from NiH: NeoPop-SDL.mdoc,v 1.8 2003/10/19 20:36:35 wiz Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.8 2003/10/19 20:36:35 wiz Exp $
 .\"
 .\" Copyright (c) 2003 Thomas Klausner.
 .\" All rights reserved.
@@ -228,10 +228,6 @@ as PNGs, otherwise as BMPs.
 \fBESC\fR
 quits the emulator.
 .SH "SEE ALSO"
-\fIDOCDIR/bugs-core.html\fR
-.PP
-\fIDOCDIR/TODO\fR
-.PP
 \fIhttp://www.nih.at/NeoPop-SDL/\fR
 .SH "AUTHORS"
 neopop_uk
@@ -245,7 +241,7 @@ Thomas Klausner
 ported it to SDL.
 .SH "BUGS"
 Please see the
-\fITODO\fR
+\fIDOCDIR/bugs-core.html\fR
 and
-\fIbugs-core.html\fR
+\fIDOCDIR/TODO\fR
 files.

@@ -8,6 +8,9 @@ If you want to save screenshots in PNG format, you'll need libpng, see
 You can get a list of command line options with the -h flag; the keys
 are described below.
 
+The readme for the Neopop is readme-core.txt; bugs-core.html contains
+a known-bugs list, also from the original NeoPop source distribution.
+
 Send comments, bug reports, and praise to Thomas Klausner <tk@giga.or.at>.
 
 Keys

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.54)
-AC_REVISION([$NiH: configure.ac,v 1.10 2003/10/16 17:29:44 wiz Exp $])
+AC_REVISION([$NiH: configure.ac,v 1.11 2003/10/17 22:53:33 wiz Exp $])
 AC_INIT([NeoPop-SDL],[0.1], [wiz@danbala.tuwien.ac.at], [NeoPop-SDL])
 AC_CONFIG_SRCDIR([System_SDL/system_main.c])
 AC_CONFIG_HEADERS([System_SDL/config.h])
@@ -55,7 +55,8 @@ in
 	*) MANFMT=man;;
 esac
 
-AC_CONFIG_LINKS([System_SDL/NeoPop-SDL.6:System_SDL/NeoPop-SDL.${MANFMT}])
+AC_SUBST(MANFMT, [${MANFMT}])
+AC_SUBST(DOCDIR, [${datadir}/doc/${PACKAGE}])
 
 AC_CONFIG_FILES([Makefile System_SDL/Makefile])
 AC_OUTPUT

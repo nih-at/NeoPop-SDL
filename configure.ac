@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.54)
-AC_REVISION([$NiH: configure.ac,v 1.12 2003/10/19 20:24:40 wiz Exp $])
+AC_REVISION([$NiH: configure.ac,v 1.13 2003/11/02 11:46:35 wiz Exp $])
 AC_INIT([NeoPop-SDL],[0.1a], [wiz@danbala.tuwien.ac.at], [NeoPop-SDL])
 AC_CONFIG_SRCDIR([System_SDL/system_main.c])
 AC_CONFIG_HEADERS([System_SDL/config.h])
@@ -47,6 +47,10 @@ AC_CHECK_HEADER(png.h,
 	    [AC_MSG_WARN([PNG library not found -- using BMP screenshots])],
 	    -lm)]),
     [AC_MSG_WARN([PNG library not found -- using BMP screenshots])])
+
+PKG_CHECK_MODULES(LIBZIP, libzip, [AC_DEFINE(HAVE_LIBZIP, [1],
+		   [Define to 1 if you have the `zip' library (-lzip)])],
+                  [AC_MSG_WARN([libzip not found -- can't read zipped ROMs])])
 
 # Man pages
 case $host_os

@@ -3,8 +3,8 @@ docdir=		@DOCDIR@
 
 AM_CPPFLAGS=	-I$(top_srcdir)/Core/z80  -I$(top_srcdir)/Core/TLCS-900h \
 		-I$(top_srcdir)/Core
-AM_CFLAGS=	-D__cdecl= @SDL_CFLAGS@ -Wall
-LDADD=		@SDL_LIBS@
+AM_CFLAGS=	-D__cdecl= @SDL_CFLAGS@ @LIBZIP_CFLAGS@ -Wall
+LDADD=		@SDL_LIBS@ @LIBZIP_LIBS@
 
 # GNU make support
 VPATH=$(top_srcdir)/Core:$(top_srcdir)/Core/TLCS-900h:$(top_srcdir)/Core/z80:$(top_srcdir)/System_SDL
@@ -32,6 +32,6 @@ NeoPop_SDL_SOURCES=system_comms.c system_graphics.c \
 NeoPop-SDL.6: NeoPop-SDL.${MANFMT} Makefile
 	sed "s|DOCDIR|${docdir}|g" ${srcdir}/NeoPop-SDL.${MANFMT} > $@.$$$$ && \
 		mv $@.$$$$ $@
-	
+
 EXTRA_DIST=	NeoPop-SDL.mdoc NeoPop-SDL.man
 DISTCLEANFILES=	NeoPop-SDL.6

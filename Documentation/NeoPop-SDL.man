@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: NeoPop-SDL.mdoc,v 1.11 2004/07/14 22:18:02 wiz Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.11 2004/07/14 22:18:02 wiz Exp $
+.\" from NiH: NeoPop-SDL.mdoc,v 1.13 2004/07/22 00:45:21 wiz Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.13 2004/07/22 00:45:21 wiz Exp $
 .\"
 .\" Copyright (c) 2003, 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -235,16 +235,20 @@ neopoprc(5)
 neopop_uk
 <neopop_uk@yahoo.co.uk>
 wrote the original NeoPop emulator.
-Marat Fayzullin
-provided the z80 core for sound.
-Gilles Vollant
-provided simple portable unzip code.
 Thomas Klausner
 <wiz@danbala.tuwien.ac.at>
 ported it to SDL.
 Dieter Baron
 <dillo@danbala.tuwien.ac.at>
 made lots of improvements.
+Marat Fayzullin
+provided the z80 core for sound.
+Gilles Vollant
+provided simple portable unzip code.
+Maxim Stepin
+and
+Max Horn
+provided the HQx scaling routines.
 .SH "BUGS"
 Please see the
 \fIDOCDIR/bugs-core.html\fR

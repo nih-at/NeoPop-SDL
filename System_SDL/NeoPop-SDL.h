@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.22 2004/07/23 13:16:39 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.23 2004/07/24 00:07:42 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -199,6 +199,12 @@ void system_sound_update(int);
 void system_state_load(void);
 void system_state_save(void);
 
+int system_video_close(void);
+void system_video_init(void);
+int system_video_open(const char *);
+void system_video_write_aframe(unsigned char *, int);
+void system_video_write_vframe(void);
+
 void HQ2x(const Uint8 *, Uint32, Uint8 *, Uint32, int, int);
 void HQ3x(const Uint8 *, Uint32, Uint8 *, Uint32, int, int);
 
@@ -221,6 +227,7 @@ extern int state_slot;
 extern int fs_mode;
 extern int need_redraw;
 extern int osd_colour;
+extern int recording;
 
 extern Uint32 hqx_lookup[16*16*16];
 

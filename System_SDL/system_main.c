@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.49 2004/07/24 00:07:43 dillo Exp $ */
+/* $NiH: system_main.c,v 1.50 2004/07/25 10:34:57 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -35,6 +35,8 @@ _u32 throttle_rate;
 int do_exit = 0;
 int paused = 0;
 int have_sound;
+int recording;
+
 void readrc(void);
 
 static void
@@ -49,7 +51,7 @@ usage(int exitcode)
 {
     printversion();
     printf("NeoGeo Pocket emulator\n\n"
-	   "Usage: %s [-cefghjMmSsv] [-C mode] [-P port] [-R remove] [game]\n"
+	   "Usage: %s [-cefghjMmSsv] [-C mode] [-P port] [-R remove] [-v file] [game]\n"
 	   "\t-C mode\t\tspecify comms mode (none, server, client; default: none)\n"
 	   "\t-c\t\tstart in colour mode (default: automatic)\n"
 	   "\t-e\t\temulate English language NeoGeo Pocket (default)\n"
@@ -64,7 +66,8 @@ usage(int exitcode)
 	   "\t-R host\t\tspecify host to connect to as comms client\n"
 	   "\t-S\t\tsilent mode\n"
 	   "\t-s\t\twith sound (default)\n"
-	   "\t-v\t\tshow version number\n"
+	   "\t-V\t\tshow version number\n"
+	   "\t-v file\t\tcapture video into file\n"
 	   "\t-y mode\t\tspecify for which modes to use YUV\n", prg);
 
     exit(exitcode);
@@ -93,6 +96,10 @@ system_VBL(void)
     int newsec;
 
     system_input_update();
+
+    if (recording)
+	system_video_write_vframe();
+
     system_osd_display();
 
     if (++frameskip_counter >= system_frameskip_key) {
@@ -122,7 +129,10 @@ system_VBL(void)
 	       time_diff.tv_sec, time_diff.tv_usec, frames_spent);
 #endif
 
-	system_sound_update(time_spent/throttle_rate + 1);
+	if (recording)
+	    system_sound_update(1);
+	else
+	    system_sound_update(time_spent/throttle_rate + 1);
 
 	/* XXX: we should include the time spent calculating samples */
 	gettimeofday(&current_time, NULL);
@@ -170,12 +180,14 @@ system_VBL(void)
 int
 main(int argc, char *argv[])
 {
-    char *start_state;
+    char *start_state, *video_file;
     int ch;
     int i;
 
     prg = argv[0];
     start_state = NULL;
+    video_file = NULL;
+    recording = 0;
 
     /* some defaults, to be changed by getopt args */
     /* auto-select colour mode */
@@ -218,7 +230,7 @@ main(int argc, char *argv[])
     system_bindings_init();
     system_rc_read();
 
-    while ((ch=getopt(argc, argv, "C:cef:ghjl:MmP:R:SsVy:")) != -1) {
+    while ((ch=getopt(argc, argv, "C:cef:ghjl:MmP:R:SsVv:y:")) != -1) {
 	switch (ch) {
 	case 'C':
 	    i = system_rc_parse_comms_mode(optarg);
@@ -288,6 +300,9 @@ main(int argc, char *argv[])
 	    printversion();
 	    exit(0);
 	    break;
+	case 'v':
+	    video_file = optarg;
+	    break;
 	case 'y':
 	    i = system_rc_parse_yuv(optarg);
 	    if (i == -1) {
@@ -347,6 +362,12 @@ main(int argc, char *argv[])
 	fprintf(stderr, "no ROM loaded\n");
     }
 
+    if (video_file) {
+	system_video_init();
+	if (system_video_open(video_file) == 0)
+	    recording = 1;
+    }
+
     reset();
     SDL_PauseAudio(0);
     if (start_state != NULL)
@@ -359,6 +380,9 @@ main(int argc, char *argv[])
 	else
 	    system_VBL();
     } while (do_exit == 0);
+
+    if (recording)
+	system_video_close();
 
     system_rom_unload();
     system_sound_shutdown();

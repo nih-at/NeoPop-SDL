@@ -7,7 +7,8 @@ bugs:
 . don't save unused/unchanging parts of Z80_regs
 
 regressions:
-. update ChangeLog for chunk snapshots
+. update ChangeLog for chunk snapshots, video
+. disable -v if not HAVE_FFMPEG
 
 features:
 . options for snapshots (include ROM, FLASH)

@@ -1,4 +1,4 @@
-/* $NiH: system_sound.c,v 1.21 2004/07/11 23:32:12 dillo Exp $ */
+/* $NiH: system_sound.c,v 1.22 2004/07/22 00:20:55 wiz Exp $ */
 /*
   system_sound.c -- sound support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -191,6 +191,9 @@ system_sound_update(int nframes)
 	    /* mix both streams into one */
 	    SDL_MixAudio(sound_buffer+sound_frame_write,
 			 dac_data, bpf, SDL_MIX_MAXVOLUME);
+
+	    if (recording)
+		system_video_write_aframe(sound_buffer+sound_frame_write, bpf);
 	}
 	
 	sound_frame_write = FRAME_INC(sound_frame_write);

@@ -25,7 +25,7 @@ nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c chunk.c dma.c flash.c gfx.c \
 	dasm.c Z80.c
 NeoPop_SDL_SOURCES=system_bindings.c system_comms.c system_graphics.c \
 	system_hq2x.c system_hq3x.c \
-	system_input.c system_io.c system_language.c \
+	system_input.c system_io.c system_language.c system_video.c \
 	system_main.c system_names.c system_osd.c system_rc.c system_rom.c \
 	system_screenshot.c system_sound.c unzip.c
 BUILT_SOURCES=system_names.c

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.54)
-AC_REVISION([$NiH: configure.ac,v 1.19 2004/08/07 11:54:06 wiz Exp $])
+AC_REVISION([$NiH: configure.ac,v 1.20 2004/08/07 13:41:25 wiz Exp $])
 AC_INIT([NeoPop-SDL],[0.2a], [wiz@danbala.tuwien.ac.at], [NeoPop-SDL])
 AC_CONFIG_SRCDIR([System_SDL/system_main.c])
 AC_CONFIG_HEADERS([System_SDL/config.h])
@@ -82,6 +82,15 @@ else
 	PKG_CONFIG_PATH="$XPKG_CONFIG_PATH"
     fi
 fi   
+
+AC_CHECK_LIB([avformat], [guess_format],
+  [AC_CHECK_HEADER([ffmpeg/avformat.h],
+                   [AC_DEFINE([HAVE_FFMPEG], [1],
+                              [Define if you have the ffmpeg libraries])
+		    LIBS="-lavformat -lavcodec -lm $LIBS"],
+		   [AC_MSG_WARN([ffmpeg libraries not found -- video capturing disabled])])],
+  [AC_MSG_WARN([ffmpeg library not found -- video capturing disabled])],
+  [-lavcodec -lm])
 
 # Man pages
 case $host_os

@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.10 2004/07/09 21:42:40 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.11 2004/07/10 00:02:42 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -51,6 +51,9 @@ enum neopop_event {
     NPEV_GUI_MUTE_OFF,
     NPEV_GUI_MUTE_ON,
     NPEV_GUI_MUTE_TOGGLE,
+    NPEV_GUI_PAUSE_OFF,
+    NPEV_GUI_PAUSE_ON,
+    NPEV_GUI_PAUSE_TOGGLE,
     NPEV_GUI_QUIT,
     NPEV_GUI_SCREENSHOT,
     NPEV_GUI_SMOOTH_OFF,
@@ -133,6 +136,9 @@ enum comms_mode {
 
 #define DEFAULT_SAMPLERATE	44100	/* default sample rate */
 
+#define PAUSED_LOCAL	1
+#define PAUSED_REMOTE	2
+
 void system_bindings_init(void);
 
 BOOL system_comms_connect(void);
@@ -174,6 +180,7 @@ void system_state_load(void);
 void system_state_save(void);
 
 extern int do_exit;
+extern int paused;
 extern int graphics_mag_req;
 extern int graphics_mag_smooth;
 extern int comms_mode;

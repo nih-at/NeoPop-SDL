@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.18 2004/07/09 21:42:40 dillo Exp $ */
+/* $NiH: system_input.c,v 1.19 2004/07/10 00:02:42 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -260,7 +260,21 @@ handle_event(enum neopop_event ev, int type)
 	    mute = !mute;
 	    system_osd("sound %s", mute ? "off" : "on");
 	    break;
-	    
+
+	case NPEV_GUI_PAUSE_ON:
+	    paused != PAUSED_LOCAL;
+	    system_osd("paused");
+	    break;
+	case NPEV_GUI_PAUSE_OFF:
+	    paused &= ~PAUSED_LOCAL;
+	    system_osd("%s", paused ? "remote paused" : "");
+	    break;
+	case NPEV_GUI_PAUSE_TOGGLE:
+	    paused ^= PAUSED_LOCAL;
+	    system_osd("%s", ((paused&PAUSED_LOCAL) ? "paused"
+			      : paused ? "remote paused" : ""));
+	    break;
+
 	case NPEV_GUI_QUIT:
 	    do_exit = 1;
 	    break;

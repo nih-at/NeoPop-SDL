@@ -1,4 +1,4 @@
-/* $NiH: system_sound.c,v 1.17.2.3 2004/07/08 10:56:38 dillo Exp $ */
+/* $NiH: system_sound.c,v 1.18 2004/07/09 10:34:32 dillo Exp $ */
 /*
   system_sound.c -- sound support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -147,7 +147,7 @@ system_sound_silence(void)
 void
 system_sound_callback(void *userdata, Uint8 *stream, int len)
 {
-    if (sound_buffer == NULL)
+    if (sound_buffer == NULL || mute || paused)
 	return;
 
     SDL_SemWait(rsem);

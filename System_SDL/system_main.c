@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.35 2004/07/09 21:42:41 dillo Exp $ */
+/* $NiH: system_main.c,v 1.36 2004/07/10 00:02:43 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -33,6 +33,7 @@ struct timeval throttle_last;
 _u8 system_frameskip_key;
 _u32 throttle_rate;
 int do_exit = 0;
+int paused = 0;
 
 void readrc(void);
 
@@ -102,7 +103,7 @@ system_VBL(void)
 	last_sec = current_time.tv_sec;
     }
 
-    if (mute == FALSE) {
+    if (mute == FALSE && paused == 0) {
 	timersub(&current_time, &throttle_last, &time_diff);
 	throttle_diff = (time_diff.tv_sec*1000000 + time_diff.tv_usec);
 
@@ -327,16 +328,11 @@ main(int argc, char *argv[])
 	state_restore(start_state);
 
     gettimeofday(&throttle_last, NULL);
-    i = 200;
     do {
-	emulate();
-#if 0
-	if (i-- == 0 && !mute) {
-	    /* for the sound thread */
-	    SDL_Delay(1);
-	    i = 200;
-	}
-#endif
+	if (paused == 0)
+	    emulate();
+	else
+	    system_VBL();
     } while (do_exit == 0);
 
     system_rom_unload();

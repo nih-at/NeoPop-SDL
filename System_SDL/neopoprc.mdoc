@@ -1,4 +1,4 @@
-.\" $NiH: neopoprc.mdoc,v 1.4 2004/07/22 01:49:02 wiz Exp $
+.\" $NiH: neopoprc.mdoc,v 1.5 2004/07/22 10:31:19 dillo Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -109,9 +109,8 @@ Has no default.
 .Bq string
 Path to the directory where Flash RAM images should be saved.
 Defaults to
-.Dq Pa ~/.neopop .
-If only the last path component does not exist, the directory
-is created automatically.
+.Dq Pa ~/.neopop/flash .
+If the directory does not exist, it is created automatically.
 .It Dv frameskip
 .Bq int (1..7)
 Show only every Nth frame.
@@ -152,8 +151,7 @@ Defaults to 44100.
 Path to directory in which to store screenshots.
 Defaults to
 .Dq Pa \&. .
-If only the last path component does not exist, the directory
-is created automatically.
+If the directory does not exist, it is created automatically.
 .It Dv smooth
 .Bq boolean
 Smooth display when magnified.
@@ -164,9 +162,8 @@ Ignored in YUV overlay mode.
 .Bq string
 Path to directory in which to store save states.
 Defaults to
-.Dq Pa \&. .
-If only the last path component does not exist, the directory
-is created automatically.
+.Dq Pa ~/.neopop/state .
+If the directory does not exist, it is created automatically.
 .It Dv sound
 .Bq boolean
 Whether to play sound.

@@ -1,4 +1,4 @@
-/* $NiH: system_io.c,v 1.12 2004/07/10 14:13:51 dillo Exp $ */
+/* $NiH: system_io.c,v 1.13 2004/07/22 10:31:20 dillo Exp $ */
 /*
   system_io.c -- read/write flash files 
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -94,24 +94,55 @@ write_file_from_buffer(char *filename, _u8 *buffer, _u32 len)
 static BOOL
 validate_dir(const char *path)
 {
+    char *s, *p, *q;
     struct stat sb;
 
-    if (stat(path, &sb) == -1 && errno == ENOENT) {
-    	if (mkdir(path, 0777) == -1) {
-	    fprintf(stderr, "Config directory `%s' does not exist and "
-		    "creation failed: %s", path, strerror(errno));
-	    return FALSE;
-	}
-	if (stat(path, &sb) == -1) {
-	    fprintf(stderr, "Config directory `%s' creation failed: %s",
-		    path, strerror(errno));
+    if (stat(path, &sb) == 0) {
+	if ((sb.st_mode & S_IFDIR) == S_IFDIR)
+	    return TRUE;
+	else {
+	    fprintf(stderr, "Not a directory: `%s'", path);
 	    return FALSE;
 	}
     }
 
-    if ((sb.st_mode & S_IFDIR) != S_IFDIR) {
-	fprintf(stderr, "Config directory `%s' is not a directory", path);
-	return FALSE;
+    s = strdup(path);
+
+    q = s+strlen(s);
+    while (q[-1] == '/')
+	--q;
+    *q = 0;
+
+    p = s+1;
+    for (;;) {
+	if ((q=strchr(p, '/')) == NULL)
+	    q = p+strlen(p);
+	*q = '\0';
+
+	if (stat(s, &sb) == -1) {
+	    if (errno == ENOENT) {
+		printf("mkdir(%s)\n", s);
+		if (mkdir(s, 0777) == -1) {
+		    fprintf(stderr, "Directory `%s' does not exist and "
+			    "creation failed: %s\n", path, strerror(errno));
+		    return FALSE;
+		}
+	    }
+	    else {
+		fprintf(stderr, "Directory `%s' does not exist and "
+			"cannot stat ancestor: %s\n", path, strerror(errno));
+		return FALSE;
+	    }
+	}
+	if ((sb.st_mode & S_IFDIR) != S_IFDIR) {
+	    fprintf(stderr, "Ancestor not a directory: `%s'", path);
+	    return FALSE;
+	}
+
+	if (q-s == strlen(path))
+	    break;
+	*q = '/';
+	p = q+1;
     }
 
     return TRUE;

@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.45 2004/07/22 12:13:07 dillo Exp $ */
+/* $NiH: system_main.c,v 1.46 2004/07/22 14:19:29 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -198,9 +198,9 @@ main(int argc, char *argv[])
     use_yuv = DEFAULT_YUV;
     use_software_yuv = 0;
     /* directories for save files */
-    flash_dir = strdup("~/.neopop");
+    flash_dir = strdup("~/.neopop/flash");
     screenshot_dir = strdup(".");
-    state_dir = strdup(".");
+    state_dir = strdup("~/.neopop/state");
     /* use rom name rather than file name for save files */
     use_rom_name = FALSE;
     /* state save slot */

@@ -1,0 +1,141 @@
+all numbers are stored in network byte order (big-endian)
+
+header
+
+offset	size	name	desc
+0	2	version	(0x0060)
+2	2	padding	(0x0000)
+4	4	magic	("NGPS")
+
+chunk header format
+
+offset	size	name	desc
+0	4	tag	what type of chunk
+4	4	length	length of chunk data (excluding header)
+
+chunks:
+
+* EVNT	-- events recording
+
+XXX
+
+
+* FLSH	-- FLASH memory
+
+offset	size	name	desc
+0	n	data	FLASH data
+
+
+* HIST	-- history recording (container)
+
+	(SNAP | RST) (EVNT SNAP?)*
+
+XXX: record NeoGeo settings (language, colour)
+
+
+* RAM	-- RAM dump
+
+offset	size	name	desc
+0	49152	data	RAM data
+
+
+* REGS	-- machine registers
+
+offset	size	name	desc
+0	4	PC	TLCS-900h PC
+4	2	SR	TLCS-900h SR
+6	64	gprBank	TLCS-900h gprBank
+70	16	gpr	TLCS-900h gpr
+86	1	f_dash	???
+87	1	eeprom	EEPROM status enable
+88	2	AF	Z80 register
+90	2	BC	Z80 register
+92	2	DE	Z80 register
+94	2	HL	Z80 register
+96	2	IX	Z80 register
+98	2	IY	Z80 register
+100	2	PC	Z80 PC
+102	2	SP	Z80 SP
+104	2	AF1	Z80 shadow register
+106	2	BC1	Z80 shadow register
+108	2	DE1	Z80 shadow register
+110	2	HL1	Z80 shadow register
+112	1	IFF	Z80 interrupt register
+114	1	I	Z80 interrupt register
+115	1	R	Z80 refresh register
+116	4	iperiod	Z80 update frequency
+120	4	icount	Z80 update counter
+124	4	ibackup	Z80 private data
+128	2	irequest Z80 IRQ request address
+130	1	iautorst Z80 config
+131	1	trpbadop Z80 config
+132	2	trap	Z80 config
+133	1	trace	Z80 config
+134	4	timhint	timer hint
+138	4	timer	timer up-counters
+142	4	timclk0	timer clock 0
+146	4	timclk1	timer clock 1
+150	4	timclk2	timer clock 2
+154	4	timclk3	timer clock 3
+158	4	sndlreg	sound chip last register written
+162	32	sndreg	sound chip registers
+194	16	sndvol	sound chip volume
+210	16	sndper	sound chip period
+226	16	sndcnt	sound chip counter
+242	16	sndout	sound chip output
+258	4	sndrng	sound chip noise generator
+262	4	sndfb	sound chip noise generator feedback mask
+266	4	nslreg	noise chip last register written
+270	32	nsreg	noise chip registers
+302	16	nsvol	noise chip volume
+318	16	nsper	noise chip period
+334	16	nscnt	noise chip counter
+350	16	nsout	noise chip output
+366	4	nsrng	noise chip noise generator
+370	4	nsfb	noise chip noise generator feedback mask
+374	16	dmaS	DMA data
+390	16	dmaD	DMA data
+406	8	dmaC	DMA data
+414	4	dmaM	DMA data
+
+* ROM	-- ROM image
+
+offset	size	name	desc
+0	64	header	ROM header (see ROMH chunk)
+64	n	data	ROM data
+
+
+* ROMH	-- ROM header
+
+offset	size	name	desc
+0	28	licence
+28	4	startPC
+32	2	catalog
+34	1	subCatalog
+35	1	mode
+36	12	name
+48	16	reserved
+
+
+* RST	-- machine reset (container)
+
+	TIME (ROM | ROMH)? FLSH?
+
+note: RST in HIST must contain a TIME chunk
+note: RST at start of HIST must contain ROM or ROMH
+
+
+* SNAP	-- snapshot of machine state (container)
+
+	TIME? (ROM | ROMH)? FLSH? RAM REGS
+
+note: SNAP in HIST must contain a TIME chunk
+note: SNAP not in or at start of HIST must contain ROM or ROMH
+
+
+* TIME	-- time index in recording
+
+offset	size	name	desc
+0	4	frame	frame # since beginning of recording
+
+

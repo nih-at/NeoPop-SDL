@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.33.2.3 2004/07/08 10:56:08 dillo Exp $ */
+/* $NiH: system_main.c,v 1.33.2.4 2004/07/08 12:11:34 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -84,18 +84,23 @@ system_VBL(void)
 {
     static int frame_counter = 0;
     static long time_spent = 0;
-    struct timeval current_time, time_diff, t2;
-    int newsec;
+    static int last_sec = 0;
+    struct timeval current_time, time_diff;
     long throttle_diff;
-    struct timespec ts, tsrem;
+    int newsec;
 
     system_graphics_update();
 
     system_input_update();
 
     newsec = 0;
+    gettimeofday(&current_time, NULL);
+    if (current_time.tv_sec != last_sec) {
+	newsec = 1;
+	last_sec = current_time.tv_sec;
+    }
+
     if (mute == FALSE) {
-	gettimeofday(&current_time, NULL);
 	timersub(&current_time, &throttle_last, &time_diff);
 	throttle_diff = (time_diff.tv_sec*1000000 + time_diff.tv_usec);
 
@@ -114,71 +119,39 @@ system_VBL(void)
 
 	/* XXX: we should include the time spent calculating samples */
 	gettimeofday(&current_time, NULL);
-	if (current_time.tv_sec != throttle_last.tv_sec)
-	    newsec = 1;
 	throttle_last = current_time;
     }
     else {
-	/* throttling */
-	throttle_last.tv_usec += throttle_rate/2;
+	throttle_last.tv_usec += throttle_rate;
 	if (throttle_last.tv_usec > 1000000) {
-	    newsec = 1;
 	    throttle_last.tv_usec -= 1000000;
 	    throttle_last.tv_sec++;
 	}
-	gettimeofday(&current_time, NULL);
 	timersub(&throttle_last, &current_time, &time_diff);
 	throttle_diff = (time_diff.tv_sec*1000000 + time_diff.tv_usec);
 	
 	if (throttle_diff > 0) {
-#ifdef TRACE_SLEEP
-	    gettimeofday(&t2, NULL);
-#endif
-#if USE_NANOSLEEP
-	    ts.tv_sec = throttle_diff / 1000000;
-	    ts.tv_nsec = (throttle_diff % 1000000) * 1000;
-	    gettimeofday(&t2, NULL);
-	    while (nanosleep(&ts, &tsrem) < 0 && errno == EINTR)
-		ts = tsrem;
-#elsif USE_USLEEP
-	    usleep(throttle_diff);
-#else
 	    SDL_Delay(throttle_diff/1000);
-#endif
-#ifdef TRACE_SLEEP
-	    gettimeofday(&current_time, NULL);
-	    timersub(&current_time, &t2, &time_diff);
-	    printf("sleep: %06ld, slept: %ld.%06ld\n",
-		   throttle_diff, time_diff.tv_sec, time_diff.tv_usec);
-#endif
 	}
-	else {
-#if 1
-	    if (throttle_last.tv_sec != current_time.tv_sec)
-		newsec = 1;
-	    throttle_last = current_time;
-#endif
-#ifdef TRACE_SLEEP
-	    printf("sleep: %06ld\n", throttle_diff);
-#endif
+	else if (throttle_diff < -2*throttle_rate) {
+	    time_diff.tv_sec = 0;
+	    time_diff.tv_usec = -2*throttle_rate;
+	    timersub(&current_time, &time_diff, &throttle_last);
 	}
-
-	throttle_last = current_time;
     }
 
     frame_counter++;
     if (newsec) {
 	char title[128];
 
-#if 1
 	/* set window caption */
-	(void)snprintf(title, sizeof(title), PROGRAM_NAME " - %s - %dfps/FS%d",
-		       rom.name, frame_counter, system_frameskip_key);
-#else
-	/* set window caption */
-	(void)snprintf(title, sizeof(title), PROGRAM_NAME " - %s - %d",
-		       rom.name, frame_counter);
-#endif
+	if (graphics_mag_req > 1)
+	    (void)snprintf(title, sizeof(title),
+			   PROGRAM_NAME " - %s - %dfps/FS%d",
+			   rom.name, frame_counter, system_frameskip_key);
+	else
+	    (void)snprintf(title, sizeof(title), PROGRAM_NAME " %dfps",
+			   frame_counter);
 	SDL_WM_SetCaption(title, NULL);
 
 	frame_counter = 0;

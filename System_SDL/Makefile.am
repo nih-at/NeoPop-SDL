@@ -25,19 +25,19 @@ nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c dma.c flash.c gfx.c \
 	TLCS900h_disassemble.c TLCS900h_interpret_src.c \
 	TLCS900h_interpret_dst.c TLCS900h_disassemble_dst.c \
 	dasm.c Z80.c
-NeoPop_SDL_SOURCES=system_comms.c system_graphics.c \
+NeoPop_SDL_SOURCES=system_bindings.c system_comms.c system_graphics.c \
 	system_input.c system_io.c system_language.c \
-	system_main.c system_rom.c system_screenshot.c system_sound.c \
-	event_names.c builtin_bindings.c
-BUILT_SOURCES=event_names.c
+	system_main.c system_names.c system_rc.c system_rom.c \
+	system_screenshot.c system_sound.c
+BUILT_SOURCES=system_names.c
 
 NeoPop-SDL.6: NeoPop-SDL.${MANFMT} Makefile
 	sed "s|DOCDIR|${docdir}|g" ${srcdir}/NeoPop-SDL.${MANFMT} > $@.$$$$ && \
 		mv $@.$$$$ $@
 
-event_names.c: mkeventnames.sh NeoPop-SDL.h
-	sh ${srcdir}/mkeventnames.sh ${srcdir}/NeoPop-SDL.h > $@.$$$$ && \
+system_names.c: mknames.sh NeoPop-SDL.h
+	sh ${srcdir}/mknames.sh ${srcdir}/NeoPop-SDL.h > $@.$$$$ && \
 		mv $@.$$$$ $@
 
-EXTRA_DIST=	NeoPop-SDL.mdoc NeoPop-SDL.man
+EXTRA_DIST=	NeoPop-SDL.mdoc NeoPop-SDL.man mknames.sh
 DISTCLEANFILES=	NeoPop-SDL.6

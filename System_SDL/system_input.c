@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.13 2004/06/22 22:46:43 dillo Exp $ */
+/* $NiH: system_input.c,v 1.14 2004/06/23 00:06:13 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -23,12 +23,7 @@
 
 /* #define KEY_DEBUG */
 
-#include <errno.h>
-#include <ctype.h>
-
 #include "NeoPop-SDL.h"
-
-enum neopop_event bindings[NPKS_SIZE];
 
 static const int joy_mask[] = {
     0x01, /* up */
@@ -47,20 +42,6 @@ static int joy_hat[NPKS_NJOY*NPKS_JOY_NHAT];
 #define JOY_AXIS(n, k)	(joy_axis[(n)*NPKS_JOY_NAXIS+(k)])
 #define JOY_HAT(n, k)	(joy_hat[(n)*NPKS_JOY_NHAT+(k)])
 
-
-static const char *shift_name[] = {
-    "", "C-", "M-"
-};
-static const char *axis_name[] = {
-    "neg", "pos"
-};
-static const char *hat_name[] = {
-    "up", "down", "left", "right"
-};
-
-#define NAME_SIZE(x)	(sizeof(x)/sizeof((x)[0]))
-
-int find_name(const char *p, char **end, const char **names, int n);
 void handle_event(enum neopop_event ev, int down);
 const char *npev_name(enum neopop_event ev);
 int npev_parse(const char *name, char **end);
@@ -68,6 +49,7 @@ const char *npks_name(int k);
 int npks_parse(const char *name, char **end);
 void emit_key(int k, int down);
 
+
 
 void
 system_input_update(void)
@@ -207,9 +189,9 @@ emit_key(int k, int type)
 {
 #ifdef KEY_DEBUG
     printf("key %s (%d) %s == %s\n",
-	   npks_name(k), k,
+	   system_npks_name(k), k,
 	   (type == NPKS_DOWN ? "down" : "up"),
-	   npev_name(bindings[k]));
+	   system_npev_name(bindings[k]));
 #endif
     handle_event(bindings[k], type);
 }
@@ -319,246 +301,3 @@ handle_event(enum neopop_event ev, int type)
 	}
     }
 }
-
-
-
-const char *
-npks_name(int k)
-{
-    static char b[8192];
-    int n;
-
-    if (k < NPKS_JOY_BASE) {
-	n = k / NPKS_KEY_SIZE;
-	k %= NPKS_KEY_SIZE;
-
-	snprintf(b, sizeof(b), "%s%s", shift_name[n], SDL_GetKeyName(k));
-    }
-    else {
-	k -= NPKS_JOY_BASE;
-	n = k / NPKS_JOY_SIZE;
-	k %= NPKS_JOY_SIZE;
-
-	if (k < NPKS_JOY_HAT_OFFSET)
-	    snprintf(b, sizeof(b), "joy %d axis %d %s",
-		     n+1, (k/2)+1, axis_name[k%2]);
-	else if (k < NPKS_JOY_BUTTON_OFFSET) {
-	    k -= NPKS_JOY_HAT_OFFSET;
-	    snprintf(b, sizeof(b), "joy %d hat %d %s",
-		     n+1, (k/4)+1, hat_name[k%4]);
-	}
-	else {
-	    k -= NPKS_JOY_BUTTON_OFFSET;
-	    snprintf(b, sizeof(b), "joy %d button %d", n+1, k+1);
-	}
-    }
-
-    return b;
-}
-
-
-
-int
-npks_parse(const char *name, char **end)
-{
-    static const char *key_name[SDLK_LAST];
-    static int key_name_inited = 0;
-
-    const char *p;
-    int n, k, i;
-
-    p = name+strspn(name, " \t");
-    if (strncasecmp(p, "joy", 3) == 0) {
-	p += 4;
-	n = strtoul(p, (char **)&p, 10)-1;
-	if (n < 0 || n >= NPKS_NJOY)
-	    return -1;
-
-	p += strspn(p, " \t");
-	if (strncasecmp(p, "axis", 4) == 0) {
-	    p += 4;
-	    k = strtoul(p, (char **)&p, 10)-1;
-	    if (k < 0 || k >= NPKS_JOY_NAXIS)
-		return -1;
-	    
-	    if ((i=find_name(p, (char **)&p,
-			     axis_name, NAME_SIZE(axis_name))) == -1)
-		return -1;
-
-	    if (end)
-		*end = (char *)p;
-	    return NPKS_JOY_AXIS(n, k) + i;
-	}
-	else if (strncasecmp(p, "hat", 3) == 0) {
-	    p += 3;
-
-	    k = strtoul(p, (char **)&p, 10)-1;
-	    if (k < 0 || k >= NPKS_JOY_NBUTTON)
-		return -1;
-
-	    if ((i=find_name(p, (char **)&p,
-			     hat_name, NAME_SIZE(hat_name))) == -1)
-		return -1;
-
-	    if (end)
-		*end = (char *)p;
-	    return NPKS_JOY_HAT(n, k) + i;
-	}
-	else if (strncasecmp(p, "button", 6) == 0) {
-	    p += 6;
-
-	    k = strtoul(p, (char **)&p, 10)-1;
-	    if (k < 0 || k >= NPKS_JOY_NBUTTON)
-		return -1;
-
-	    if (end)
-		*end = (char *)p;
-	    return NPKS_JOY_BUTTON(n, k);
-	}
-	else
-	    return -1;
-    }
-    else {
-	if (!key_name_inited) {
-	    for (i=0; i<SDLK_LAST; i++) {
-		key_name[i] = SDL_GetKeyName(i);
-		if (strcmp(key_name[i], "unknown key") == 0)
-		    key_name[i] = NULL;
-	    }
-	    key_name_inited = 1;
-	}
-
-	n = NPKS_SH_NONE;
-	if (p[1] == '-') {
-	    switch (p[0]) {
-	    case 'C':
-	    case 'c':
-		n = NPKS_SH_CTRL;
-		p += 2; 
-		break;
-	    case 'A':
-	    case 'a':
-	    case 'M':
-	    case 'm':
-		n = NPKS_SH_ALT;
-		p += 2; 
-		break;
-	    }
-	}
-
-	if ((k=find_name(p, (char **)&p, key_name, SDLK_LAST)) != -1) {
-	    if (end)
-		*end = (char *)p;
-	    return NPKS_KEY(n, k);
-	}
-	return -1;
-    }    
-}
-
-
-
-void
-read_bindings(const char *fname)
-{
-    char b[8192], *p;
-    FILE *f;
-    int lno;
-    int k;
-    int ev;
-
-    if ((f=fopen(fname, "r")) == NULL)
-	return;
-
-    lno = 0;
-    while (fgets(b, sizeof(b), f)) {
-	lno++;
-	if (b[strlen(b)-1] == '\n')
-	    b[strlen(b)-1] = '\0';
-	if (b[0] == '#' || b[0] == '\0')
-	    continue;
-
-	p = b+strspn(b, " \t");
-	if (strncasecmp(p, "map", 3) == 0) {
-	    p += 3;
-	    if ((k=npks_parse(p, (char **)&p)) < 0) {
-		printf("%s:%d: cannot parse key [%s]\n",
-		       fname, lno, p);
-		continue;
-	    }
-	    p += strspn(p, " \t");
-	    if (p[0] != '=') {
-		printf("%s:%d: missing = in map [%s]\n",
-		       fname, lno, p);
-		continue;
-	    }
-	    p += strspn(p+1, " \t");
-	    if ((ev=npev_parse(p, (char **)&p)) < 0) {
-		printf("%s:%d: cannot parse event [%s]\n",
-		       fname, lno, p);
-		continue;
-	    }
-	    p += strspn(p, " \t");
-	    if (p[0] != '\0') {
-		printf("%s:%d: trailing garbage in map [%s]\n",
-		       fname, lno, p);
-		continue;
-	    }
-	    bindings[k] = ev;
-	}
-	else {
-	    printf("%s:%d: unknown command [%s]\n",
-		   fname, lno, p);
-	}
-    }
-}
-
-
-
-const char *
-npev_name(enum neopop_event ev)
-{
-    static const char *unknown="[unknown]";
-
-    if (ev < 0 || ev >= NPEV_LAST)
-	return unknown;
-
-    return event_names[ev];
-}
-
-
-
-int
-npev_parse(const char *name, char **end)
-{
-    return find_name(name, end, event_names, NPEV_LAST);
-}
-
-
-
-int
-find_name(const char *p, char **end, const char **names, int n)
-{
-    int i, l, k, l2;
-
-    k = l2 = -1;
-    p += strspn(p, " \t");
-    
-    for (i=0; i<n; i++) {
-	if (names[i] == NULL)
-	    continue;
-
-	l = strlen(names[i]);
-	if (l>l2 && strncasecmp(p, names[i], l) == 0
-	    && (p[l] == '\0' || isspace(p[l]))) {
-	    k = i;
-	    l2 = l;
-	}
-    }
-
-    if (k != -1) {
-	if (end)
-	    *end = (char *)(p+l2);
-    }
-    return k;
-}
-

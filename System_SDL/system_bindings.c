@@ -49,10 +49,12 @@ static struct binding builtin[] = {
     { -1, NPEV_NONE }
 };
 
+enum neopop_event bindings[NPKS_SIZE];
+
 
 
 void
-bindings_init(void)
+system_bindings_init(void)
 {
     int i;
 

@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.4 2004/06/22 22:04:33 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.5 2004/06/23 00:06:13 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2003 Thomas Klausner
@@ -62,6 +62,18 @@ enum neopop_event {
     NPEV_LAST
 };
 
+enum nprc {
+    NPRC_COLOUR,
+    NPRC_FRAMESKIP,
+    NPRC_FULLSCREEN,
+    NPRC_LANGUAGE,
+    NPRC_MAGNIFY,
+    NPRC_MAP,
+    NPRC_SMOOTH,
+    NPRC_SOUND,
+
+    NPRC_LAST
+};
 
 /* defines for keys */
 
@@ -100,7 +112,8 @@ enum npks_shift {
 #define NPKS_JOY_BUTTON(n, i)	(NPKS_JOY(n)+NPKS_JOY_BUTTON_OFFSET+(i))
 
 extern enum neopop_event bindings[];
-extern const char *event_names[];
+extern const char *npev_names[];
+extern const char *nprc_names[];
 
 
 void system_graphics_fullscreen_toggle(void);
@@ -129,5 +142,12 @@ extern int do_exit;
 extern int graphics_mag_req;
 extern int graphics_mag_smooth;
 
-void read_bindings(const char *fname);
-void bindings_init(void);
+void system_bindings_init(void);
+
+void system_rc_read(void);
+void system_rc_read_file(const char *);
+
+const char *system_npev_name(enum neopop_event);
+int system_npev_parse(const char *, char **);
+const char *system_npks_name(int);
+int system_npks_parse(const char *, char **);

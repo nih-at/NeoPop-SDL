@@ -446,9 +446,9 @@ void reset_memory(void)
 
 	if (rom.data)
 	{
-		*(_u32*)(ram + 0x6C00) = rom_header->startPC;	//Start
-		*(_u16*)(ram + 0x6E82) = 				//Catalog
-			*(_u16*)(ram + 0x6C04) = rom_header->catalog;
+		*(_u32*)(ram + 0x6C00) = rom_header->startPC;		//Start
+		*(_u16*)(ram + 0x6E82) = 
+			*(_u16*)(ram + 0x6C04) = rom_header->catalog;	//Catalog
 		*( _u8*)(ram + 0x6E84) = 
 			*( _u8*)(ram + 0x6C06) = rom_header->subCatalog;	//Sub-Cat
 		memcpy(ram + 0x6C08, rom.data + 0x24, 12);			//name

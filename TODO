@@ -1,9 +1,9 @@
+. readd smooth
 . osd for fullscreen, smooth
 . option: yuv for fullscreen, rgb for windowed
 . option: yuv only if hardware accelerated
 . convert DAC sound ourselves (SDL is broken)
 . movie captures
-. pause game
 . reset game
 . change emulation speed (run faster/slower)
 . turning sound on during game disables throttling for about 2s

@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: NeoPop-SDL.mdoc,v 1.16 2004/07/22 10:10:39 dillo Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.16 2004/07/22 10:10:39 dillo Exp $
+.\" from NiH: NeoPop-SDL.mdoc,v 1.17 2004/07/25 07:21:54 dillo Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.17 2004/07/25 07:21:54 dillo Exp $
 .\"
 .\" Copyright (c) 2003, 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -305,7 +305,13 @@ and
 Max Horn
 provided the HQx scaling routines.
 .SH "BUGS"
-Please see the
+Network play does not work.
+.PP
+.B NeoPop-SDL
+crashes if it tries to use YUV overlay but another application is
+already using an YUV overlay.
+.PP
+Also, please see the
 \fBDOCDIR/bugs-core.html\fR
 and
 \fBDOCDIR/TODO\fR

@@ -8,8 +8,6 @@ bugs:
 . comm support not working
 
 features:
-+ osd for fullscreen
-+ implement NPEV_GUI_FULLSCREEN_{ON,OFF}
 . hqx i386 asm versions
 . configure: test for altivec
 . movie captures

@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.21 2004/07/21 09:36:47 dillo Exp $ */
+/* $NiH: system_graphics.c,v 1.22 2004/07/21 10:00:33 dillo Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -50,7 +50,7 @@ static int use_yuv_now;
 static int graphics_mag_actual = 1;
 
 /* display in full screen mode? */
-static int fs_mode = 0;
+int fs_mode = 0;
 
 
 static BOOL system_graphics_screen_init(int mfactor);
@@ -157,10 +157,14 @@ system_graphics_init(void)
 }
 
 void
-system_graphics_fullscreen_toggle(void)
+system_graphics_fullscreen(int mode)
 {
+    if (mode == -1)
+	mode = !fs_mode;
+    if (mode == fs_mode)
+	return;
     SDL_WM_ToggleFullScreen(disp);
-    fs_mode = (fs_mode ? 0 : 1);
+    fs_mode = mode;
     /* hide mouse pointer in fullscreen mode */
     if (SDL_ShowCursor(-1) == fs_mode)
 	    SDL_ShowCursor(1-fs_mode);
@@ -204,6 +208,9 @@ system_graphics_screen_init(int mfactor)
     }
     else
 	use_yuv_now = 0;
+
+    if (SDL_ShowCursor(-1) == fs_mode)
+	    SDL_ShowCursor(1-fs_mode);
 
     return TRUE;
 }

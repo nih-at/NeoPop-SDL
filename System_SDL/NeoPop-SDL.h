@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.19 2004/07/22 10:31:19 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.20 2004/07/22 12:13:07 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -159,7 +159,7 @@ void system_bindings_init(void);
 BOOL system_comms_connect(void);
 void system_comms_pause(BOOL);
 
-void system_graphics_fullscreen_toggle(void);
+void system_graphics_fullscreen(int);
 BOOL system_graphics_init(void);
 void system_graphics_update(void);
 
@@ -171,7 +171,6 @@ void system_osd(const char *, ...);
 void system_osd_display(void);
 int system_osd_init(void);
 void system_osd_pause(int);
-
 
 const char *system_npev_name(enum neopop_event);
 int system_npev_parse(const char *, char **);
@@ -218,6 +217,7 @@ extern char *flash_dir;
 extern char *screenshot_dir;
 extern int use_rom_name;
 extern int state_slot;
+extern int fs_mode;
 
 extern Uint32 hqx_lookup[16*16*16];
 

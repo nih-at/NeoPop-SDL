@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.23 2004/07/21 10:35:38 wiz Exp $ */
+/* $NiH: system_input.c,v 1.24 2004/07/22 12:13:07 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -45,6 +45,7 @@ static int joy_hat[NPKS_NJOY*NPKS_JOY_NHAT];
 static void handle_event(enum neopop_event, int);
 static void emit_key(int, int);
 
+static void set_fullscreen(int);
 static void set_mute(int);
 static void set_paused(int);
 
@@ -227,13 +228,13 @@ handle_event(enum neopop_event ev, int type)
 	    break;
 	    
 	case NPEV_GUI_FULLSCREEN_OFF:
-	    /* not implemented yet */
+	    set_fullscreen(0);
 	    break;
 	case NPEV_GUI_FULLSCREEN_ON:
-	    /* not implemented yet */
+	    set_fullscreen(1);
 	    break;
 	case NPEV_GUI_FULLSCREEN_TOGGLE:
-	    system_graphics_fullscreen_toggle();
+	    set_fullscreen(!fs_mode);
 	    break;
 	    
 	case NPEV_GUI_MAGNIFY_1:
@@ -327,6 +328,15 @@ handle_event(enum neopop_event ev, int type)
 	    break;
 	}
     }
+}
+
+
+
+static void
+set_fullscreen(int val)
+{
+    system_graphics_fullscreen(val);
+    system_osd("fullscreen %s", fs_mode ? "on" : "off");
 }
 
 

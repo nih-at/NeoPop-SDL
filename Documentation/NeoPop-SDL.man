@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
 .\" from NiH: NeoPop-SDL.mdoc,v 1.1 2003/10/16 17:19:36 wiz Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.1 2003/10/16 17:19:36 wiz Exp $
+.\" $NiH: NeoPop-SDL.man,v 1.1 2003/10/16 17:19:53 wiz Exp $
 .\"
 .\" Copyright (c) 2003 Thomas Klausner.
 .\" All rights reserved.
@@ -217,7 +217,7 @@ using
 Marat FayzullinNo 's
 z80 core.
 Thomas Klausner
-<tk@giga.or.at>
+<wiz@danbala.tuwien.ac.at>
 ported it to SDL.
 .SH "BUGS"
 Please see the

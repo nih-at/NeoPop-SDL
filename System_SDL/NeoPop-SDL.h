@@ -1,10 +1,10 @@
-/* $NiH: NeoPop-SDL.h,v 1.1 2003/10/15 12:16:38 wiz Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.2 2003/10/15 12:30:02 wiz Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2003 Thomas Klausner
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
-  The author can be contacted at <tk@giga.or.at>
+  The author can be contacted at <wiz@danbala.tuwien.ac.at>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

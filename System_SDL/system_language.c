@@ -1,10 +1,10 @@
-/* $NiH: system_language.c,v 1.3 2002/12/02 14:24:22 wiz Exp $ */
+/* $NiH: system_language.c,v 1.4 2003/10/15 12:30:03 wiz Exp $ */
 /*
   system_language.c -- language strings needed by NeoPop core
   Copyright (C) 2002-2003 Thomas Klausner
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
-  The author can be contacted at <tk@giga.or.at>
+  The author can be contacted at <wiz@danbala.tuwien.ac.at>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

@@ -1,10 +1,10 @@
-/* $NiH: system_graphics.c,v 1.12 2003/10/15 12:16:14 wiz Exp $ */
+/* $NiH: system_graphics.c,v 1.13 2003/10/15 12:30:02 wiz Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2003 Thomas Klausner
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
-  The author can be contacted at <tk@giga.or.at>
+  The author can be contacted at <wiz@danbala.tuwien.ac.at>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

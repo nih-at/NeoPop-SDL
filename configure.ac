@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.54)
-AC_REVISION([$NiH: configure.ac,v 1.8 2003/10/15 12:36:25 wiz Exp $])
-AC_INIT([NeoPop-SDL],[0.1], [tk@giga.or.at], [NeoPop-SDL])
+AC_REVISION([$NiH: configure.ac,v 1.9 2003/10/16 17:25:21 wiz Exp $])
+AC_INIT([NeoPop-SDL],[0.1], [wiz@danbala.tuwien.ac.at], [NeoPop-SDL])
 AC_CONFIG_SRCDIR([System_SDL/system_main.c])
 AC_CONFIG_HEADERS([System_SDL/config.h])
 AC_CANONICAL_HOST

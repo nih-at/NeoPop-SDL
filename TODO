@@ -1,3 +1,4 @@
+. osd for gui actions (e.g. load/save state)
 . option: yuv for fullscreen, rgb for windowed
 . option: yuv only if hardware accelerated
 . convert DAC sound ourselves (SDL is broken)

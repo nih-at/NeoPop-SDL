@@ -1,5 +1,13 @@
 2004-08-07  Thomas Klausner  <wiz@danbala.tuwien.ac.at>
 
+	* System_SDL/unzip.c: remove unused variable, and add braces
+	around ambiguous if-else clauses.
+
+	* Core/neopop.c (instruction_error): add appropriate ifdef around
+	otherwise unused variable.
+
+	* Core/biosHLE.c (iBIOSHLE): remove unused variable.
+
 	* configure.ac: Use pkgconfig to find libpng.
 	Handle --with-png=no correctly.
 

@@ -106,12 +106,26 @@ static unsigned char mirrored[] = {
 
 //=============================================================================
 
-static void Plot8(int x, _u16* palette_ptr, _u8 palette, _u16 index, _u8 depth)
+static void drawPattern(_u8 screenx, _u16 tile, _u8 tiley, _u16 mirror, 
+				 _u16* palette_ptr, _u8 pal, _u8 depth)
 {
-	int left, right, highmark, xx;
+	int index, x, left, right, highmark, xx;
 	_u16 data16;
-	
-	palette_ptr += palette << 2;
+
+	x = screenx;
+	if (x > 0xf8)
+		x -= 256;
+	if (x >= SCREEN_WIDTH)
+		return;
+
+	//Get the data for the "tiley'th" line of "tile".
+	index = le16toh(*(_u16*)(ram + 0xA000 + (tile * 16) + (tiley * 2)));
+
+	//Horizontal Flip
+	if (mirror)
+		index = mirrored[(index & 0xff00)>>8] | (mirrored[(index & 0xff)] << 8);
+
+	palette_ptr += pal << 2;
 	left = max(max(x, winx), 0);
 	right = x+7;
 
@@ -135,29 +149,6 @@ static void Plot8(int x, _u16* palette_ptr, _u8 palette, _u16 index, _u8 depth)
 		else
 			cfb_scanline[xx] = data16;
 	}
-	
-}
-
-static void drawPattern(_u8 screenx, _u16 tile, _u8 tiley, _u16 mirror, 
-				 _u16* palette_ptr, _u8 pal, _u8 depth)
-{
-	int x;
-	_u16 data;
-
-	x = screenx;
-	if (screenx > 0xf8)
-		x -= 256;
-	if (x >= SCREEN_WIDTH)
-		return;
-
-	//Get the data for the "tiley'th" line of "tile".
-	data = le16toh(*(_u16*)(ram + 0xA000 + (tile * 16) + (tiley * 2)));
-
-	//Horizontal Flip
-	if (mirror)
-		data = mirrored[(data & 0xff00)>>8] | (mirrored[(data & 0xff)] << 8);
-	
-	Plot8(x, palette_ptr, pal, data, depth);
 }
 
 static void gfx_draw_scroll1(_u8 depth)

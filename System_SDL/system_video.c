@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_video.c,v 1.1 2004/08/08 16:56:56 dillo Exp $ */
 /*
   system_video.c -- record video
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -22,12 +22,11 @@
 */
 
 #include "config.h"
+#include "NeoPop-SDL.h"
 
 #ifdef HAVE_FFMPEG
 
 #include <ffmpeg/avformat.h>
-
-#include "NeoPop-SDL.h"
 
 #define DO_AUDIO
 
@@ -46,12 +45,16 @@ static int buf_aoff;
 static AVFrame *alloc_pic(int, int, int);
 static void fill_pic(AVFrame *);
 
+#endif /* HAVE_FFMPEG */
 
 
 
 int
 system_video_close(void)
 {
+#ifndef HAVE_FFMPEG
+    return 0;
+#else
     avcodec_close(&st_v->codec);
 #ifdef DO_AUDIO
     avcodec_close(&st_a->codec);
@@ -63,6 +66,7 @@ system_video_close(void)
     /* XXX: free oc */
 
     return 0;
+#endif /* HAVE_FFMPEG */
 }
 
 
@@ -70,7 +74,11 @@ system_video_close(void)
 void
 system_video_init(void)
 {
+#ifndef HAVE_FFMPEG
+    return;
+#else
     av_register_all();
+#endif /* HAVE_FFMPEG */
 }
 
 
@@ -78,6 +86,10 @@ system_video_init(void)
 int
 system_video_open(const char *fname)
 {
+#ifndef HAVE_FFMPEG
+    fprintf(stderr, "video capture (with ffmpeg) not compiled in\n");
+    return -1;
+#else
     AVOutputFormat *fmt;
     AVCodecContext *c;
     AVCodec *cd;
@@ -150,6 +162,7 @@ system_video_open(const char *fname)
     av_write_header(oc);
 
     return 0;
+#endif /* HAVE_FFMPEG */
 }
 
 
@@ -157,6 +170,7 @@ system_video_open(const char *fname)
 void
 system_video_write_aframe(unsigned char *samples, int bpf)
 {
+#ifdef HAVE_FFMPEG
 #ifdef DO_AUDIO
     AVCodecContext *c;
     int size, len;
@@ -184,6 +198,7 @@ system_video_write_aframe(unsigned char *samples, int bpf)
 	}
     }
 #endif
+#endif /* HAVE_FFMPEG */
 }
 
 
@@ -191,6 +206,7 @@ system_video_write_aframe(unsigned char *samples, int bpf)
 void
 system_video_write_vframe(void)
 {
+#ifdef HAVE_FFMPEG
     AVCodecContext *c;
     AVFrame *pic;
     int size;
@@ -213,9 +229,12 @@ system_video_write_vframe(void)
     size = avcodec_encode_video(c, buf_v, sizeof(buf_v), pic);
     if (size > 0)
 	av_write_frame(oc, st_v->index, buf_v, size);
+#endif /* HAVE_FFMPEG */
 }
 
 
+
+#ifdef HAVE_FFMPEG
 
 static AVFrame *
 alloc_pic(int fmt, int width, int height)
@@ -264,4 +283,4 @@ fill_pic(AVFrame *pic)
     }
 }
 
-#endif
+#endif /* HAVE_FFMPEG */

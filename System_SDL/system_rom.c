@@ -1,4 +1,4 @@
-/* $NiH: system_rom.c,v 1.13 2004/06/23 17:19:05 dillo Exp $ */
+/* $NiH: system_rom.c,v 1.14 2004/07/09 18:48:12 dillo Exp $ */
 /*
   system_rom.c -- ROM loading support
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -53,10 +53,7 @@ rom_load(char *filename)
 
 #ifdef HAVE_LIBZ
     if ((z=unzOpen(filename)) != NULL) {
-	err=unzGoToFirstFile(z); 
-	while (err==UNZ_OK &&
-	       ((err=unzGoToNextFile(z)) == UNZ_OK
-		|| err == UNZ_END_OF_LIST_OF_FILE)) {
+	for (err=unzGoToFirstFile(z); err==0; err=unzGoToNextFile(z)) {
 	    if (unzGetCurrentFileInfo(z, &zfi, name, sizeof(name),
 				      NULL, 0, NULL, 0) != UNZ_OK)
 		continue;

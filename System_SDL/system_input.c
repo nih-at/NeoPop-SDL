@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.9 2003/10/16 17:29:45 wiz Exp $ */
+/* $NiH: system_input.c,v 1.10 2004/06/20 23:43:30 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -74,7 +74,6 @@ system_input_update(void)
 		graphics_mag_smooth = graphics_mag_smooth ? 0 : 1;
 		break;
 	    case SDLK_RETURN:
-		printf("enter [%d]\n", evt.key.keysym.mod);
 		if ((evt.key.keysym.mod & KMOD_ALT) == 0)
 		    break;
 		/* fallthrough */

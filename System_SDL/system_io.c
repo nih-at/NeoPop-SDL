@@ -1,4 +1,4 @@
-/* $NiH: system_io.c,v 1.10 2004/07/10 00:49:52 dillo Exp $ */
+/* $NiH: system_io.c,v 1.11 2004/07/10 02:39:35 dillo Exp $ */
 /*
   system_io.c -- read/write flash files 
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -195,7 +195,7 @@ system_io_state_write(char *filename, _u8 *buffer, _u32 len)
 static char *
 make_file_name(const char *dir, const char *ext, int writing)
 {
-    char *fname, *name, *home;
+    char *fname, *name, *home, *p;
     int len;
 
     if (use_rom_name)
@@ -223,7 +223,11 @@ make_file_name(const char *dir, const char *ext, int writing)
     if (writing && !validate_dir(fname))
 	return NULL;
 
-    sprintf(fname+strlen(fname), "/%s.%s", name, ext);
+    p = fname+strlen(fname);
+    sprintf(p, "/%s.%s", name, ext);
+    while (*(++p))
+	if (*p == '/')
+	    *p = '_';
 
     return fname;
 }

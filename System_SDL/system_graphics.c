@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.15 2004/07/09 10:34:31 dillo Exp $ */
+/* $NiH: system_graphics.c,v 1.16 2004/07/10 02:39:35 dillo Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -115,7 +115,11 @@ system_graphics_init(void)
 	    if (u < 0) u = 0; if (u > 255) u = 255;
 	    if (v < 0) v = 0; if (v > 255) v = 255;
 	    
-	    lookup[i] = y|(u<<24)|(v<<8)|(y<<16);
+#ifdef LSB_FIRST
+	    lookup[i] = (u<<24)|(y<<16)|(v<<8)|y;
+#else
+	    lookup[i] = (y<<24)|(v<<16)|(y<<8)|u;
+#endif
 	}
     }
     else

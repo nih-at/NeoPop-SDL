@@ -106,29 +106,6 @@ static unsigned char mirrored[] = {
 
 //=============================================================================
 
-#if 0
-static void Plot(_u8 x, _u16* palette_ptr, _u8 palette, _u8 index, _u8 depth)
-{
-	_u16 data16;
-
-	//Clip
-	if (index == 0 || x < winx || x >= (winw + winx) || x >= SCREEN_WIDTH)
-		return;
-
-	//Depth check, <= to stop later sprites overwriting pixels!
-	if (depth <= zbuffer[x]) return;
-	zbuffer[x] = depth;
-
-	//Get the colour of the pixel
-	data16 = le16toh(palette_ptr[(palette << 2) + index]);
-
-	if (negative)
-		cfb_scanline[x] = ~data16;
-	else
-		cfb_scanline[x] = data16;
-}
-#endif
-
 static void Plot8(int x, _u16* palette_ptr, _u8 palette, _u16 index, _u8 depth)
 {
 	int left, right, highmark, xx;
@@ -181,16 +158,6 @@ static void drawPattern(_u8 screenx, _u16 tile, _u8 tiley, _u16 mirror,
 		data = mirrored[(data & 0xff00)>>8] | (mirrored[(data & 0xff)] << 8);
 	
 	Plot8(x, palette_ptr, pal, data, depth);
-#if 0
-	Plot(screenx + 0, palette_ptr, pal, (data & 0xC000) >> 0xE, depth);
-	Plot(screenx + 1, palette_ptr, pal, (data & 0x3000) >> 0xC, depth);
-	Plot(screenx + 2, palette_ptr, pal, (data & 0x0C00) >> 0xA, depth);
-	Plot(screenx + 3, palette_ptr, pal, (data & 0x0300) >> 0x8, depth);
-	Plot(screenx + 4, palette_ptr, pal, (data & 0x00C0) >> 0x6, depth);
-	Plot(screenx + 5, palette_ptr, pal, (data & 0x0030) >> 0x4, depth);
-	Plot(screenx + 6, palette_ptr, pal, (data & 0x000C) >> 0x2, depth);
-	Plot(screenx + 7, palette_ptr, pal, (data & 0x0003) >> 0x0, depth);
-#endif
 }
 
 static void gfx_draw_scroll1(_u8 depth)

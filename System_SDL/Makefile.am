@@ -10,7 +10,7 @@ VPATH=$(top_srcdir)/Core:$(top_srcdir)/Core/TLCS-900h:$(top_srcdir)/Core/z80:$(t
 .PATH=${VPATH}
 
 bin_PROGRAMS=NeoPop-SDL
-man_MANS=NeoPop-SDL.1
+man_MANS=NeoPop-SDL.6
 noinst_HEADERS=NeoPop-SDL.h
 
 nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c dma.c flash.c gfx.c \
@@ -27,4 +27,4 @@ NeoPop_SDL_SOURCES=system_comms.c system_graphics.c \
 	system_main.c system_rom.c system_screenshot.c system_sound.c
 
 EXTRA_DIST=	NeoPop-SDL.mdoc NeoPop-SDL.man
-DISTCLEANFILES=	NeoPop-SDL.1
+DISTCLEANFILES=	NeoPop-SDL.6

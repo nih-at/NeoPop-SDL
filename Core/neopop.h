@@ -489,7 +489,13 @@ RomHeader;
 
 #endif
 
-#ifdef BIGENDIAN
+/*! Macros for big- and little-endian support (defaults to little-endian). */
+
+#ifdef MSB_FIRST
+#ifdef LSB_FIRST
+#error Only define one of LSB_FIRST and MSB_FIRST
+#endif
+
 #ifndef le32toh
 #define le32toh(l)	((((l)>>24) & 0xff) | (((l)>>8) & 0xff00) \
 			 (((l)<<8) & 0xff0000) | (((l)<<24) & 0xff000000))

@@ -13,7 +13,9 @@
 #ifndef Z80_H
 #define Z80_H
 
-#define LSB_FIRST	/* Added by neopop_uk */
+#if !defined(LSB_FIRST) && !defined(MSB_FIRST)
+#define LSB_FIRST
+#endif
 
                                /* Compilation options:       */
 /* #define DEBUG */            /* Compile debugging version  */

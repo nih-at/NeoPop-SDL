@@ -1,5 +1,5 @@
 # extra documentation
-doc_DATA=	bugs-core.html readme-core.txt recording.format.txt
+doc_DATA=	bugs-core.html layout.png readme-core.txt recording.format.txt
 docdir=		@DOCDIR@
 
 # man pages

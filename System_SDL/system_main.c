@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.25 2003/10/17 23:00:12 wiz Exp $ */
+/* $NiH: system_main.c,v 1.26 2004/06/20 23:43:31 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2003 Thomas Klausner
@@ -205,6 +205,8 @@ main(int argc, char *argv[])
 	SDL_JoystickOpen(0);
 	SDL_JoystickEventState(SDL_ENABLE);
     }
+
+    read_bindings("neopoprc");
 
     if (system_graphics_init() == FALSE) {
 	fprintf(stderr, "cannot create window: %s\n", SDL_GetError());

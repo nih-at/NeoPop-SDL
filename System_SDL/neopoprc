@@ -1,0 +1,40 @@
+map escape = gui quit
+map C-q = gui quit
+map 1 = gui magnify 1
+map 2 = gui magnify 2
+map 3 = gui magnify 3
+map m = gui mute toggle
+map b = gui smooth toggle
+map f = gui fullscreen toggle
+map - = gui frameskip decrement
+map = = gui frameskip increment
+map M-return = gui fullscreen toggle
+map f3 = gui state load
+map f4 = gui state save
+map f12 = gui screenshot
+
+map up = joy up
+map down = joy down
+map left = joy left
+map right = joy right
+map left shift = joy button a
+map right shift = joy button a
+map left ctrl = joy button b
+map right ctrl = joy button b
+map tab = joy option
+
+map i = joy up
+map k = joy down
+map j = joy left
+map l = joy right
+map a = joy button a
+map s = joy button b
+map d = joy option
+
+map joy 1 axis 2 neg = joy up
+map joy 1 axis 2 pos = joy down
+map joy 1 axis 1 neg = joy left
+map joy 1 axis 1 pos = joy right
+map joy 1 button 1 = joy button a
+map joy 1 button 2 = joy button b
+map joy 1 button 6 = joy option

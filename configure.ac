@@ -1,8 +1,8 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.56)
-AC_REVISION([$NiH: configure.ac,v 1.4 2002/12/03 13:12:16 wiz Exp $])
+AC_PREREQ(2.54)
+AC_REVISION([$NiH: configure.ac,v 1.5 2002/12/03 13:55:36 wiz Exp $])
 AC_INIT([neopop-SDL],[0.1])
 AC_CONFIG_SRCDIR([System_SDL/system_main.c])
 AC_CONFIG_HEADERS([System_SDL/config.h])

@@ -1,4 +1,5 @@
-#include <SDL.h>
+/* $NiH$ */
+
 #include "neopop-SDL.h"
 
 #define INPUT_MASK_UP		0x1
@@ -18,6 +19,9 @@ system_input_update(void)
 	switch(evt.type) {
 	case SDL_KEYDOWN:
 	    switch(evt.key.keysym.sym) {
+	    case SDLK_F12:
+		system_screenshot();
+		break;
 	    case SDLK_1:
 		graphics_mag_req = 1;
 		break;

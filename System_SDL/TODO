@@ -1,15 +1,13 @@
-x command line options
- . no audio
- . jap/eng
- . color/bw
-. video
- . fps
- x throttled mode
- . screenshot
+. movie captures
 . pause game
 . reset game
 . joystick support
-. input configurable
+. input keys configurable
 . zip support
 . config file
 x save states
+. comm support
+x cleanup:
+ . SDL -> System_SDL
+ . make 'make distribution' work
+ . add license to all files

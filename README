@@ -20,4 +20,10 @@ blur) is AdvanceMAME Scale2x, 3x is homebrewn.
 
 F switches between full-screen and windowed mode.
 
+F12 saves a screenshot in the current directory.  The name of the output
+file is ``neopop-ROMNAMEXXX.png'', where ROMNAME is the internal name of
+the rom and XXX is the number of the screenshot starting from 0; special
+care is taken not to overwrite existing screenshots.
+This feature is only enabled if the PNG library was found during compilation.
+
 ESC quits the emulator.

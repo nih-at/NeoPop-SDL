@@ -1,0 +1,30 @@
+------------------------------------------------------
+System_Win32\docs\todo.txt 
+------------------------------------------------------
+Features to add to the Windows version
+------------------------------------------------------
+
+Far Future, or Never
+====================
+* Invert screen toggle (for "Cool Cool Jam")
+* Network Chat messages
+* Customise menu keyboard shortcuts
+* Screenshot capture to PNG file. (Use LibPNG)
+* Have a border graphic of the NGPC unit / skins (Use LibPNG)
+* Display Filters: scanlines, LCD mode
+* Cheats (Write values to memory every frame).
+* Auto frameskip (need good algorithm)
+* Fast-forward / Don't throttle
+
+
+Debugger
+========
+* Disable GFX layers.
+* Disable breakpoints.
+* Breakpoint for Memory Read/Write to an address/range.
+* DMA register display.
+* Dump Memory to disk
+* Customisable Memory Bookmarks
+* Multi-byte entry to memory viewer
+
+

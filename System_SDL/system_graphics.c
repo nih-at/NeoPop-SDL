@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.13 2003/10/15 12:30:02 wiz Exp $ */
+/* $NiH: system_graphics.c,v 1.14 2003/10/16 17:29:45 wiz Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -30,38 +30,107 @@ int graphics_mag_req = 1;
 /* smooth magnification mode: 1 on, 0 off */
 int graphics_mag_smooth = 1;
 
+/* use YUV overlay (hardware scaling) */
+int use_yuv;
+
 /* display structure */
 static SDL_Surface *disp = NULL;
-/* SDL Surface containing the screen data */
-static SDL_Surface *corescr = NULL;
+
+static SDL_Overlay *over = NULL;
+static SDL_Rect orect_fs, orect_win;
+
 /* displayed graphics is how big compared to original size? 1: normal size,
  * 2: double size, 3: triple size */
 static int graphics_mag_actual = 1;
+
 /* display in full screen mode? */
 static int fs_mode = 0;
 
 
 static BOOL system_graphics_screen_init(int mfactor);
+#if 0
 static BOOL system_graphics_mag_smooth(void);
+#endif
+
+static Uint32 lookup[16*16*16];
+
+#define CONV4TO8(x)	(((x)<<4)|(x))
 
 BOOL
 system_graphics_init(void)
 {
-    Uint32 pixel;
+    int i;
 
-    if (system_graphics_screen_init(1) == FALSE) {
+    if (use_yuv) {
+	SDL_Rect **mode;
+	double mul;
+
+	orect_fs.x = orect_fs.y = orect_win.x = orect_win.y = 0;
+	
+	if ((mode=SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE)) == NULL) {
+	    fprintf(stderr, "cannot get list of modes");
+	    orect_fs.w = SCREEN_WIDTH;
+	    orect_fs.h = SCREEN_HEIGHT;
+	}
+	else {
+	    mul = mode[0]->w/(double)SCREEN_WIDTH;
+	    if (mode[0]->h/(double)SCREEN_HEIGHT < mul)
+		mul = mode[0]->h/(double)SCREEN_HEIGHT;
+	    orect_fs.w = SCREEN_WIDTH*mul;
+	    orect_fs.h = SCREEN_HEIGHT*mul;
+	}
+    }
+
+    if (system_graphics_screen_init(graphics_mag_req) == FALSE) {
 	fprintf(stderr, "cannot create main window: %s\n", SDL_GetError());
 	return FALSE;
     }
+    graphics_mag_actual = graphics_mag_req;
+
+    if (use_yuv) {
+	if ((over=SDL_CreateYUVOverlay(SCREEN_WIDTH*2, SCREEN_HEIGHT,
+				       SDL_YUY2_OVERLAY, disp)) == NULL) {
+	    fprintf(stderr, "cannot create YUV overlay\n");
+	    use_yuv = 0;
+	}
+	if (over->format != SDL_YUY2_OVERLAY || over->planes != 1) {
+	    fprintf(stderr, "unsupported YUV overlay format\n");
+	    use_yuv = 0;
+	}
+    }
+	    
+    if (use_yuv) {
+	int y, u, v;
+	int r, g, b;
+
+	for (i=0; i<16*16*16; i++) {
+	    r = CONV4TO8(i&0xf);
+	    g = CONV4TO8((i>>4)&0xf);
+	    b = CONV4TO8(i>>8);
+	    
+	    y = (((r *  263) + (g * 516) + (b * 100)) >> 10) + 16;
+	    u = (((r *  450) - (g * 377) - (b *  73)) >> 10) + 128;
+	    v = (((r * -152) - (g * 298) + (b * 450)) >> 10) + 128;
+	    if (y < 0) y = 0; if (y > 255) y = 255;
+	    if (u < 0) u = 0; if (u > 255) u = 255;
+	    if (v < 0) v = 0; if (v > 255) v = 255;
+	    
+	    lookup[i] = y|(u<<24)|(v<<8)|(y<<16);
+	}
+    }
+    else
+	for (i=0; i<16*16*16; i++)
+	    lookup[i] = SDL_MapRGB(disp->format,
+				   CONV4TO8(i&0xf),
+				   CONV4TO8((i>>4)&0xf),
+				   CONV4TO8(i>>8));
 
     /* set window caption */
     SDL_WM_SetCaption(PROGRAM_NAME, NULL);
 
     /* fill screen green */
-    pixel = SDL_MapRGB(corescr->format, 0, 0xff, 0);
-    SDL_FillRect(corescr, NULL, pixel);
+    SDL_FillRect(disp, NULL, SDL_MapRGB(disp->format, 0, 0xff, 0));
 
-    SDL_BlitSurface(corescr, NULL, disp, NULL);
     SDL_Flip(disp);
 
     return TRUE;
@@ -75,54 +144,45 @@ system_graphics_fullscreen_toggle(void)
     /* hide mouse pointer in fullscreen mode */
     if (SDL_ShowCursor(-1) == fs_mode)
 	    SDL_ShowCursor(1-fs_mode);
+    if (use_yuv)
+	system_graphics_screen_init(graphics_mag_actual);
 }
 
 static BOOL
 system_graphics_screen_init(int mfactor)
 {
     SDL_Surface *disp_new;
-    SDL_Surface *corescr_new;
-    Uint32 rm, gm, bm;
-    int flags;
+    int flags, w, h;
 
-    flags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE;
+    flags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE | SDL_ANYFORMAT;
     if (fs_mode)
 	flags |= SDL_FULLSCREEN;
-    rm = 0x000f;
-    gm = 0x00f0;
-    bm = 0x0f00;
 
-    if ((disp_new=SDL_SetVideoMode(mfactor*SCREEN_WIDTH,
-				   mfactor*SCREEN_HEIGHT, 16,
-				   flags)) == NULL) {
+    if (use_yuv && fs_mode) {
+	w = orect_fs.w;
+	h = orect_fs.h;
+    }
+    else {
+	w = mfactor*SCREEN_WIDTH;
+	h = mfactor*SCREEN_HEIGHT;
+    }
+
+    if ((disp_new=SDL_SetVideoMode(w, h, 16, flags)) == NULL) {
 	fprintf(stderr, "cannot switch mode: %s\n", SDL_GetError());
 	return FALSE;
     }
 
-    if (mfactor == 1) {
-	corescr_new = SDL_CreateRGBSurfaceFrom(cfb, SCREEN_WIDTH,
-					       SCREEN_HEIGHT, 16,
-					       sizeof(_u16)*SCREEN_WIDTH,
-					       rm, gm, bm, 0);
-    }
-    else {
-	corescr_new = SDL_CreateRGBSurface(SDL_SWSURFACE, mfactor*SCREEN_WIDTH,
-					   mfactor*SCREEN_HEIGHT, 16, rm, gm,
-					   bm, 0);
-    }
-
-    if (corescr_new == NULL) {
-	fprintf(stderr, "CreateRGBSurface failed: %s", SDL_GetError());
-	return FALSE;
-    }
-
     disp = disp_new;
-    SDL_FreeSurface(corescr);
-    corescr = corescr_new;
+
+    if (use_yuv && !fs_mode) {
+	orect_win.w = w;
+	orect_win.h = h;
+    }
 
     return TRUE;
 }
 
+#if 0
 static BOOL
 system_graphics_mag_smooth(void)
 {
@@ -310,10 +370,44 @@ system_graphics_mag_smooth(void)
 
     return TRUE;
 }
+#endif
+
+#define SET1	(line[x] = lookup[*(fbp++)])
+#define SET2	(line[pitch+x+1] = line[pitch+x] = line[x+1] = SET1)
+#define SET3	(line[pitch*2+x+2] = line[pitch*2+x+1] = line[pitch*2+x] = \
+		 line[pitch+x+2] = line[x+2] = SET2)
+
+#define LOOP(T, S, F, P)	{		\
+    T *line;					\
+						\
+    line = (T *)P;				\
+    fbp = cfb;					\
+    for (y=0; y<SCREEN_HEIGHT; y++) {		\
+	for (x=0; x<SCREEN_WIDTH*F; x+=F)	\
+	    SET##F;				\
+	line += pitch*F;			\
+    }						\
+}
+
+#define SWITCH(T, S)				\
+        pitch = disp->pitch/S;			\
+	switch(graphics_mag_actual) {		\
+	case 1:					\
+	    LOOP(T, S, 1, disp->pixels);	\
+	    break;				\
+	case 2:					\
+	    LOOP(T, S, 2, disp->pixels);	\
+	    break;				\
+	case 3:					\
+	    LOOP(T, S, 3, disp->pixels);	\
+	    break;				\
+	}
 
 void
 system_graphics_update(void)
 {
+    int x, y, pitch;
+    _u16 *fbp;
 
     /* handle screen size changes */
     if (graphics_mag_req != graphics_mag_actual) {
@@ -327,50 +421,29 @@ system_graphics_update(void)
 	    graphics_mag_actual = graphics_mag_req;
     }
 
-    if (graphics_mag_actual > 1) {
-	if (!graphics_mag_smooth || system_graphics_mag_smooth() == FALSE) {
-	    /* simple magnification */
-	    _u16 *pixelptr;
-	    int x, y, linelen;
-	    int cfb_offset;
+    if (use_yuv) {
+	SDL_LockYUVOverlay(over);
+	pitch = over->pitches[0]/4;
+	LOOP(Uint32, 4, 1, over->pixels[0]);
+	SDL_UnlockYUVOverlay(over);
 
-	    pixelptr = corescr->pixels;
-	    cfb_offset = 0;
-	    linelen = graphics_mag_actual*SCREEN_WIDTH;
-	    for (y=0; y<SCREEN_HEIGHT; y++) {
-		for (x=0; x<SCREEN_WIDTH; x++) {
-		    /* magnify in x-direction */
-		    switch(graphics_mag_actual) {
-		    case 3:
-			*pixelptr++ = cfb[cfb_offset];
-			/* FALLTHROUGH */
-		    case 2:
-			*pixelptr++ = cfb[cfb_offset];
-			*pixelptr++ = cfb[cfb_offset];
-			break;
-		    default:
-			break;
-		    }
-		    cfb_offset++;
-		}
-
-		/* magnify in y-direction */
-		switch(graphics_mag_actual) {
-		case 3:
-		    memcpy(pixelptr, pixelptr-linelen, linelen*sizeof(_u16));
-		    pixelptr += linelen;
-		    /* FALLTHROUGH */
-		case 2:
-		    memcpy(pixelptr, pixelptr-linelen, linelen*sizeof(_u16));
-		    pixelptr += linelen;
-		    break;
-		default:
-		    break;
-		}
-	    }
+	SDL_DisplayYUVOverlay(over, (fs_mode ? &orect_fs : &orect_win));
+    }
+    else {
+	switch (disp->format->BytesPerPixel) {
+	case 1:
+	    SWITCH(Uint8, 1);
+	    break;
+	    
+	case 2:
+	    SWITCH(Uint16, 2);
+	    break;
+	    
+	case 4:
+	    SWITCH(Uint32, 4);
+	    break;
 	}
+	SDL_Flip(disp);
     }
 
-    SDL_BlitSurface(corescr, NULL, disp, NULL);
-    SDL_Flip(disp);
 }

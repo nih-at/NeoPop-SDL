@@ -1,4 +1,4 @@
-/* $NiH: system_rc.c,v 1.4 2004/06/23 21:36:36 dillo Exp $ */
+/* $NiH: system_rc.c,v 1.4.2.1 2004/07/07 20:20:13 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -374,7 +374,14 @@ system_rc_read_file(const char *filename)
 		break;
 	    mute = !i;
 	    break;
+
+	case NPRC_YUV:
+	    if (i=rc_parse_boolean(p, &p) == -1)
+		break;
+	    use_yuv = i;
+	    break;
 	}
+	
 
 	if (!error_line) {
 	    p += strspn(p, " \t");

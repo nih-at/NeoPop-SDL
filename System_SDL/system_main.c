@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.33.2.2 2004/07/07 21:55:03 dillo Exp $ */
+/* $NiH: system_main.c,v 1.33.2.3 2004/07/08 10:56:08 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -214,6 +214,8 @@ main(int argc, char *argv[])
     comms_host = NULL;
     /* output sample rate */
     samplerate = DEFAULT_SAMPLERATE;
+    /* use YUV overlay (hardware scaling) */
+    use_yuv = 1;
 
     system_bindings_init();
     system_rc_read();

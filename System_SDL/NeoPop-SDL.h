@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.8.2.1 2004/07/07 20:22:50 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.8.2.2 2004/07/07 21:55:03 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -75,6 +75,7 @@ enum nprc {
     NPRC_SAMPLERATE,
     NPRC_SMOOTH,
     NPRC_SOUND,
+    NPRC_YUV,
 
     NPRC_LAST
 };
@@ -170,6 +171,7 @@ extern int comms_mode;
 extern int comms_port;
 extern char *comms_host;
 extern int samplerate;
+extern int use_yuv;
 
 extern enum neopop_event bindings[];
 extern const char *comms_names[];

@@ -12,9 +12,11 @@ You can get a list of command line options with the -h flag; details,
 the config file, and the keys are described in the man pages
 NeoPop-SDL(6) and neopoprc(5).
 
+You can find additional documentation in the Documentation directory.
 The readme for the NeoPop core is readme-core.txt; bugs-core.html
 contains a known-bugs list, also from the original NeoPop source
-distribution.
+distribution; and recording.format.txt describes the save state
+format NeoPop-SDL is using.
 
 You can find the NeoPop-SDL homepage at
 	http://www.nih.at/NeoPop-SDL/

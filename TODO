@@ -2,7 +2,6 @@
 . pause game
 . reset game
 . turn sound off/on during game
-. joystick support: options key, hat
-. input keys configurable
-. config file
 . comm support
+. fix audio
+. gui

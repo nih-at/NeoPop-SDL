@@ -1,5 +1,6 @@
+/* $NiH$ */
+
 #include <errno.h>
-#include <SDL.h>
 #include "neopop-SDL.h"
 
 /* graphics size requested: 1 normal, 2 double size, 3 triple size */
@@ -50,6 +51,9 @@ system_graphics_fullscreen_toggle(void)
 {
     SDL_WM_ToggleFullScreen(disp);
     fs_mode = (fs_mode ? 0 : 1);
+    /* hide mouse pointer in fullscreen mode */
+    if (SDL_ShowCursor(-1) == fs_mode)
+	    SDL_ShowCursor(1-fs_mode);
 }
 
 static BOOL

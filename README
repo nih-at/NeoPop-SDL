@@ -8,8 +8,9 @@ If you want to save screenshots in PNG format, you'll need libpng, see
 You can get a list of command line options with the -h flag; details
 and the keys are described in the man page.
 
-The readme for the NeoPop is readme-core.txt; bugs-core.html contains
-a known-bugs list, also from the original NeoPop source distribution.
+The readme for the NeoPop core is readme-core.txt; bugs-core.html
+contains a known-bugs list, also from the original NeoPop source
+distribution.
 
 You can find the NeoPop-SDL homepage at
 	http://www.nih.at/neopop-sdl/

@@ -4,14 +4,14 @@
 * YUV overlay (hardware scaling)
 * config file (~/.neopop/neopoprc)
 * joystick support
-* HQ2x / HQ3x smothing scalers
+* HQ2x/HQ3x smoothing scalers
 * sound and throttling improvements
 * speed improvements
 * configurable key and joystick bindings
 * pause
-- 10 state save slots
-- OSD
+* 10 state save slots
+* on-screen display
 
-0.1 (XXX)
+0.1 (2003/10/20)
 
 First release.

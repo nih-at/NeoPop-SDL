@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_rom.c,v 1.4 2002/12/02 14:23:52 wiz Exp $ */
 
 #include <sys/stat.h>
 #include <errno.h>
@@ -62,7 +62,7 @@ system_rom_load(char *filename)
 	*fn++ = '\0';
 
     /* don't copy extension */
-    strncpy(rom.filename, fn, min(sizeof(rom.filename), strlen(fn)-5));
+    strncpy(rom.filename, fn, min(sizeof(rom.filename), strlen(fn)-4));
 
     rom_loaded();
     system_rom_changed();

@@ -1,4 +1,4 @@
-/* $NiH: system_rom.c,v 1.8 2003/10/16 17:29:45 wiz Exp $ */
+/* $NiH: system_rom.c,v 1.9 2004/06/21 03:21:52 dillo Exp $ */
 /*
   system_rom.c -- ROM loading support
   Copyright (C) 2002-2003 Thomas Klausner
@@ -24,9 +24,12 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
-#include <zip.h>
 
 #include "config.h"
+#ifdef HAVE_LIBZIP
+#include <zip.h>
+#endif
+
 #include "NeoPop-SDL.h"
 
 static BOOL rom_load(char *);

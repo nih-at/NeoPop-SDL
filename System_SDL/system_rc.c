@@ -1,4 +1,4 @@
-/* $NiH: system_rc.c,v 1.12 2004/07/22 12:25:08 dillo Exp $ */
+/* $NiH: system_rc.c,v 1.13 2004/07/24 00:07:43 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -377,11 +377,11 @@ system_rc_read_file(const char *filename)
 	    p += strspn(p, " \t");
 	    switch (strspn(p, "0123456789abcdefABCDEF")) {
 	    case 3:
-		osd_colour = strtol(p, &p, 16);
+		i = strtol(p, &p, 16);
 		break;
 	    case 6:
 		i = strtol(p, &p, 16);
-		i = ((i>>12)&0xf00) | ((i>>8)&0xf0) | (i&0xf);
+		i = ((i>>12)&0xf00) | ((i>>8)&0xf0) | ((i>>4)&0xf);
 		break;
 	    default:
 		i = -1;

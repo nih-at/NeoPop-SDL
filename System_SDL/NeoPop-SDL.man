@@ -1,0 +1,227 @@
+.\" Converted with mdoc2man 0.2
+.\" from NiH: NeoPop-SDL.mdoc,v 1.1 2003/10/16 17:19:36 wiz Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.1 2003/10/16 17:19:36 wiz Exp $
+.\"
+.\" Copyright (c) 2003 Thomas Klausner.
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above
+.\"    copyright notice, this list of conditions and the following
+.\"    disclaimer in the documentation and/or other materials provided
+.\"    with the distribution.
+.\" 3. The name of the author may not be used to endorse or promote
+.\"    products derived from this software without specific prior
+.\"    written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THOMAS KLAUSNER ``AS IS'' AND ANY
+.\" EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.\" PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+.\" CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+.\" SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+.\" LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+.\" USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+.\" ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+.\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+.\" OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.TH NEOPOP-SDL 1 "October 16, 2003" NiH
+.SH "NAME"
+NeoPop-SDL \- NeoGeo Pocket (Color) emulator
+.SH "SYNOPSIS"
+.B NeoPop-SDL
+[\fB-ceghjMmSsv\fR]
+[\fB-f\fR \fBcount\fR]
+[\fB-l\fR \fBstate\fR]
+\fBfilename\fR
+.SH "DESCRIPTION"
+.B NeoPop-SDL
+is a NeoGeo Pocket emulator using SDL.
+.PP
+The following options are supported:
+.RS
+.TP 12
+\fB-c\fR
+Start in colour mode (default: automatic).
+See also
+\fB-g\fR.
+.TP 12
+\fB-e\fR
+Emulate English language NeoGeo Pocket (default).
+See also
+\fB-j\fR.
+.TP 12
+\fB-f\fR \fBcount\fR
+Set frameskip to
+\fBcount.\fR
+The default frameskip is 1.
+Frameskip 2 means that every second frame is shown, thus speeding
+up emulation speed since showing the graphics on screen is skipped
+half of the time.
+However, animation will be less smooth.
+.TP 12
+\fB-g\fR
+Start in greyscale mode (default: automatic).
+See also
+\fB-c\fR.
+.TP 12
+\fB-h\fR
+Show a short help message explaining the options.
+.TP 12
+\fB-j\fR
+Emulate Japanese language NeoGeo Pocket.
+Some ROMs will show Japanese text instead of English
+if these option is chosen.
+See also
+\fB-e\fR.
+.TP 12
+\fB-l\fR \fBstate\fR
+Load start state from file
+\fBstate.\fR
+.TP 12
+\fB-M\fR
+Do not use smoothed magnification modes.
+See also
+\fB-m\fR.
+.TP 12
+\fB-m\fR
+Use smoothed magnification modes (default).
+In double- and triple-size mode, the graphics will look less
+blocky, but this option has quite a performance impact.
+.TP 12
+\fB-S\fR
+Silent mode.
+See also
+\fB-s\fR.
+.TP 12
+\fB-s\fR
+With sound (default).
+.TP 12
+\fB-v\fR
+Display the version number.
+.RE
+\fBfilename\fR
+should obviously be a NeoGeo Pocket ROM file.
+.SS "KEYS"
+Currently, the keys are fixed.
+The movement keys are:
+\fBI\fR
+for up,
+\fBK\fR
+for down,
+\fBJ\fR
+for left, and
+\fBL\fR
+for right.
+.PP
+The buttons are:
+.RS
+.TP 17
+Button A
+\fBA\fR
+or
+\fBSHIFT.\fR
+.TP 17
+Button B
+\fBS\fR
+or
+\fBCTRL.\fR
+.TP 17
+Option button
+\fBD\fR
+or
+\fBTAB.\fR
+.RE
+.PP
+Other keys:
+.PP
+\fBM\fR
+toggles music and sound effects during game.
+.PP
+\fB1,\fR
+\fB2,\fR
+and
+\fB3\fR
+set the magnication factor:
+\fB1\fR
+is normal (160x152),
+\fB2\fR
+is doubled in both directions, and
+\fB3\fR
+tripled.
+Please note that bigger screens are slower to display,
+even more so if smooth magnification is enabled (see
+\fB-m\fR
+and
+\fBB\fR
+below).
+.PP
+\fBB\fR
+toggles between blocky and smooth magnification (defaults
+to smooth).
+The algorithm used for smooth 2x magnification (without
+blur) is AdvanceMAME Scale2x, the one used for 3x is homebrewn.
+Smooth animation is slower than blocky.
+.PP
+\fBF\fR
+switches between full-screen and windowed mode.
+.PP
+\fB\&+\fR
+and
+\fB\&=\fR
+increase frameskip while
+\fB\&-\fR
+decreases frameskip.
+The default frameskip is one, if the
+\fB-f\fR
+option was not used.
+A frameskip of
+\fBn\fR
+means one in
+\fBn\fR
+frames is shown, thus speeding up emulation at the
+cost of less smooth animation.
+.PP
+\fBF3\fR
+loads and
+\fBF4\fR
+writes the current emulator state from/to
+\fBfilename.ngs\fR
+in the current directory.
+.PP
+\fBF12\fR
+saves a screenshot in the current directory.
+The name of the output file is
+``\fIneopop-ROMNAMEXXX.ext,\fR''
+where
+\fBROMNAME\fR
+is the internal name of the rom and
+\fBXXX\fR
+is the number of the screenshot starting from 0; special
+care is taken not to overwrite existing screenshots.
+If the PNG library was found during compilation, screenshots are saved
+as PNGs, otherwise as BMPs.
+.PP
+\fBESC\fR
+quits the emulator.
+.SH "AUTHORS"
+neopop_uk
+<neopop_uk@yahoo.co.uk>
+wrote the original NeoPop emulator
+using
+Marat FayzullinNo 's
+z80 core.
+Thomas Klausner
+<tk@giga.or.at>
+ported it to SDL.
+.SH "BUGS"
+Please see the
+\fITODO\fR
+and
+\fIbugs-core.html\fR
+files.

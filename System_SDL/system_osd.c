@@ -1,4 +1,4 @@
-/* $NiH: system_osd.c,v 1.1 2004/07/10 00:02:43 dillo Exp $
+/* $NiH: system_osd.c,v 1.2 2004/07/10 02:38:02 dillo Exp $
 
   system_osd.c -- on-screen display
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -127,7 +127,10 @@ system_osd_display(void)
     if (!font_usable || osd_timer == 0)
 	return;
 
-    --osd_timer;
+    if (--osd_timer == 0) {
+	if (paused)
+	    system_osd((paused & PAUSED_LOCAL) ? "paused" : "remote paused");
+    }
 
     base = cfb + SCREEN_WIDTH*(SCREEN_HEIGHT-FONT_HEIGHT);
     

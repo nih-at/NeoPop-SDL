@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.19 2004/07/10 00:02:42 dillo Exp $ */
+/* $NiH: system_input.c,v 1.20 2004/07/10 02:29:20 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -42,12 +42,11 @@ static int joy_hat[NPKS_NJOY*NPKS_JOY_NHAT];
 #define JOY_AXIS(n, k)	(joy_axis[(n)*NPKS_JOY_NAXIS+(k)])
 #define JOY_HAT(n, k)	(joy_hat[(n)*NPKS_JOY_NHAT+(k)])
 
-void handle_event(enum neopop_event ev, int down);
-const char *npev_name(enum neopop_event ev);
-int npev_parse(const char *name, char **end);
-const char *npks_name(int k);
-int npks_parse(const char *name, char **end);
-void emit_key(int k, int down);
+static void handle_event(enum neopop_event, int);
+static void emit_key(int, int);
+
+static void set_mute(int);
+
 
 
 
@@ -184,7 +183,7 @@ system_input_update(void)
 
 
 
-void
+static void
 emit_key(int k, int type)
 {
 #ifdef KEY_DEBUG
@@ -198,7 +197,7 @@ emit_key(int k, int type)
 
 
 
-void
+static void
 handle_event(enum neopop_event ev, int type)
 {
     if (type == NPKS_DOWN) {
@@ -249,20 +248,17 @@ handle_event(enum neopop_event ev, int type)
 	    break;
 	    
 	case NPEV_GUI_MUTE_OFF:
-	    mute = 0;
-	    system_osd("sound off");
+	    set_mute(FALSE);
 	    break;
 	case NPEV_GUI_MUTE_ON:
-	    mute = 1;
-	    system_osd("sound on");
+	    set_mute(TRUE);
 	    break;
 	case NPEV_GUI_MUTE_TOGGLE:
-	    mute = !mute;
-	    system_osd("sound %s", mute ? "off" : "on");
+	    set_mute(!mute);
 	    break;
 
 	case NPEV_GUI_PAUSE_ON:
-	    paused != PAUSED_LOCAL;
+	    paused |= PAUSED_LOCAL;
 	    system_osd("paused");
 	    break;
 	case NPEV_GUI_PAUSE_OFF:
@@ -332,4 +328,18 @@ handle_event(enum neopop_event ev, int type)
 	    break;
 	}
     }
+}
+
+
+
+static void
+set_mute(int val)
+{
+    if (!have_sound) {
+	system_osd("no sound");
+	return;
+    }
+
+    mute = val;
+    system_osd("sound %s", mute ? "off" : "on");
 }

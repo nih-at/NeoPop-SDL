@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.36 2004/07/10 00:02:43 dillo Exp $ */
+/* $NiH: system_main.c,v 1.37 2004/07/10 02:29:20 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -34,7 +34,7 @@ _u8 system_frameskip_key;
 _u32 throttle_rate;
 int do_exit = 0;
 int paused = 0;
-
+int have_sound;
 void readrc(void);
 
 static void
@@ -103,7 +103,7 @@ system_VBL(void)
 	last_sec = current_time.tv_sec;
     }
 
-    if (mute == FALSE && paused == 0) {
+    if (have_sound) {
 	timersub(&current_time, &throttle_last, &time_diff);
 	throttle_diff = (time_diff.tv_sec*1000000 + time_diff.tv_usec);
 
@@ -300,6 +300,7 @@ main(int argc, char *argv[])
 	fprintf(stderr, "cannot turn on sound: %s\n", SDL_GetError());
 	mute = TRUE;
     }
+    have_sound = !mute;
 
     if (system_osd_init() == FALSE)
 	fprintf(stderr, "OSD font unusable, OSD disabled\n");

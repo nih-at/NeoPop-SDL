@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.11 2004/07/10 00:02:42 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.12 2004/07/10 02:29:20 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -181,6 +181,7 @@ void system_state_save(void);
 
 extern int do_exit;
 extern int paused;
+extern int have_sound;
 extern int graphics_mag_req;
 extern int graphics_mag_smooth;
 extern int comms_mode;

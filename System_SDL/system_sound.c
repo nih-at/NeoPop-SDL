@@ -1,4 +1,4 @@
-/* $NiH: system_sound.c,v 1.19 2004/07/10 02:29:20 dillo Exp $ */
+/* $NiH: system_sound.c,v 1.20 2004/07/10 02:39:36 dillo Exp $ */
 /*
   system_sound.c -- sound support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -147,7 +147,7 @@ system_sound_silence(void)
 void
 system_sound_callback(void *userdata, Uint8 *stream, int len)
 {
-    if (sound_buffer == NULL || mute || paused)
+    if (sound_buffer == NULL)
 	return;
 
     SDL_SemWait(rsem);
@@ -161,9 +161,6 @@ system_sound_update(int nframes)
 {
     int i;
     int consumed;
-
-    if (mute == TRUE)
-	return;
 
     /* SDL_LockAudio(); */
 
@@ -181,26 +178,27 @@ system_sound_update(int nframes)
 #endif
 
     for (; i<nframes; i++) {
-#if 1
-	dac_update(dac_data, dac_bpf);
-	/* convert to standard format */
-	acvt.buf = dac_data;
-	acvt.len = dac_bpf;
-	if (SDL_ConvertAudio(&acvt) == -1) {
-	    fprintf(stderr,
-		    "DAC data conversion failed: %s\n", SDL_GetError());
-	    return;
+	if (mute || paused)
+	    memset(sound_buffer+sound_frame_write, silence_value, bpf);
+	else {
+	    dac_update(dac_data, dac_bpf);
+	    /* convert to standard format */
+	    acvt.buf = dac_data;
+	    acvt.len = dac_bpf;
+	    if (SDL_ConvertAudio(&acvt) == -1) {
+		fprintf(stderr,
+			"DAC data conversion failed: %s\n", SDL_GetError());
+		return;
+	    }
+	    
+	    /* get sound data */
+	    sound_update((_u16 *)(sound_buffer+sound_frame_write), bpf);
+	    
+	    /* mix both streams into one */
+	    SDL_MixAudio(sound_buffer+sound_frame_write,
+			 dac_data, bpf, SDL_MIX_MAXVOLUME);
 	}
-#endif
 	
-	/* get sound data */
-	sound_update((_u16 *)(sound_buffer+sound_frame_write), bpf);
-	
-#if 1
-	/* mix both streams into one */
-	SDL_MixAudio(sound_buffer+sound_frame_write,
-		     dac_data, bpf, SDL_MIX_MAXVOLUME);
-#endif
 	sound_frame_write = FRAME_INC(sound_frame_write);
 	if (sound_frame_write == sound_frame_read) {
 	    fprintf(stderr, "your machine is much too slow.\n");

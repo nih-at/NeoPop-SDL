@@ -96,7 +96,7 @@ main(int argc, char *argv[])
     }
 
     if (argc > 0) {
-	if (system_load_rom(argv[0]) == FALSE)
+	if (system_rom_load(argv[0]) == FALSE)
 	    exit(1);
     }
 
@@ -109,7 +109,7 @@ main(int argc, char *argv[])
 	system_input_update();
     } while (do_exit == 0);
 
-    system_unload_rom();
+    system_rom_unload();
 #if 0
     system_sound_shutdown();
     system_input_shutdown();

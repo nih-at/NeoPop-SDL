@@ -2,14 +2,13 @@
 #include <errno.h>
 #include <string.h>
 #include <SDL.h>
-#include "neopop.h"
 
-static BOOL load_rom(char *filename);
-void system_changed_rom(void);
-void system_unload_rom(void);
+#include "neopop-SDL.h"
+
+static BOOL rom_load(char *);
 
 static BOOL
-load_rom(char *filename)
+rom_load(char *filename)
 {
     struct stat st;
 
@@ -31,7 +30,7 @@ load_rom(char *filename)
 }
 
 void
-system_changed_rom(void)
+system_rom_changed(void)
 {
     char title[128];
 
@@ -42,15 +41,15 @@ system_changed_rom(void)
 }
     
 BOOL
-system_load_rom(char *filename)
+system_rom_load(char *filename)
 {
     char *fn;
     BOOL ret;
 
     /* Remove old ROM from memory */
-    system_unload_rom();
+    system_rom_unload();
 
-    ret = load_rom(filename);
+    ret = rom_load(filename);
 
     if (ret == FALSE)
 	return FALSE;
@@ -65,13 +64,13 @@ system_load_rom(char *filename)
     strncpy(rom.filename, fn, min(sizeof(strncpy), strlen(fn)-5));
 
     rom_loaded();
-    system_changed_rom();
+    system_rom_changed();
 
     return TRUE;
 }
 
 void
-system_unload_rom(void)
+system_rom_unload(void)
 {
     rom_unload();
 

@@ -8,21 +8,19 @@
 #define DEFAULT_FORMAT		AUDIO_U16SYS
 #define DEFAULT_SAMPLERATE	44100
 #define DEFAULT_CHANNELS	1
-/* following may need to be set higher (power of two?) */
+/* following may need to be set higher power of two */
 #define DEFAULT_SAMPLES		8192
-
-#ifndef MAX
-#define MAX(a, b)	((a) > (b) ? (a) : (b))
-#endif
 
 static SDL_AudioCVT acvt;
 static _u16 *sound_buffer;
 static int sound_buffer_offset;
+static Uint8 silence_value;
 
 void
 system_sound_chipreset(void)
 {
 
+    sound_init(DEFAULT_SAMPLERATE);
     return;
 }
 
@@ -63,6 +61,7 @@ system_sound_init(void)
     sound_buffer_offset = CHIPBUFFERLENGTH;
 
     sound_init(DEFAULT_SAMPLERATE);
+    silence_value = desired.silence;
 
     return TRUE;
 }
@@ -71,7 +70,10 @@ void
 system_sound_shutdown(void)
 {
 
+    free(sound_buffer);
+    sound_buffer = NULL;
     SDL_CloseAudio();
+
     return;
 }
 
@@ -79,7 +81,10 @@ void
 system_sound_silence(void)
 {
 
-    SDL_PauseAudio(1);
+    SDL_LockAudio();
+    memset(sound_buffer, silence_value, CHIPBUFFERLENGTH);
+    sound_buffer_offset = 0;
+    SDL_UnlockAudio();
     return;
 }
 
@@ -104,6 +109,9 @@ system_sound_update(void)
 {
     char dac_data[CHIPBUFFERLENGTH];
 
+    if (mute == TRUE)
+	return;
+
     /*
      * Differing buffer sizes because DAC data is 8-bit, 8kHz and will
      * be converted to 16-bit, 44.1kHz.
@@ -118,6 +126,7 @@ system_sound_update(void)
     }
 
     SDL_LockAudio();
+
     /* get sound data */
     sound_update(sound_buffer, CHIPBUFFERLENGTH);
 

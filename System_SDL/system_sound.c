@@ -81,6 +81,9 @@ void
 system_sound_silence(void)
 {
 
+    if (mute == TRUE)
+	return;
+
     SDL_LockAudio();
     memset(sound_buffer, silence_value, CHIPBUFFERLENGTH);
     sound_buffer_offset = 0;

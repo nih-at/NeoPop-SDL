@@ -1,4 +1,4 @@
-.\" $NiH$
+.\" $NiH: neopoprc.man,v 1.1 2004/07/14 22:18:02 wiz Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -49,8 +49,10 @@ Logical value, can be one of
 ``on'',
 ``off'',
 ``yes'',
+``no'',
+``0'',
 and
-``no''.
+``1''.
 .TP 12
 enum
 A value chosen from a limited set (described next to the

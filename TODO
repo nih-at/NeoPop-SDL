@@ -1,9 +1,9 @@
 bugs:
 . fix graphics on big-endian
 . convert DAC sound ourselves (SDL is broken)
-. turning sound on during game disables throttling for about 2s
 . comm: send and handle pause/unpause packets
 . test comm support
+. osd handling during pause sucks
 
 regressions:
 . readd smooth

@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: neopoprc.mdoc,v 1.7 2004/07/24 00:07:43 dillo Exp 
-.\" $NiH: neopoprc.mdoc,v 1.7 2004/07/24 00:07:43 dillo Exp $
+.\" from NiH: neopoprc.mdoc,v 1.8 2004/07/24 00:19:55 wiz Exp 
+.\" $NiH: neopoprc.mdoc,v 1.8 2004/07/24 00:19:55 wiz Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -30,7 +30,7 @@
 .\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 .\" OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
-.TH NEOPOPRC 5 "July 22, 2004" NiH
+.TH NEOPOPRC 5 "July 24, 2004" NiH
 .SH "NAME"
 neopoprc \- NeoPop-SDL config file
 .SH "DESCRIPTION"
@@ -167,7 +167,8 @@ section below.
 \fBosd-colour\fR
 .Bq string
 Colour to use for on-screen display, in RGB with either one or two hex
-digits per colour component.  Default is white (fff).
+digits per colour component.
+Default is white (fff).
 .TP 13
 \fBsamplerate\fR
 .Bq int

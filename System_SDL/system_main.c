@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.31 2004/06/23 17:19:04 dillo Exp $ */
+/* $NiH: system_main.c,v 1.32 2004/07/05 12:26:55 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -127,7 +127,7 @@ system_VBL(void)
 	int fps;
 
 	frame_counter = 0;
-	fps = (int)(1000000/(throttle_rate-throttle_diff+.5);
+	fps = (int)(1000000/(throttle_rate-throttle_diff)+.5);
 
 	(void)snprintf(title, sizeof(title), PROGRAM_NAME " - %s - %dfps/FS%d",
 		       rom.name, fps, system_frameskip_key);

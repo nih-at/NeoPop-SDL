@@ -38,7 +38,8 @@ system_io_flash_read(_u8* buffer, _u32 bufferLength)
     FILE* file;
 
     /* Build a path to the flash file */
-    sprintf(path, "%s/%s.ngf", FlashDirectory, rom.filename);
+    snprintf(path, sizeof(path), "%s/%s.ngf", FlashDirectory,
+	     rom.filename);
 
     file = fopen(path, "rb");
 
@@ -58,7 +59,8 @@ system_io_flash_write(_u8* buffer, _u32 bufferLength)
     FILE* file;
 
     /* Build a path for the flash file */
-    sprintf(path, "%s/%s.ngf", FlashDirectory, rom.filename);
+    snprintf(path, sizeof(path), "%s/%s.ngf", FlashDirectory,
+	     rom.filename);
 	
     file = fopen(path, "wb");
 

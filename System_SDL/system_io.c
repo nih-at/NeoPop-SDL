@@ -1,4 +1,4 @@
-/* $NiH: system_io.c,v 1.13 2004/07/22 10:31:20 dillo Exp $ */
+/* $NiH: system_io.c,v 1.14 2004/07/22 15:23:10 dillo Exp $ */
 /*
   system_io.c -- read/write flash files 
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -151,9 +151,9 @@ validate_dir(const char *path)
 void
 system_state_load(void)
 {
-    char *fn, ext[4];
+    char *fn, ext[5];
 
-    sprintf(ext, "ng%c", (state_slot ? state_slot+'0' : 's'));
+    sprintf(ext, ".ng%c", (state_slot ? state_slot+'0' : 's'));
     if ((fn=system_make_file_name(state_dir, ext, FALSE)) == NULL)
 	return;
     state_restore(fn);
@@ -165,9 +165,9 @@ system_state_load(void)
 void
 system_state_save(void)
 {
-    char *fn, ext[4];
+    char *fn, ext[5];
 
-    sprintf(ext, "ng%c", (state_slot ? state_slot+'0' : 's'));
+    sprintf(ext, ".ng%c", (state_slot ? state_slot+'0' : 's'));
     if ((fn=system_make_file_name(state_dir, ext, TRUE)) == NULL)
 	return;
     state_store(fn);
@@ -188,7 +188,7 @@ system_io_flash_read(_u8* buffer, _u32 len)
     char *fn;
     int ret;
 
-    if ((fn=system_make_file_name(flash_dir, "ngf", FALSE)) == NULL)
+    if ((fn=system_make_file_name(flash_dir, ".ngf", FALSE)) == NULL)
 	return FALSE;
     ret = read_file_to_buffer(fn, buffer, len);
     free(fn);
@@ -201,7 +201,7 @@ system_io_flash_write(_u8* buffer, _u32 len)
     char *fn;
     int ret;
 
-    if ((fn=system_make_file_name(flash_dir, "ngf", TRUE)) == NULL)
+    if ((fn=system_make_file_name(flash_dir, ".ngf", TRUE)) == NULL)
 	return FALSE;
     ret = write_file_from_buffer(fn, buffer, len);
     free(fn);
@@ -230,7 +230,7 @@ system_make_file_name(const char *dir, const char *ext, int writing)
 	name = rom.name;
     else
 	name = rom.filename;
-    len = strlen(dir)+strlen(name)+strlen(ext)+3;
+    len = strlen(dir)+strlen(name)+strlen(ext)+2;
 
     home = NULL;
     if (strncmp(dir, "~/", 2) == 0) {
@@ -253,7 +253,7 @@ system_make_file_name(const char *dir, const char *ext, int writing)
 
     /* XXX: maybe replace all but [-_A-Za-z0-9] */
     p = fname+strlen(fname);
-    sprintf(p, "/%s.%s", name, ext);
+    sprintf(p, "/%s%s", name, ext);
     while (*(++p))
 	if (*p == '/')
 	    *p = '_';

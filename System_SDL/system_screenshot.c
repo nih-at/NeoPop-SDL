@@ -1,4 +1,4 @@
-/* $NiH: system_screenshot.c,v 1.7 2004/07/14 10:15:38 dillo Exp $ */
+/* $NiH: system_screenshot.c,v 1.8 2004/07/22 10:31:20 dillo Exp $ */
 /*
   system_screenshot.c -- screenshot functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -35,10 +35,20 @@ get_screenshot_name(const char *ext)
 {
     static int scount;
     char *name;
+    char *countext;
     struct stat sb;
 
+    /* 3 for the number, one for the \0 */
+    if ((countext=malloc(strlen(ext)+4)) == NULL) {
+	fprintf(stderr, "Saving screenshot failed: %s\n",
+		strerror(errno));
+	return NULL;
+    }
+	
     do {
-	name = system_make_file_name(screenshot_dir, ext, 1);
+	snprintf(countext, strlen(ext)+4, "%03d%s",
+		 scount, ext);
+	name = system_make_file_name(screenshot_dir, countext, 1);
 	if (stat(name, &sb) == -1 && errno == ENOENT)
 	    return name;
 	free(name);
@@ -58,7 +68,7 @@ system_screenshot(void)
 
     ret = 0;
 
-    if ((bmpname=get_screenshot_name("bmp")) == NULL)
+    if ((bmpname=get_screenshot_name(".bmp")) == NULL)
 	return -1;
 
     image = SDL_CreateRGBSurfaceFrom(cfb, SCREEN_WIDTH,
@@ -119,7 +129,7 @@ system_screenshot(void)
 
     ret = 0;
     /* get file name */
-    if ((pngname=get_screenshot_name("png")) == NULL)
+    if ((pngname=get_screenshot_name(".png")) == NULL)
 	return -1;
 
     /* open file for writing */

@@ -97,9 +97,6 @@ system_graphics_screen_init(int mfactor)
 void
 system_graphics_update(void)
 {
-    int cfb_offset, corescr_offset;
-    
-    /* update screen */
 
     /* handle screen size changes */
     if (graphics_mag_req != graphics_mag_actual) {
@@ -114,27 +111,42 @@ system_graphics_update(void)
     }
 
     if (graphics_mag_actual > 1) {
-	int i, x, y, linelen;
+	_u16 *pixelptr;
+	int x, y, linelen;
+	int cfb_offset;
 
-	corescr_offset = 0;
+	pixelptr = corescr->pixels;
 	cfb_offset = 0;
 	linelen = graphics_mag_actual*SCREEN_WIDTH;
 	for (y=0; y<SCREEN_HEIGHT; y++) {
 	    for (x=0; x<SCREEN_WIDTH; x++) {
 		/* magnify in x-direction */
-		for (i=0; i<graphics_mag_actual; i++)
-		    ((_u16*)corescr->pixels)[corescr_offset++] =
-			cfb[cfb_offset];
-
+		switch(graphics_mag_actual) {
+		case 3:
+		    *pixelptr++ = cfb[cfb_offset];
+		    /* FALLTHROUGH */
+		case 2:
+		    *pixelptr++ = cfb[cfb_offset];
+		    *pixelptr++ = cfb[cfb_offset];
+		    break;
+		default:
+		    break;
+		}
 		cfb_offset++;
 	    }
 
 	    /* magnify in y-direction */
-	    for (i=1; i<graphics_mag_actual; i++) {
-		memcpy(corescr->pixels+corescr_offset*sizeof(_u16),
-		       corescr->pixels+(corescr_offset-linelen)*sizeof(_u16),
-		       linelen*sizeof(_u16));
-		corescr_offset += linelen;
+	    switch(graphics_mag_actual) {
+	    case 3:
+		memcpy(pixelptr, pixelptr-linelen, linelen*sizeof(_u16));
+		pixelptr += linelen;
+		/* FALLTHROUGH */
+	    case 2:
+		memcpy(pixelptr, pixelptr-linelen, linelen*sizeof(_u16));
+		pixelptr += linelen;
+		break;
+	    default:
+		break;
 	    }
 	}
     }

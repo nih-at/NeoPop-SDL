@@ -18,6 +18,18 @@ system_input_update(void)
 	switch(evt.type) {
 	case SDL_KEYDOWN:
 	    switch(evt.key.keysym.sym) {
+	    case SDLK_1:
+		graphics_mag_req = 1;
+		break;
+	    case SDLK_2:
+		graphics_mag_req = 2;
+		break;
+	    case SDLK_3:
+		graphics_mag_req = 3;
+		break;
+	    case SDLK_f:
+		system_graphics_fullscreen_toggle();
+		break;
 	    case SDLK_i:
 		ram[0x6F82] |= INPUT_MASK_UP;
 		break;
@@ -66,12 +78,17 @@ system_input_update(void)
 	    case SDLK_l:
 		ram[0x6F82] &= ~INPUT_MASK_RIGHT;
 		break;
+	    case SDLK_LSHIFT:
+	    case SDLK_RSHIFT:
 	    case SDLK_a:
 		ram[0x6F82] &= ~INPUT_MASK_BUTTON_A;
 		break;
+	    case SDLK_LCTRL:
+	    case SDLK_RCTRL:
 	    case SDLK_s:
 		ram[0x6F82] &= ~INPUT_MASK_BUTTON_B;
 		break;
+	    case SDLK_TAB:
 	    case SDLK_d:
 		ram[0x6F82] &= ~INPUT_MASK_OPTION;
 		break;

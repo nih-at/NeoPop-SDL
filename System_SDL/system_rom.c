@@ -1,4 +1,4 @@
-/* $NiH: system_rom.c,v 1.9 2004/06/21 03:21:52 dillo Exp $ */
+/* $NiH: system_rom.c,v 1.10 2004/06/21 03:27:13 wiz Exp $ */
 /*
   system_rom.c -- ROM loading support
   Copyright (C) 2002-2003 Thomas Klausner
@@ -46,44 +46,44 @@ rom_load(char *filename)
     }
 
 #ifdef HAVE_LIBZIP
- {
-     struct zip *z;
-     struct zip_file *zf;
-     struct zip_stat zst;
-     int i, n, l;
+    {
+	struct zip *z;
+	struct zip_file *zf;
+	struct zip_stat zst;
+	int i, n, l;
 
-     if ((z=zip_open(filename, 0, NULL)) != NULL) {
-	 n = zip_get_num_files(z);
-	 for (i=0; i<n; i++) {
-	     if (zip_stat_index(z, i, 0, &zst) != 0)
-		 continue;
-	     l = strlen(zst.name);
-	     if (l < 4)
-		 continue;
-	     if (strcasecmp(zst.name+l-4, ".ngp") == 0) {
-		 rom.length = zst.size;
-		 rom.data = (char *)calloc(rom.length, 1);
+	if ((z=zip_open(filename, 0, NULL)) != NULL) {
+	    n = zip_get_num_files(z);
+	    for (i=0; i<n; i++) {
+		if (zip_stat_index(z, i, 0, &zst) != 0)
+		    continue;
+		l = strlen(zst.name);
+		if (l < 4)
+		    continue;
+		if (strcasecmp(zst.name+l-4, ".ngp") == 0) {
+		    rom.length = zst.size;
+		    rom.data = (char *)calloc(rom.length, 1);
 
-		 if ((zf=zip_fopen_index(z, i, 0)) == NULL
-		     || zip_fread(zf, rom.data, rom.length) != rom.length) {
-		     /* XXX: free(rom.data); ?! */
-		     system_message("%s `%s': %s",
-				    system_get_string(IDS_EROMOPEN),
-				    filename, zip_strerror(z));
-		     return FALSE;
-		 }
-		 zip_fclose(zf);
-		 zip_close(z);
+		    if ((zf=zip_fopen_index(z, i, 0)) == NULL
+			|| zip_fread(zf, rom.data, rom.length) != rom.length) {
+			/* XXX: free(rom.data); ?! */
+			system_message("%s `%s': %s",
+				       system_get_string(IDS_EROMOPEN),
+				       filename, zip_strerror(z));
+			return FALSE;
+		    }
+		    zip_fclose(zf);
+		    zip_close(z);
 			
-		 return TRUE;
-	     }
-	 }
-	 zip_close(z);
-	 system_message("%s `%s': no rom found",
-			system_get_string(IDS_EROMOPEN), filename);
-	 return FALSE;
-     }
- }
+		    return TRUE;
+		}
+	    }
+	    zip_close(z);
+	    system_message("%s `%s': no rom found",
+			   system_get_string(IDS_EROMOPEN), filename);
+	    return FALSE;
+	}
+    }
 #endif
 
     rom.length = st.st_size;

@@ -1,6 +1,5 @@
 bugs:
 + update NEWS and ChangeLog
-. sound loss on macppc (emulation too slow)
 . get exactly one frame's worth of DAC data each frame
 . convert DAC sound ourselves (SDL is broken)
 . comm: send and handle pause/unpause packets

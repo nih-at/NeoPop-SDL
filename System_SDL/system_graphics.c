@@ -1,7 +1,7 @@
-/* $NiH$ */
+/* $NiH: system_graphics.c,v 1.11 2002/12/02 14:25:51 wiz Exp $ */
 
 #include <errno.h>
-#include "neopop-SDL.h"
+#include "NeoPop-SDL.h"
 
 /* graphics size requested: 1 normal, 2 double size, 3 triple size */
 int graphics_mag_req = 1;

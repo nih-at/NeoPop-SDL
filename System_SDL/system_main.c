@@ -1,10 +1,10 @@
-/* $NiH: system_main.c,v 1.20 2002/12/02 14:29:20 wiz Exp $ */
+/* $NiH: system_main.c,v 1.21 2002/12/03 13:14:01 wiz Exp $ */
 
 #include <sys/time.h>
 #include <math.h>
 #include <unistd.h>
 #include "config.h"
-#include "neopop-SDL.h"
+#include "NeoPop-SDL.h"
 
 #define NGP_FPS 59.95
 

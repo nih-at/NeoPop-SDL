@@ -1,10 +1,10 @@
-/* $NiH: system_rom.c,v 1.4 2002/12/02 14:23:52 wiz Exp $ */
+/* $NiH: system_rom.c,v 1.5 2002/12/03 13:10:03 wiz Exp $ */
 
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
 
-#include "neopop-SDL.h"
+#include "NeoPop-SDL.h"
 
 static BOOL rom_load(char *);
 

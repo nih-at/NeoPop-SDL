@@ -1,7 +1,7 @@
-/* $NiH: system_sound.c,v 1.11 2002/12/02 14:23:35 wiz Exp $ */
+/* $NiH: system_sound.c,v 1.12 2002/12/03 13:11:36 wiz Exp $ */
 
 #include <assert.h>
-#include "neopop-SDL.h"
+#include "NeoPop-SDL.h"
 
 #define CHIPBUFFERLENGTH	35280
 #define DACBUFFERLENGTH		3200

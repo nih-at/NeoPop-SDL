@@ -1,7 +1,7 @@
-/* $NiH: system_screenshot.c,v 1.1 2002/12/02 14:31:27 wiz Exp $ */
+/* $NiH: system_screenshot.c,v 1.2 2002/12/03 13:10:30 wiz Exp $ */
 
 #include "config.h"
-#include "neopop-SDL.h"
+#include "NeoPop-SDL.h"
 #include <sys/stat.h>
 #include <errno.h>
 #include <stdio.h>

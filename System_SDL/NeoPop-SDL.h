@@ -1,4 +1,4 @@
-/* $NiH: neopop-SDL.h,v 1.8 2002/12/02 14:29:18 wiz Exp $ */
+/* $NiH: neopop-SDL.h,v 1.9 2002/12/03 13:08:20 wiz Exp $ */
 
 #include "neopop.h"
 #include <SDL.h>

@@ -1,6 +1,6 @@
-/* $NiH: system_input.c,v 1.5 2002/12/03 13:09:37 wiz Exp $ */
+/* $NiH: system_input.c,v 1.6 2003/02/06 16:25:24 wiz Exp $ */
 
-#include "neopop-SDL.h"
+#include "NeoPop-SDL.h"
 
 #define INPUT_MASK_UP		0x1
 #define INPUT_MASK_DOWN		0x2

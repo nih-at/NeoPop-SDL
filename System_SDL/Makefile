@@ -20,7 +20,8 @@ FILES=	bios.c biosHLE.c dma.c flash.c gfx.c gfx_scanline_mono.c \
 	TLCS900h_disassemble.c TLCS900h_interpret_src.c \
 	TLCS900h_interpret_dst.c TLCS900h_disassemble_dst.c \
 	dasm.c Z80.c \
-	system_comms.c system_io.c system_main.c
+	system_comms.c system_graphics.c system_io.c system_language.c \
+	system_main.c system_sound.c
 
 .c.o:
 	${CC} ${CFLAGS} -c $<

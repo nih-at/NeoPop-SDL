@@ -27,11 +27,11 @@ static _u8 *read_chunk_data(FILE *, _u32);
 static void read_soundchip(SoundChip *, _u8 **);
 static void read_REGS(const _u8 *);
 
-static BOOL write1(FILE *, _u8);
-static BOOL write2(FILE *, _u16);
-static BOOL write4(FILE *, _u32);
+static void write1(_u8 *, _u8);
+static void write2(_u8 *, _u16);
+static void write4(_u8 *, _u32);
 static BOOL write_chunk(FILE *, _u32, const _u8 *, _u32);
-static BOOL write_soundchip(FILE *, const SoundChip *);
+static void write_soundchip(const SoundChip *, _u8 **);
 static BOOL write_FLSH(FILE *, const _u8 *, _u32);
 static BOOL write_RAM(FILE *);
 static BOOL write_REGS(FILE *);
@@ -342,65 +342,62 @@ static void read_REGS(const _u8 *p)
 }
 
 
-static BOOL write1(FILE *fp, _u8 val)
+static void write1(_u8 *p, _u8 val)
 {
-	return fputc(val, fp) == 0;
+	p[0] = val;
 }
 
-static BOOL write2(FILE *fp, _u16 val)
+static void write2(_u8 *p, _u16 val)
 {
-	int ret;
-
-	ret = fputc((val>>8) & 0xff, fp) == 0;
-	ret &= fputc(val & 0xff, fp) == 0;
-
-	return ret;
+	p[0] = (val>>8) & 0xff;
+	p[1] = val & 0xff;
 }
 
-static BOOL write4(FILE *fp, _u32 val)
+static void write4(_u8 *p, _u32 val)
 {
-	int ret;
-
-	ret = fputc((val>>24) & 0xff, fp) == 0;
-	ret &= fputc((val>>16) & 0xff, fp) == 0;
-	ret &= fputc((val>>8) & 0xff, fp) == 0;
-	ret &= fputc(val & 0xff, fp) == 0;
-
-	return ret;
+	p[0] = (val>>24) & 0xff;
+	p[1] = (val>>16) & 0xff;
+	p[2] = (val>>8) & 0xff;
+	p[3] = val & 0xff;
 }
 
 static BOOL write_chunk(FILE *fp, _u32 name, const _u8 *data, _u32 size)
 {
+	_u8 buf[SIZE_CHUNK], *p;
 	int ret;
 
-	ret = write4(fp, name);
-	ret &= write4(fp, size);
+	p = buf;
+	write4(p, name), p+=4;
+	write4(p, size);
+
+	ret = fwrite(buf, 1, SIZE_CHUNK, fp) == SIZE_CHUNK;
+
 	if (data && size > 0)
 	    ret &= fwrite(data, 1, size, fp) == size;
 
 	return ret;
 }
 
-static BOOL write_soundchip(FILE *fp, const SoundChip *chip)
+static void write_soundchip(const SoundChip *chip, _u8 **pp)
 {
-	BOOL ret;
+	_u8 *p;
 	int i;
 
-	ret = write4(fp, chip->LastRegister);
-	for (i=0; i<8; i++)
-		ret &= write4(fp, chip->Register[i]);
-	for (i=0; i<4; i++)
-		ret &= write4(fp, chip->Volume[i]);
-	for (i=0; i<4; i++)
-		ret &= write4(fp, chip->Period[i]);
-	for (i=0; i<4; i++)
-		ret &= write4(fp, chip->Count[i]);
-	for (i=0; i<4; i++)
-		ret &= write4(fp, chip->Output[i]);
-	ret &= write4(fp, chip->RNG);
-	ret &= write4(fp, chip->NoiseFB);
+	p = *pp;
 
-	return ret;
+	write4(p, chip->LastRegister), p+=4;
+	for (i=0; i<8; i++)
+		write4(p, chip->Register[i]), p+=4;
+	for (i=0; i<4; i++)
+		write4(p, chip->Volume[i]), p+=4;
+	for (i=0; i<4; i++)
+		write4(p, chip->Period[i]), p+=4;
+	for (i=0; i<4; i++)
+		write4(p, chip->Count[i]), p+=4;
+	for (i=0; i<4; i++)
+		write4(p, chip->Output[i]), p+=4;
+	write4(p, chip->RNG), p+=4;
+	write4(p, chip->NoiseFB), p+=4;
 }
 
 static BOOL write_FLSH(FILE *fp, const _u8 *data, _u32 size)
@@ -415,61 +412,62 @@ static BOOL write_RAM(FILE *fp)
 
 static BOOL write_REGS(FILE *fp)
 {
-	BOOL ret;
+	_u8 data[SIZE_REGS], *p;
 	int i, j;
 
-	ret = write_chunk(fp, TAG_REGS, NULL, SIZE_REGS);
-	ret &= write4(fp, pc);
-	ret &= write2(fp, sr);
+	p = data;
+
+	write4(p, pc), p+=4;
+	write2(p, sr), p+=2;
 	for (i=0; i<4; i++)	
 		for (j=0; j<4; j++)
-			ret &= write4(fp, gprBank[i][j]);
+			write4(p, gprBank[i][j]), p+=4;
 	for (i=0; i<4; i++)
-		ret &= write4(fp, gpr[i]);
-	ret &= write1(fp, f_dash);
-	ret &= write1(fp, eepromStatusEnable);
-	ret &= write2(fp, Z80_regs.AF.W);
-	ret &= write2(fp, Z80_regs.BC.W);
-	ret &= write2(fp, Z80_regs.DE.W);
-	ret &= write2(fp, Z80_regs.HL.W);
-	ret &= write2(fp, Z80_regs.IX.W);
-	ret &= write2(fp, Z80_regs.IY.W);
-	ret &= write2(fp, Z80_regs.PC.W);
-	ret &= write2(fp, Z80_regs.SP.W);
-	ret &= write2(fp, Z80_regs.AF1.W);
-	ret &= write2(fp, Z80_regs.BC1.W);
-	ret &= write2(fp, Z80_regs.DE1.W);
-	ret &= write2(fp, Z80_regs.HL1.W);
-	ret &= write1(fp, Z80_regs.IFF);
-	ret &= write1(fp, Z80_regs.I);
-	ret &= write1(fp, Z80_regs.R);
-	ret &= write4(fp, Z80_regs.IPeriod);
-	ret &= write4(fp, Z80_regs.ICount);
-	ret &= write4(fp, Z80_regs.IBackup);
-	ret &= write2(fp, Z80_regs.IRequest);
-	ret &= write1(fp, Z80_regs.IAutoReset);
-	ret &= write1(fp, Z80_regs.TrapBadOps);
-	ret &= write2(fp, Z80_regs.Trap);
-	ret &= write1(fp, Z80_regs.Trace);
-	ret &= write4(fp, timer_hint);
+		write4(p, gpr[i]), p+=4;
+	write1(p, f_dash), p+=1;
+	write1(p, eepromStatusEnable), p+=1;
+	write2(p, Z80_regs.AF.W), p+=2;
+	write2(p, Z80_regs.BC.W), p+=2;
+	write2(p, Z80_regs.DE.W), p+=2;
+	write2(p, Z80_regs.HL.W), p+=2;
+	write2(p, Z80_regs.IX.W), p+=2;
+	write2(p, Z80_regs.IY.W), p+=2;
+	write2(p, Z80_regs.PC.W), p+=2;
+	write2(p, Z80_regs.SP.W), p+=2;
+	write2(p, Z80_regs.AF1.W), p+=2;
+	write2(p, Z80_regs.BC1.W), p+=2;
+	write2(p, Z80_regs.DE1.W), p+=2;
+	write2(p, Z80_regs.HL1.W), p+=2;
+	write1(p, Z80_regs.IFF), p+=1;
+	write1(p, Z80_regs.I), p+=1;
+	write1(p, Z80_regs.R), p+=1;
+	write4(p, Z80_regs.IPeriod), p+=4;
+	write4(p, Z80_regs.ICount), p+=4;
+	write4(p, Z80_regs.IBackup), p+=4;
+	write2(p, Z80_regs.IRequest), p+=2;
+	write1(p, Z80_regs.IAutoReset), p+=1;
+	write1(p, Z80_regs.TrapBadOps), p+=1;
+	write2(p, Z80_regs.Trap), p+=2;
+	write1(p, Z80_regs.Trace), p+=1;
+	write4(p, timer_hint), p+=4;
 	for (i=0; i<4; i++)
-		ret &= write1(fp, timer[i]);
-	ret &= write4(fp, timer_clock0);
-	ret &= write4(fp, timer_clock1);
-	ret &= write4(fp, timer_clock2);
-	ret &= write4(fp, timer_clock3);
-	ret &= write_soundchip(fp, &toneChip);
-	ret &= write_soundchip(fp, &noiseChip);
+		write1(p, timer[i]), p+=1;
+	write4(p, timer_clock0), p+=4;
+	write4(p, timer_clock1), p+=4;
+	write4(p, timer_clock2), p+=4;
+	write4(p, timer_clock3), p+=4;
+	write_soundchip(&toneChip, &p);
+	write_soundchip(&noiseChip, &p);
 	for (i=0; i<4; i++)
-		ret &= write4(fp, dmaS[i]);
+		write4(p, dmaS[i]), p+=4;
 	for (i=0; i<4; i++)
-		ret &= write4(fp, dmaD[i]);
+		write4(p, dmaD[i]), p+=4;
 	for (i=0; i<4; i++)
-		ret &= write2(fp, dmaC[i]);
+		write2(p, dmaC[i]), p+=2;
 	for (i=0; i<4; i++)
-		ret &= write1(fp, dmaM[i]);
+		write1(p, dmaM[i]), p+=1;
 
-	return ret;
+	return write_chunk(fp, TAG_REGS, data, SIZE_REGS);
 }
 
 static BOOL write_ROM(FILE *fp)
@@ -484,10 +482,8 @@ static BOOL write_ROMH(FILE *fp)
 
 static BOOL write_TIME(FILE *fp)
 {
-	BOOL ret;
+	_u8 data[SIZE_TIME];
 
-	ret = write_chunk(fp, TAG_TIME, NULL, SIZE_TIME);
-	ret &= write4(fp, frame_count);
-
-	return ret;
+	write4(data, frame_count);
+	return write_chunk(fp, TAG_TIME, data, SIZE_TIME);
 }

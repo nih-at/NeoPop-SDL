@@ -1,4 +1,4 @@
-/* $NiH: system_screenshot.c,v 1.4 2003/10/15 12:30:03 wiz Exp $ */
+/* $NiH: system_screenshot.c,v 1.5 2003/10/16 17:29:46 wiz Exp $ */
 /*
   system_screenshot.c -- screenshot functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -61,7 +61,7 @@ get_screenshot_name(const char *ext)
 	return NULL;
 
     do {
-	snprintf(name, sizeof(name), "neopop-%s%03d.%s", romname,
+	snprintf(name, sizeof(name), "NeoPop-%s%03d.%s", romname,
 		 scount, ext);
 	if (stat(name, &sb) == -1 && errno == ENOENT)
 	    return strdup(name);

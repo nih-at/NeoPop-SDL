@@ -12,7 +12,7 @@ Button A: A or SHIFT.
 Button B: S or CTRL.
 Option button: D or TAB.
  
-1, 2, 3 set the magnication factor: 1 is normal (160x152),
+1, 2, and 3 set the magnication factor: 1 is normal (160x152),
 2 is doubled in both directions, 3 tripled (bigger == slower).
 M toggles between smooth and blocky magnification (defaults
 to smooth); 2x magnification for smooth magnification (without
@@ -20,10 +20,17 @@ blur) is AdvanceMAME Scale2x, 3x is homebrewn.
 
 F switches between full-screen and windowed mode.
 
++ and = increase frameskip, - decreases frameskip. Default is one, if
+the '-f' option was not used. Frameskip n means one in n frames is shown.
+
+F3 loads and F4 writes the current emulator state from/to filename.ngs
+in the current directory.
+
 F12 saves a screenshot in the current directory.  The name of the output
-file is ``neopop-ROMNAMEXXX.png'', where ROMNAME is the internal name of
+file is ``neopop-ROMNAMEXXX.ext'', where ROMNAME is the internal name of
 the rom and XXX is the number of the screenshot starting from 0; special
 care is taken not to overwrite existing screenshots.
-This feature is only enabled if the PNG library was found during compilation.
+If the PNG library was found during compilation, screenshots are saved
+as PNGs, otherwise as BMPs.
 
 ESC quits the emulator.

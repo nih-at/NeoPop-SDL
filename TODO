@@ -1,20 +1,20 @@
 bugs:
-. key parsing: SDL_GetKeyName called before SDL_SetVideoMode
++ osd handling during pause sucks
 . get exactly one frame's worth of DAC data each frame
 . convert DAC sound ourselves (SDL is broken)
 . comm: send and handle pause/unpause packets
 . test comm support
-. osd handling during pause sucks
-. add HQx credits
 
 regressions:
-. update man page
-. document key and event names (rc ``map'' arguments)
++ update man page
++ document key and event names (rc ``map'' arguments)
++ update NEWS and ChangeLog
 
 features:
++ osd for fullscreen
++ implement NPEV_GUI_FULLSCREEN_{ON,OFF}
 . hqx i386 asm versions
 . configure: test for altivec
-. osd for fullscreen
 . movie captures
 . reset game
 . change emulation speed (run faster/slower)

@@ -2,9 +2,9 @@ Thanks go to:
 
 neopop_uk <neopop_uk@yahoo.co.uk> for the portable source
 
-Dieter Baron <dillo@giga.or.at> for big-endian fixes
+Gilles Vollant for the zip handling routines.
 
-Andrea Mazzoleni for the AdvanceMAME Scale2x algorithm.
+Maxim Stepin and Max Horn for the HQx scalers.
 
 
 neopop_uk's thanks are in readme-core.txt.

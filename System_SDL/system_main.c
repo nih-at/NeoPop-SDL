@@ -26,6 +26,7 @@ system_message(char *vaMessage, ...)
     va_start(vl, vaMessage);
     vprintf(vaMessage, vl);
     va_end(vl);
+    printf("\n");
 }
 
 void
@@ -105,6 +106,7 @@ main(int argc, char *argv[])
     }
 
     reset();
+    SDL_PauseAudio(0);
 
     i = 0;
     do {

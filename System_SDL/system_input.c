@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_input.c,v 1.4 2002/12/02 14:29:19 wiz Exp $ */
 
 #include "neopop-SDL.h"
 
@@ -19,8 +19,26 @@ system_input_update(void)
 	switch(evt.type) {
 	case SDL_KEYDOWN:
 	    switch(evt.key.keysym.sym) {
+	    case SDLK_F3:
+		system_state_load();
+		break;
+	    case SDLK_F4:
+		system_state_save();
+		break;
 	    case SDLK_F12:
 		system_screenshot();
+		break;
+	    case SDLK_MINUS:
+	    case SDLK_KP_MINUS:
+		if (system_frameskip_key > 1)
+		    system_frameskip_key--;
+		break;
+	    case SDLK_EQUALS:
+	    case SDLK_KP_EQUALS:
+	    case SDLK_PLUS:
+	    case SDLK_KP_PLUS:
+		if (system_frameskip_key < 7)
+		    system_frameskip_key++;
 		break;
 	    case SDLK_1:
 		graphics_mag_req = 1;

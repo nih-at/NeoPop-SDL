@@ -1,4 +1,4 @@
-/* $NiH: system_rom.c,v 1.12 2004/06/22 03:37:52 wiz Exp $ */
+/* $NiH: system_rom.c,v 1.13 2004/06/23 17:19:05 dillo Exp $ */
 /*
   system_rom.c -- ROM loading support
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -26,11 +26,11 @@
 #include <string.h>
 
 #include "config.h"
-#ifdef HAVE_LIBZIP
-#include <zip.h>
-#endif
 
 #include "NeoPop-SDL.h"
+#ifdef HAVE_LIBZ
+#include "unzip.h"
+#endif
 
 static BOOL rom_load(char *);
 
@@ -38,6 +38,12 @@ static BOOL
 rom_load(char *filename)
 {
     struct stat st;
+#ifdef HAVE_LIBZ
+    char name[1024];
+    unzFile z;
+    unz_file_info zfi;
+    int l, err;
+#endif
 
     if (stat(filename, &st) == -1) {
 	system_message("%s `%s': %s", system_get_string(IDS_EROMFIND),
@@ -45,48 +51,54 @@ rom_load(char *filename)
 	return FALSE;
     }
 
-#ifdef HAVE_LIBZIP
-    {
-	struct zip *z;
-	struct zip_file *zf;
-	struct zip_stat zst;
-	int i, n, l;
-
-	if ((z=zip_open(filename, 0, NULL)) != NULL) {
-	    n = zip_get_num_files(z);
-	    for (i=0; i<n; i++) {
-		if (zip_stat_index(z, i, 0, &zst) != 0)
-		    continue;
-		l = strlen(zst.name);
-		if (l < 4)
-		    continue;
-		if (strcasecmp(zst.name+l-4, ".ngp") == 0
-		    || strcasecmp(zst.name+l-4, ".ngc") == 0
-		    || strcasecmp(zst.name+l-4, ".npc") == 0) {
-		    rom.length = zst.size;
-		    rom.data = (char *)calloc(rom.length, 1);
-
-		    if ((zf=zip_fopen_index(z, i, 0)) == NULL
-			|| zip_fread(zf, rom.data, rom.length) != rom.length) {
-			free(rom.data);
-			rom.data = NULL;
-			system_message("%s `%s': %s",
-				       system_get_string(IDS_EROMOPEN),
-				       filename, zip_strerror(z));
-			return FALSE;
-		    }
-		    /* XXX: return value */
-		    zip_fclose(zf);
-		    zip_close(z);
-			
-		    return TRUE;
+#ifdef HAVE_LIBZ
+    if ((z=unzOpen(filename)) != NULL) {
+	err=unzGoToFirstFile(z); 
+	while (err==UNZ_OK &&
+	       ((err=unzGoToNextFile(z)) == UNZ_OK
+		|| err == UNZ_END_OF_LIST_OF_FILE)) {
+	    if (unzGetCurrentFileInfo(z, &zfi, name, sizeof(name),
+				      NULL, 0, NULL, 0) != UNZ_OK)
+		continue;
+	    if (zfi.size_filename > sizeof(name))
+		continue;
+	    l = strlen(name);
+	    if (l < 4)
+		continue;
+	    if (strcasecmp(name+l-4, ".ngp") == 0
+		|| strcasecmp(name+l-4, ".ngc") == 0
+		|| strcasecmp(name+l-4, ".npc") == 0) {
+		rom.length = zfi.uncompressed_size;
+		rom.data = (char *)calloc(rom.length, 1);
+		
+		if ((unzOpenCurrentFile(z) != UNZ_OK)
+		    || (unzReadCurrentFile(z, rom.data, rom.length)
+			!= rom.length)) {
+		    free(rom.data);
+		    rom.data = NULL;
+		    system_message("%s `%s'", system_get_string(IDS_EROMOPEN),
+				   filename);
+		    unzCloseCurrentFile(z);
+		    unzClose(z);
+		    return FALSE;
 		}
+		if (unzCloseCurrentFile(z) != UNZ_OK) {
+		    free(rom.data);
+		    rom.data = NULL;
+		    system_message("%s `%s'", system_get_string(IDS_EROMOPEN),
+				   filename);
+		    unzClose(z);
+		    return FALSE;
+		}
+		unzClose(z);
+		
+		return TRUE;
 	    }
-	    zip_close(z);
-	    system_message("%s `%s': no rom found",
-			   system_get_string(IDS_EROMOPEN), filename);
-	    return FALSE;
 	}
+	unzClose(z);
+	system_message("%s `%s': no rom found",
+		       system_get_string(IDS_EROMOPEN), filename);
+	return FALSE;
     }
 #endif
 

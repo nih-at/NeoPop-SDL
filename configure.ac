@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.54)
-AC_REVISION([$NiH: configure.ac,v 1.14 2004/06/21 03:21:52 dillo Exp $])
+AC_REVISION([$NiH: configure.ac,v 1.15 2004/06/23 16:59:55 dillo Exp $])
 AC_INIT([NeoPop-SDL],[0.1a], [wiz@danbala.tuwien.ac.at], [NeoPop-SDL])
 AC_CONFIG_SRCDIR([System_SDL/system_main.c])
 AC_CONFIG_HEADERS([System_SDL/config.h])
@@ -48,16 +48,18 @@ AC_CHECK_HEADER(png.h,
 	    -lm)]),
     [AC_MSG_WARN([PNG library not found -- using BMP screenshots])])
 
-PKG_CHECK_MODULES(LIBZIP, libzip, [AC_DEFINE(HAVE_LIBZIP, [1],
-		   [Define to 1 if you have the `zip' library (-lzip)])],
-                  [AC_MSG_WARN([libzip not found -- can't read zipped ROMs])])
+AC_CHECK_LIB([z], [main],
+	[AC_DEFINE([HAVE_LIBZ], [1],
+		  [Define to 1 if you have the zlib library (-lz)])
+	LIBS="$LIBS -lz"],
+	[AC_MSG_WARN([zlib not found -- no support for zipped ROMs])])
 
 AC_CHECK_LIB([SDL_net], [SDLNet_TCP_Open],
-			[AC_DEFINE([HAVE_LIBSDL_NET], [1],
-			           [Define to 1 if you have the `SDL_net' library (-lSDL_net)])
-			 SDL_LIBS="$SDL_LIBS -lSDL_net"],
-			[AC_MSG_WARN([SDL_net not found -- no comms support])],
-			[$SDL_LIBS])
+	[AC_DEFINE([HAVE_LIBSDL_NET], [1],
+	           [Define to 1 if you have the `SDL_net' library (-lSDL_net)])
+	 SDL_LIBS="$SDL_LIBS -lSDL_net"],
+	[AC_MSG_WARN([SDL_net not found -- no comms support])],
+	[$SDL_LIBS])
 
 # Man pages
 case $host_os

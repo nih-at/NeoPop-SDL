@@ -4,9 +4,13 @@ For installation, you'll need SDL (Simple DirectMedia Layer), see
 	http://www.libsdl.org/
 If you want to save screenshots in PNG format, you'll need libpng, see
 	http://www.libpng.org/pub/png/
+To read ROMs from zips, you should have zlib installed, see
+	http://www.zlib.org/
+(most distributions include it).
 
-You can get a list of command line options with the -h flag; details
-and the keys are described in the man page.
+You can get a list of command line options with the -h flag; details,
+the config file, and the keys are described in the man pages
+NeoPop-SDL(6) and neopoprc(5).
 
 The readme for the NeoPop core is readme-core.txt; bugs-core.html
 contains a known-bugs list, also from the original NeoPop source
@@ -22,5 +26,4 @@ If you package this program, please reference either of
         http://www.nih.at/NeoPop-SDL/
 as the master distribution site.
 
-Send comments, bug reports, and praise to
-	Thomas Klausner <wiz@danbala.tuwien.ac.at>.
+Send comments, bug reports, and praise to nih@giga.or.at.

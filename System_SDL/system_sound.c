@@ -1,4 +1,4 @@
-/* $NiH: system_sound.c,v 1.17.2.1 2004/07/07 20:22:51 dillo Exp $ */
+/* $NiH: system_sound.c,v 1.17.2.2 2004/07/07 21:55:03 dillo Exp $ */
 /*
   system_sound.c -- sound support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -175,7 +175,7 @@ system_sound_update(int nframes)
 
     /* SDL_UnlockAudio(); */
 
-#if 1
+#if 0
     printf("update: left: %d, consumed: %d, wanted: %d\n",
 	   i, consumed, nframes);
 #endif

@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_hq2x.h,v 1.2 2004/07/21 09:34:02 dillo Exp $ */
 /* Adapted for NeoPop-SDL by Dieter Baron and Thomas Klausner */
 
 /* ScummVM - Scumm Interpreter
@@ -69,6 +69,8 @@
 #endif
 
 	while (height--) {
+		int tmpWidth;
+
 		w1 = *(p - 1 - nextlineSrc);
 		w4 = *(p - 1);
 		w7 = *(p - 1 + nextlineSrc);
@@ -86,15 +88,18 @@
 		vecYUV6789 = *(const vector signed char *)arr6789;
 #endif
 
-		int tmpWidth = width;
+		tmpWidth = width;
 		while (tmpWidth--) {
+			int pattern;
+			int yuv5;
+
 			p++;
 
 			w3 = *(p - nextlineSrc);
 			w6 = *(p);
 			w9 = *(p + nextlineSrc);
 
-			int pattern = 0;
+			pattern = 0;
 
 #ifdef USE_ALTIVEC
 			/*
@@ -165,7 +170,7 @@
 			vSum = vec_sums(vPattern2, vSum);
 			pattern = ((int *)&vSum)[3];
 #else
-			const int yuv5 = YUV(5);
+			yuv5 = YUV(5);
 			if (w5 != w1 && diffYUV(yuv5, YUV(1))) pattern |= 0x0001;
 			if (w5 != w2 && diffYUV(yuv5, YUV(2))) pattern |= 0x0002;
 			if (w5 != w3 && diffYUV(yuv5, YUV(3))) pattern |= 0x0004;

@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.33.2.1 2004/07/07 20:22:50 dillo Exp $ */
+/* $NiH: system_main.c,v 1.33.2.2 2004/07/07 21:55:03 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -83,9 +83,10 @@ void
 system_VBL(void)
 {
     static int frame_counter = 0;
+    static long time_spent = 0;
     struct timeval current_time, time_diff, t2;
     int newsec;
-    long frames_spent, throttle_diff;
+    long throttle_diff;
     struct timespec ts, tsrem;
 
     system_graphics_update();
@@ -95,20 +96,27 @@ system_VBL(void)
     newsec = 0;
     if (mute == FALSE) {
 	gettimeofday(&current_time, NULL);
-	if (current_time.tv_sec != throttle_last.tv_sec)
-	    newsec = 1;
 	timersub(&current_time, &throttle_last, &time_diff);
-	frames_spent = ((time_diff.tv_sec*1000000 + time_diff.tv_usec)
-			/ throttle_rate);
+	throttle_diff = (time_diff.tv_sec*1000000 + time_diff.tv_usec);
+
+	if (time_spent == 0)
+	    time_spent = throttle_diff;
+	else
+	    time_spent = (time_spent*9 + throttle_diff) / 10;
 
 #if 0
+	printf("%4ld", time_spent*10/throttle_rate), fflush(stdout);
 	printf("time spent: %ld.%06ld, frames spent: %ld\n",
 	       time_diff.tv_sec, time_diff.tv_usec, frames_spent);
 #endif
 
-	throttle_last = current_time;
+	system_sound_update(time_spent/throttle_rate + 1);
 
-	system_sound_update(frames_spent+1);
+	/* XXX: we should include the time spent calculating samples */
+	gettimeofday(&current_time, NULL);
+	if (current_time.tv_sec != throttle_last.tv_sec)
+	    newsec = 1;
+	throttle_last = current_time;
     }
     else {
 	/* throttling */

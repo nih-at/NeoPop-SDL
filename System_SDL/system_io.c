@@ -1,4 +1,4 @@
-/* $NiH: system_io.c,v 1.7 2003/10/15 12:30:03 wiz Exp $ */
+/* $NiH: system_io.c,v 1.8 2003/10/16 17:29:45 wiz Exp $ */
 /*
   system_io.c -- read/write flash files 
   Copyright (C) 2002-2003 Thomas Klausner
@@ -25,7 +25,15 @@
 #include <errno.h>
 #include <string.h>
 
-#include "neopop.h"
+#include "NeoPop-SDL.h"
+
+char *state_dir;
+char *flash_dir;
+int use_rom_name;
+int state_slot;
+
+static char *make_file_name(const char *, const char *, int);
+
 
 static BOOL
 read_file_to_buffer(char *filename, _u8 *buffer, _u32 len)
@@ -87,7 +95,7 @@ write_file_from_buffer(char *filename, _u8 *buffer, _u32 len)
 
 
 static BOOL
-validate_dir(char *path)
+validate_dir(const char *path)
 {
     struct stat sb;
 
@@ -115,10 +123,13 @@ validate_dir(char *path)
 void
 system_state_load(void)
 {
-    char fn[256];
+    char *fn, ext[4];
 
-    snprintf(fn, sizeof(fn), "%s.ngs", rom.filename);
+    sprintf(ext, "ng%c", (state_slot ? state_slot+'0' : 's'));
+    if ((fn=make_file_name(state_dir, ext, FALSE)) == NULL)
+	return;
     state_restore(fn);
+    free(fn);
 
     return;
 }
@@ -126,10 +137,13 @@ system_state_load(void)
 void
 system_state_save(void)
 {
-    char fn[256];
+    char *fn, ext[4];
 
-    snprintf(fn, sizeof(fn), "%s.ngs", rom.filename);
+    sprintf(ext, "ng%c", (state_slot ? state_slot+'0' : 's'));
+    if ((fn=make_file_name(state_dir, ext, TRUE)) == NULL)
+	return;
     state_store(fn);
+    free(fn);
 
     return;
 }
@@ -143,43 +157,27 @@ system_io_rom_read(char *filename, _u8 *buffer, _u32 len)
 BOOL
 system_io_flash_read(_u8* buffer, _u32 len)
 {
-    char path[256];
-    char *homedir;
+    char *fn;
+    int ret;
 
-    if ((homedir=getenv("HOME")) == NULL) {
-	fprintf(stderr, "can't find home directory");
+    if ((fn=make_file_name(flash_dir, "ngf", FALSE)) == NULL)
 	return FALSE;
-    }
-
-    /* Build a path to the flash file */
-    snprintf(path, sizeof(path), "%s/.neopop/%s.ngf", homedir,
-	     rom.filename);
-
-    return read_file_to_buffer(path, buffer, len);
+    ret = read_file_to_buffer(fn, buffer, len);
+    free(fn);
+    return ret;
 }
 
 BOOL
 system_io_flash_write(_u8* buffer, _u32 len)
 {
-    char path[256];
-    char *homedir;
-    char flash_dir[256];
+    char *fn;
+    int ret;
 
-    if ((homedir=getenv("HOME")) == NULL) {
-	fprintf(stderr, "can't find home directory");
+    if ((fn=make_file_name(flash_dir, "ngf", TRUE)) == NULL)
 	return FALSE;
-    }
-
-    /* Make sure flash dir exists */
-    snprintf(flash_dir, sizeof(flash_dir), "%s/.neopop", homedir);
-    if (validate_dir(flash_dir) < 0)
-	return FALSE;
-
-    /* Build a path for the flash file */
-    snprintf(path, sizeof(path), "%s/%s.ngf", flash_dir,
-	     rom.filename);
-
-    return write_file_from_buffer(path, buffer, len);
+    ret = write_file_from_buffer(fn, buffer, len);
+    free(fn);
+    return ret;
 }
 
 BOOL
@@ -192,4 +190,39 @@ BOOL
 system_io_state_write(char *filename, _u8 *buffer, _u32 len)
 {
     return write_file_from_buffer(filename, buffer, len);
+}
+
+static char *
+make_file_name(const char *dir, const char *ext, int writing)
+{
+    char *fname, *name, *home;
+    int len;
+
+    if (use_rom_name)
+	name = rom.name;
+    else
+	name = rom.filename;
+    len = strlen(dir)+strlen(name)+strlen(ext)+3;
+
+    if (strncmp(dir, "~/", 2) == 0) {
+	home = getenv("HOME");
+	if (home == NULL)
+	    return NULL;
+	len += strlen(home)-1;
+    }
+
+    if ((fname=malloc(len)) == NULL)
+	return NULL;
+
+    if (strncmp(dir, "~/", 2) == 0)
+	sprintf(fname, "%s%s", home, dir+1);
+    else
+	strcpy(fname, dir);
+
+    if (writing && !validate_dir(fname))
+	return NULL;
+
+    sprintf(fname+strlen(fname), "/%s.%s", name, ext);
+
+    return fname;
 }

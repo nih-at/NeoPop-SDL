@@ -1,4 +1,4 @@
-/* $NiH: system_rc.c,v 1.5 2004/07/09 10:34:32 dillo Exp $ */
+/* $NiH: system_rc.c,v 1.6 2004/07/09 18:37:28 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -301,8 +301,15 @@ system_rc_read_file(const char *filename)
 	    break;
 	    
 	case NPRC_COMMS_REMOTE:
+	    p += strspn(p, " \t");
 	    /* XXX: check for legal host name (syntax) */
 	    comms_host = strdup(p);
+	    p += strlen(p);
+	    break;
+
+	case NPRC_FLASH_DIR:
+	    p += strspn(p, " \t");
+	    flash_dir = strdup(p);
 	    p += strlen(p);
 	    break;
 
@@ -373,6 +380,18 @@ system_rc_read_file(const char *filename)
 	    if ((i=rc_parse_boolean(p, &p)) == -1)
 		break;
 	    mute = !i;
+	    break;
+
+	case NPRC_STATE_DIR:
+	    p += strspn(p, " \t");
+	    state_dir = strdup(p);
+	    p += strlen(p);
+	    break;
+
+	case NPRC_USE_ROM_NAME:
+	    if ((i=rc_parse_boolean(p, &p)) == -1)
+		break;
+	    use_rom_name = i;
 	    break;
 
 	case NPRC_YUV:

@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.33.2.5 2004/07/08 23:36:33 dillo Exp $ */
+/* $NiH: system_main.c,v 1.34 2004/07/09 10:34:31 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -189,6 +189,13 @@ main(int argc, char *argv[])
     samplerate = DEFAULT_SAMPLERATE;
     /* use YUV overlay (hardware scaling) */
     use_yuv = 1;
+    /* directories for save files */
+    flash_dir = "~/.neopop";
+    state_dir = ".";
+    /* use rom name rather than file name for save files */
+    use_rom_name = FALSE;
+    /* state save slot */
+    state_slot = 0;
 
     system_bindings_init();
     system_rc_read();

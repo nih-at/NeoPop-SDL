@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.8.2.3 2004/07/08 12:11:34 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.9 2004/07/09 10:34:31 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -58,6 +58,8 @@ enum neopop_event {
     NPEV_GUI_SMOOTH_TOGGLE,
     NPEV_GUI_STATE_LOAD,
     NPEV_GUI_STATE_SAVE,
+    NPEV_GUI_STATE_SLOT_DECREMENT,
+    NPEV_GUI_STATE_SLOT_INCREMENT,
 
     NPEV_LAST
 };
@@ -67,6 +69,7 @@ enum nprc {
     NPRC_COMMS_MODE,
     NPRC_COMMS_PORT,
     NPRC_COMMS_REMOTE,
+    NPRC_FLASH_DIR,
     NPRC_FRAMESKIP,
     NPRC_FULLSCREEN,
     NPRC_LANGUAGE,
@@ -74,7 +77,9 @@ enum nprc {
     NPRC_MAP,
     NPRC_SAMPLERATE,
     NPRC_SMOOTH,
+    NPRC_STATE_DIR,
     NPRC_SOUND,
+    NPRC_USE_ROM_NAME,
     NPRC_YUV,
 
     NPRC_LAST
@@ -172,6 +177,10 @@ extern int comms_port;
 extern char *comms_host;
 extern int samplerate;
 extern int use_yuv;
+extern char *state_dir;
+extern char *flash_dir;
+extern int use_rom_name;
+extern int state_slot;
 
 extern enum neopop_event bindings[];
 extern const char *comms_names[];

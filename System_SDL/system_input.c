@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.16 2004/06/23 05:50:36 wiz Exp $ */
+/* $NiH: system_input.c,v 1.17 2004/06/23 17:19:04 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -278,6 +278,13 @@ handle_event(enum neopop_event ev, int type)
 	    break;
 	case NPEV_GUI_STATE_SAVE:
 	    system_state_save();
+	    break;
+
+	case NPEV_GUI_STATE_SLOT_DECREMENT:
+	    state_slot = (state_slot-1)%10;
+	    break;
+	case NPEV_GUI_STATE_SLOT_INCREMENT:
+	    state_slot = (state_slot+1)%10;
 	    break;
 
 	case NPEV_LAST:

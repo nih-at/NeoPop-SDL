@@ -1,6 +1,4 @@
 . video
- . zoom
- . fs/windowed
  . fps
  . throttled mode
  . screenshot

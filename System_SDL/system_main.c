@@ -1,11 +1,13 @@
 #include <unistd.h>
 #include <SDL.h>
-#include "neopop.h"
+#include "neopop-SDL.h"
 
 #define VERSION "0.01"
 
 char *prg;
 _u8 system_frameskip_key = 1;
+int do_exit = 0;
+
 
 void
 usage(int exitcode)
@@ -34,8 +36,8 @@ system_VBL(void)
 {
     system_graphics_update();
 
-#if 0
     system_input_update();
+#if 0
     if (mute == FALSE)
 	system_sound_update();
 
@@ -88,13 +90,6 @@ main(int argc, char *argv[])
 	exit(1);
     }
 
-#if NOT_YET
-    if (system_input_init() == FALSE) {
-	fprintf(stderr, "cannot get input devices: %s\n", SDL_GetError());
-	exit(1);
-    }
-#endif
-
     if (system_sound_init() == FALSE) {
 	fprintf(stderr, "cannot turn on sound: %s\n", SDL_GetError());
 	mute = TRUE;
@@ -108,15 +103,11 @@ main(int argc, char *argv[])
     reset();
     SDL_PauseAudio(0);
 
-    i = 0;
     do {
 	i++;
 	emulate();
-    } while (i<1000000);
-
-#if 0
-    sleep(4);
-#endif
+	system_input_update();
+    } while (do_exit == 0);
 
     system_unload_rom();
 #if 0

@@ -1,4 +1,4 @@
-/* $NiH: system_sound.c,v 1.15 2003/10/16 17:29:46 wiz Exp $ */
+/* $NiH: system_sound.c,v 1.16 2004/06/20 23:43:31 dillo Exp $ */
 /*
   system_sound.c -- sound support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -121,7 +121,7 @@ system_sound_callback(void *userdata, Uint8 *stream, int len)
     assert(len != 0);
     assert(stream != NULL);
 
-    if (sound_buffer != NULL)
+    if (sound_buffer == NULL)
 	return;
 
     if (len > CHIPBUFFERLENGTH - sound_buffer_offset) {

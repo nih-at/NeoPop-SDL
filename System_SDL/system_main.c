@@ -115,7 +115,7 @@ main(int argc, char *argv[])
     do {
 	i++;
 	emulate();
-	if (i == 200) {
+	if (mute == FALSE && i == 200) {
 	    SDL_Delay(1);
 	    i = 0;
 	}

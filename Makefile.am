@@ -1,8 +1,8 @@
-SUBDIRS=System_SDL
+SUBDIRS=System_SDL Documentation
 
-EXTRA_DIST=Core bugs-core.html readme-core.txt
+EXTRA_DIST=Core
 
-doc_DATA=TODO bugs-core.html
+doc_DATA=TODO
 docdir=@DOCDIR@
 
 dist-hook:

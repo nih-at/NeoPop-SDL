@@ -1,6 +1,3 @@
-MANFMT=		@MANFMT@
-docdir=		@DOCDIR@
-
 AM_CPPFLAGS=	-I$(top_srcdir)/Core/z80  -I$(top_srcdir)/Core/TLCS-900h \
 		-I$(top_srcdir)/Core
 AM_CFLAGS=	-D__cdecl= @SDL_CFLAGS@ -Wall
@@ -13,9 +10,9 @@ VPATH=$(top_srcdir)/Core:$(top_srcdir)/Core/TLCS-900h:$(top_srcdir)/Core/z80:$(t
 .PATH=${VPATH}
 
 bin_PROGRAMS=NeoPop-SDL
-man_MANS=NeoPop-SDL.6 neopoprc.5
 noinst_HEADERS=NeoPop-SDL.h system_hq2x.h system_hq3x.h system_hq_intern.h \
 	unzip.h font.xpm
+EXTRA_DIST=	mknames.sh
 
 nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c chunk.c dma.c flash.c gfx.c \
 	gfx_scanline_mono.c gfx_scanline_colour.c interrupt.c mem.c neopop.c \
@@ -33,17 +30,6 @@ NeoPop_SDL_SOURCES=system_bindings.c system_comms.c system_graphics.c \
 	system_screenshot.c system_sound.c unzip.c
 BUILT_SOURCES=system_names.c
 
-NeoPop-SDL.6: NeoPop-SDL.${MANFMT} Makefile
-	sed "s|DOCDIR|${docdir}|g" ${srcdir}/NeoPop-SDL.${MANFMT} > $@.$$$$ && \
-		mv $@.$$$$ $@
-
-neopoprc.5: neopoprc.${MANFMT} Makefile
-	cp ${srcdir}/neopoprc.${MANFMT} $@
-
 system_names.c: mknames.sh NeoPop-SDL.h
 	sh ${srcdir}/mknames.sh ${srcdir}/NeoPop-SDL.h > $@.$$$$ && \
 		mv $@.$$$$ $@
-
-EXTRA_DIST=	NeoPop-SDL.mdoc NeoPop-SDL.man mknames.sh \
-		neopoprc.mdoc neopoprc.man
-DISTCLEANFILES=	NeoPop-SDL.6 neopoprc.5

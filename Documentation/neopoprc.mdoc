@@ -1,4 +1,4 @@
-.\" $NiH: neopoprc.mdoc,v 1.1 2004/07/14 22:18:02 wiz Exp $
+.\" $NiH: neopoprc.mdoc,v 1.2 2004/07/14 22:26:58 dillo Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -28,7 +28,7 @@
 .\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 .\" OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
-.Dd July 14, 2004
+.Dd July 22, 2004
 .Dt NEOPOPRC 5
 .Os
 .Sh NAME
@@ -43,6 +43,8 @@ file contains the configuration of
 Lines starting with a hash mark
 .Pq Sq #
 are ignored.
+All keywords and values (except for paths) are case-insensitive.
+Command-line options override config file settings.
 .Pp
 The configuration values can be of the following types:
 .Bl -tag -width XbooleanXX -offset indent -compact
@@ -64,8 +66,7 @@ An integer.
 A string.
 .El
 .Pp
-The following keywords are understood
-the:
+The following keywords are understood:
 .Bl -tag -width XuseXromXnameXX -offset indent
 .It colour
 .Bq enum
@@ -109,6 +110,8 @@ Has no default.
 Path to the directory where Flash RAM images should be saved.
 Defaults to
 .Dq Pa ~/.neopop .
+If only the last path component does not exist, the directory
+is created automatically.
 .It Dv frameskip
 .Bq int (1..7)
 Show only every Nth frame.
@@ -132,12 +135,13 @@ Defaults to
 .Bq int (1..3)
 Magnification factor for the graphics display.
 Defaults to 1 (no magnification).
+Not used in YUV fullscreen mode.
 .It Dv map
 Assign a
 .Xr NeoPop-SDL 1
 event to a key.
 For details, please see the
-.Sx KEYS
+.Sx BINDINGS
 section below.
 .It Dv samplerate
 .Bq int
@@ -146,15 +150,16 @@ Defaults to 44100.
 .It Dv smooth
 .Bq boolean
 Smooth display when magnified.
-.\" XXX
-Currently unimplemented.
 Defaults to
 .Dv on .
+Ignored in YUV overlay mode.
 .It Dv state-dir
 .Bq string
 Path to directory in which to store save states.
 Defaults to
 .Dq Pa \&. .
+If only the last path component does not exist, the directory
+is created automatically.
 .It Dv sound
 .Bq boolean
 Whether to play sound.
@@ -190,12 +195,129 @@ Use a YUV overlay even if scaling is not hardware accelerated.
 Defaults to
 .Dv off .
 .El
-.Sh KEYS
-XXX
-Describe the map keyword and the possible values both left
-and right.
+.Sh BINDINGS
+The
+.Dv map
+keyword can be used to set key bindings.
+The following actions can be bound:
+.Bl -tag -width n -compact -offset indent
+.It Dv none
+No action.
+Can be used to remove a key binding.
+.Pp
+.It Dv joy up
+.It Dv joy down
+.It Dv joy left
+.It Dv joy right
+.It Dv joy button a
+.It Dv joy button b
+.It Dv joy option
+NeoGeo Pocket Gamepad.
+.Pp
+.It Dv gui frameskip decrement
+.It Dv gui frameskip increment
+Decrease/increase frameskip.
+.Pp
+.It Dv gui fullscreen off
+.It Dv gui fullscreen on
+.It Dv gui fullscreen toggle
+Turn fullscreen mode off, on, or toggle it.
+.Pp
+.It Dv gui magnify 1
+.It Dv gui magnify 2
+.It Dv gui magnify 3
+Set graphics magnification factor.
+.Pp
+.\" .It Dv gui menu
+.It Dv gui mute off
+.It Dv gui mute on
+.It Dv gui mute toggle
+Turn sound and music on, off, or toggle it.
+.Pp
+.It Dv gui pause off
+.It Dv gui pause on
+.It Dv gui pause toggle
+Pause or unpause game.
+.Pp
+.It Dv gui quit
+Exit the emulator.
+.Pp
+.It Dv gui screenshot
+Make a screenshot.
+.Pp
+.It Dv gui smooth off
+.It Dv gui smooth on
+.It Dv gui smooth toggle
+Choose whether to use a smoothing filter.
+.Pp
+.It Dv gui state load
+.It Dv gui state save
+Load or save a game state.
+.Pp
+.It Dv gui state slot decrement
+.It Dv gui state slot increment
+Decrease or increase the current game state slot.
+Goes from 0 to 9 and then wraps around to 0 again.
+.El
+.Pp
+The key events use the names from the SDL library;
+see
+.Xr SDLKey 3
+for details.
+Additionally,
+.Dv C-
+can be prepended for the control key, and
+.Dv A-
+or
+.Dv M-
+for the alt key.
+See also the
+.Sx EXAMPLES
+section below.
+.Pp
+The following joystick events are known:
+.Bl -tag -width XXX -compact -offset indent
+.It Dv joy Ar m Dv axis Ar n Ar neg|pos
+On joystick
+.Ar m
+axis
+.Ar n
+the negative or positive direction.
+.It Dv joy Ar m Dv button Ar n
+Button
+.Ar n
+on joystick
+.Ar m .
+.It Dv joy Ar m Dv hat Ar n Ar up|left|down|right
+On joystick
+.Ar m
+hat
+.Ar n
+direction up, left, down, or right.
+.El
+.Sh FILES
+.Pa ~/.neopop/neopoprc
+Location of the config file.
+.Sh EXAMPLES
+To exit the emulator with
+.Sy ALT-F4 ,
+add the following line to your
+.Pa ~/.neopop/neopoprc :
+.Dl map A-F4 = gui quit
+.Pp
+To simulate a NeoGeo Pocket option key with
+button 5 on the second joystick use:
+.Dl map joy 2 button 5 = joy option
+.Pp
+To save all game states and flash saves in subdirectories
+of
+.Pa ~/.neopop :
+.Bd -literal -offset indent
+flash-dir ~/.neopop/flash
+state-dir ~/.neopop/states
+.Ed
 .Sh SEE ALSO
-.Xr NeoPOP-SDL 1
+.Xr NeoPop-SDL 1
 .Pp
 .Lk http://www.nih.at/NeoPop-SDL/
 .Sh AUTHORS

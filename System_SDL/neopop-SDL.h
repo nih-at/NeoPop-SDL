@@ -1,6 +1,7 @@
 #include "neopop.h"
 
 BOOL system_graphics_init(void);
+void system_graphics_fullscreen_toggle(void);
 void system_graphics_update(void);
 
 void system_input_update(void);
@@ -17,3 +18,4 @@ BOOL system_rom_load(char *);
 void system_rom_unload(void);
 
 extern int do_exit;
+extern int graphics_mag_req;

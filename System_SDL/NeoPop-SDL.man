@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: NeoPop-SDL.mdoc,v 1.9 2003/10/20 12:17:43 wiz Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.9 2003/10/20 12:17:43 wiz Exp $
+.\" from NiH: NeoPop-SDL.mdoc,v 1.10 2003/10/20 12:58:17 wiz Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.10 2003/10/20 12:58:17 wiz Exp $
 .\"
 .\" Copyright (c) 2003 Thomas Klausner.
 .\" All rights reserved.
@@ -215,7 +215,7 @@ command line flag.)
 \fBF12\fR
 saves a screenshot in the current directory.
 The name of the output file is
-``\fIneopop-ROMNAMEXXX.ext,\fR''
+``\fINeoPop-ROMNAMEXXX.ext,\fR''
 where
 \fBROMNAME\fR
 is the internal name of the rom and

@@ -17,8 +17,6 @@
 	* System_SDL/NeoPop-SDL.mdoc: Update descriptions for F3/F4 and
 	F12. Fix section number.
 	* System_SDL/neopoprc.mdoc: Fix NeoPop-SDL section number.
-	* System_SDL/NeoPop-SDL.man: regen.
-	* System_SDL/neopoprc.man: regen.
 	
 	* System_SDL/system_io.c (system_make_file_name): use ".ext"
 	instead of "ext" for system_make_file_name so it's usable for

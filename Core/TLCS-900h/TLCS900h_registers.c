@@ -180,7 +180,7 @@ void reset_registers(void)
 	memset(gpr, 0, sizeof(gpr));
 
 	if (rom.data)
-		pc = rom_header->startPC & 0xFFFFFF;
+		pc = le32toh(rom_header->startPC) & 0xFFFFFF;
 	else
 		pc = 0xFFFFFE;
 

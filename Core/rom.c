@@ -91,6 +91,9 @@
 RomInfo rom;
 RomHeader* rom_header;
 
+#define MATCH_CATALOG(c, s)	(rom_header->catalog == htole16(c) \
+				 && rom_header->subCatalog == (s))
+
 //=============================================================================
 
 static void rom_hack(void)
@@ -100,19 +103,19 @@ static void rom_hack(void)
 	//=============================
 	// GRAPHICS HACKS
 	//=============================
-	if ((rom_header->catalog == 89 && rom_header->subCatalog == 5)||	//Sonic
-		(rom_header->catalog == 149 && rom_header->subCatalog == 36)||	//LastBlade(US)
-		(rom_header->catalog == 100 && rom_header->subCatalog == 31)||	//LastBlade(J)
-		(rom_header->catalog == 2 && rom_header->subCatalog == 8)||		//NG.Cup
-		(rom_header->catalog == 57 && rom_header->subCatalog == 14)||	//NG.Cup+Colour
-		(rom_header->catalog == 133 && rom_header->subCatalog == 8)||	//Ogre
-		(rom_header->catalog == 148 && rom_header->subCatalog == 4)||	//Rockman
-		(rom_header->catalog == 105 && rom_header->subCatalog == 21)||	//SNKvsCAPCOM
-		(rom_header->catalog == 48 && rom_header->subCatalog == 26)||	//Sam.Shodown2
-		(rom_header->catalog == 102 && rom_header->subCatalog == 241)||	//Wrestle-Beta
-		(rom_header->catalog == 102 && rom_header->subCatalog == 2)||	//Pro-Wrestle
-		(rom_header->catalog == 1 && rom_header->subCatalog == 10)||	//KOF-R1
-		(rom_header->catalog == 35 && rom_header->subCatalog == 21))	//KOF-R2
+	if (MATCH_CATALOG(89, 5)||	//Sonic
+		MATCH_CATALOG(149, 36)||	//LastBlade(US)
+		MATCH_CATALOG(100, 31)||	//LastBlade(J)
+		MATCH_CATALOG(2, 8)||		//NG.Cup
+		MATCH_CATALOG(57, 14)||	//NG.Cup+Colour
+		MATCH_CATALOG(133, 8)||	//Ogre
+		MATCH_CATALOG(148, 4)||	//Rockman
+		MATCH_CATALOG(105, 21)||	//SNKvsCAPCOM
+		MATCH_CATALOG(48, 26)||	//Sam.Shodown2
+		MATCH_CATALOG(102, 241)||	//Wrestle-Beta
+		MATCH_CATALOG(102, 2)||	//Pro-Wrestle
+		MATCH_CATALOG(1, 10)||	//KOF-R1
+		MATCH_CATALOG(35, 21))	//KOF-R2
 	{
 		gfx_hack = TRUE;
 #ifdef NEOPOP_DEBUG
@@ -121,7 +124,8 @@ static void rom_hack(void)
 	}
 
 	//### Quick way of displaying the rom information
-//	system_message("%d %d", rom_header->catalog, rom_header->subCatalog); 
+//	system_message("%d %d", le16toh(rom_header->catalog),
+//		       rom_header->subCatalog); 
 //	gfx_hack = TRUE;
 
 	//=============================
@@ -129,7 +133,7 @@ static void rom_hack(void)
 	//=============================
 
 	//"Neo-Neo! V1.0 (PD)"
-	if (rom_header->catalog == 0 && rom_header->subCatalog == 16)
+	if (MATCH_CATALOG(0, 16))
 	{
 		rom.data[0x23] = 0x10;	// Fix rom header
 
@@ -139,7 +143,7 @@ static void rom_hack(void)
 	}
 
 	//"Cool Cool Jam SAMPLE (U)"
-	if (rom_header->catalog == 4660 && rom_header->subCatalog == 161)
+	if (MATCH_CATALOG(4660, 161))
 	{
 		rom.data[0x23] = 0x10;	// Fix rom header
 
@@ -149,7 +153,7 @@ static void rom_hack(void)
 	}
 
 	//"Dokodemo Mahjong (J)"
-	if (rom_header->catalog == 51 && rom_header->subCatalog == 33)
+	if (MATCH_CATALOG(51, 33))
 	{
 		rom.data[0x23] = 0x00;	// Fix rom header
 
@@ -159,7 +163,7 @@ static void rom_hack(void)
 	}
 
 	//"Puyo Pop (V05) (JUE)"
-	if (rom_header->catalog == 65 && rom_header->subCatalog == 5)
+	if (MATCH_CATALOG(65, 5))
 	{
 		int i;
 		for (i = 0x8F0; i < 0x8FC; i++)
@@ -171,7 +175,7 @@ static void rom_hack(void)
 	}
 
 	//"Puyo Pop (V06) (JUE)"
-	if (rom_header->catalog == 65 && rom_header->subCatalog == 6)
+	if (MATCH_CATALOG(65, 6))
 	{
 		int i;
 		for (i = 0x8F0; i < 0x8FC; i++)
@@ -184,7 +188,7 @@ static void rom_hack(void)
 
 	//"Metal Slug - 2nd Mission (JUE) [!]"
 	//"Metal Slug - 2nd Mission (JUE) [h1]"
-	if (rom_header->catalog == 97 && rom_header->subCatalog == 4)
+	if (MATCH_CATALOG(97, 4))
 	{
 		//Enable dev-kit code path, because otherwise it doesn't
 		//allow jumping or firing (for some reason!)
@@ -218,10 +222,13 @@ static void rom_display_header(void)
 	}
 
 	//Catalog Numbers
-	system_debug_message("Catalogue %d (sub %d)", rom_header->catalog, rom_header->subCatalog);
+	system_debug_message("Catalogue %d (sub %d)",
+			     le16toh(rom_header->catalog),
+			     rom_header->subCatalog);
 
 	//Starting PC
-	system_debug_message("Starting PC = %06X", rom_header->startPC & 0xFFFFFF);
+	system_debug_message("Starting PC = %06X",
+			     le32toh(rom_header->startPC) & 0xFFFFFF);
 
 	system_debug_message("====================================\n");
 #endif
@@ -238,9 +245,6 @@ void rom_loaded(void)
 
 	//Extract the header
 	rom_header = (RomHeader*)(rom.data);
-	rom_header->startPC = le32toh(rom_header->startPC);
-	rom_header->catalog = le16toh(rom_header->catalog);
-	/* reserved fields are not fixed */
 
 	//Rom Name
 	for(i = 0; i < 12; i++)

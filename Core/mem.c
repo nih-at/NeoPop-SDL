@@ -355,8 +355,6 @@ void storeB(_u32 address, _u8 data)
 	//Write
 	if (ptr)
 	{
-		if (ptr == ram+0x8005)
-			printf("HIT: %d\n", data);
 		*ptr = data;
 		post_write(address);
 	}
@@ -369,8 +367,6 @@ void storeW(_u32 address, _u16 data)
 	//Write
 	if (ptr)
 	{
-		if ((_u8*)ptr == ram+0x8004)
-			printf("HIT16: %d\n", data);
 		*ptr = htole16(data);
 		post_write(address);
 	}
@@ -383,10 +379,6 @@ void storeL(_u32 address, _u32 data)
 	//Write
 	if (ptr)
 	{
-		if ((_u8*)ptr == ram+0x8004)
-			printf("HIT32: %d\n", data);
-		if ((_u8*)ptr == ram+0x8002)
-			printf("HIT32-: %d\n", data);
 		*ptr = htole32(data);
 		post_write(address);
 	}

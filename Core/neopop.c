@@ -95,10 +95,8 @@ void emulate(void)
 	for (i = 0; i < 64; i++)
 	{
 		updateTimers(TLCS900h_interpret());
-		/* printf("%08x\n", pc); */
 		if (Z80ACTIVE) Z80EMULATE
 		updateTimers(TLCS900h_interpret());
-		/* printf("%08x\n", pc); */
 	}
 }
 

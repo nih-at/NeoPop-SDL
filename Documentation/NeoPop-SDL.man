@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: NeoPop-SDL.mdoc,v 1.17 2004/07/25 07:21:54 dillo Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.17 2004/07/25 07:21:54 dillo Exp $
+.\" from NiH: NeoPop-SDL.mdoc,v 1.18 2004/07/25 10:47:27 wiz Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.18 2004/07/25 10:47:27 wiz Exp $
 .\"
 .\" Copyright (c) 2003, 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -30,7 +30,7 @@
 .\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 .\" OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
-.TH NEOPOP-SDL 1 "July 22, 2004" NiH
+.TH NEOPOP-SDL 1 "July 25, 2004" NiH
 .SH "NAME"
 NeoPop-SDL \- NeoGeo Pocket (Color) emulator
 .SH "SYNOPSIS"
@@ -252,12 +252,16 @@ loads and
 \fBF4\fR
 writes the current emulator state from/to
 \fBfilename.ngs\fR
+(or
+\fBfilename.ngX\fR
+with
+\fBX\fR
+from 0 to 9 for the numbered save slots)
 in the directory configured in
 neopoprc(5)
 (defaults to
-``. )''.
+``.neopop/flash )''.
 The emulator state
-\fBfilename.ngs\fR
 contains all the necessary information to continue
 emulation at the exact same place at some later
 time (i.e., when it is loaded again via
@@ -265,20 +269,31 @@ time (i.e., when it is loaded again via
 or the
 \fB-l\fR
 command line flag.)
+\fBfilename\fR
+depends on the
+\fBuse-rom-name\fR
+setting in
+neopoprc(5).
 .PP
 \fBF12\fR
-saves a screenshot in the current directory.
+saves a screenshot in the directory configured in
+neopoprc(5)
+(defaults to
+``. )''.
 The name of the output file is
-``\fBNeoPop-ROMNAMEXXX.ext\fR,''
+``\fBfilenameXXX.ext\fR,''
 where
-\fBROMNAME\fR
-is the internal name of the rom and
 \fBXXX\fR
 is the number of the screenshot starting from 0; special
 care is taken not to overwrite existing screenshots.
 If the PNG library was found during compilation, screenshots are saved
 as PNGs, otherwise as BMPs.
 The screenshot is always in the original screen size.
+\fBfilename\fR
+depends on the
+\fBuse-rom-name\fR
+setting in
+neopoprc(5).
 .PP
 \fBESC\fR
 quits the emulator.

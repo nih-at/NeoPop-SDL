@@ -111,13 +111,12 @@ main(int argc, char *argv[])
     reset();
     SDL_PauseAudio(0);
 
-    i = 0;
+    i = 200;
     do {
-	i++;
 	emulate();
-	if (mute == FALSE && i == 200) {
+	if (i-- == 0 && !mute) {
 	    SDL_Delay(1);
-	    i = 0;
+	    i = 200;
 	}
     } while (do_exit == 0);
 

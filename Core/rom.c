@@ -238,6 +238,9 @@ void rom_loaded(void)
 
 	//Extract the header
 	rom_header = (RomHeader*)(rom.data);
+	rom_header->startPC = le32toh(rom_header->startPC);
+	rom_header->catalog = le16toh(rom_header->catalog);
+	/* reserved fields are not fixed */
 
 	//Rom Name
 	for(i = 0; i < 12; i++)

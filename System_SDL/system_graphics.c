@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include "neopop-SDL.h"
 
-/* graphics size requested: 1 normal, 2 doublesize */
+/* graphics size requested: 1 normal, 2 double size, 3 triple size */
 int graphics_mag_req = 1;
 
 /* display structure */
@@ -10,7 +10,7 @@ static SDL_Surface *disp = NULL;
 /* SDL Surface containing the screen data */
 static SDL_Surface *corescr = NULL;
 /* displayed graphics is how big compared to original size? 1: normal size,
- * 2: double size */
+ * 2: double size, 3: triple size */
 static int graphics_mag_actual = 1;
 /* display in full screen mode? */
 static int fs_mode = 0;

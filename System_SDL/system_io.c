@@ -1,4 +1,4 @@
-/* $NiH: system_io.c,v 1.14 2004/07/22 15:23:10 dillo Exp $ */
+/* $NiH: system_io.c,v 1.15 2004/07/25 10:40:51 wiz Exp $ */
 /*
   system_io.c -- read/write flash files 
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -121,7 +121,6 @@ validate_dir(const char *path)
 
 	if (stat(s, &sb) == -1) {
 	    if (errno == ENOENT) {
-		printf("mkdir(%s)\n", s);
 		if (mkdir(s, 0777) == -1) {
 		    fprintf(stderr, "Directory `%s' does not exist and "
 			    "creation failed: %s\n", path, strerror(errno));

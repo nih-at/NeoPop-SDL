@@ -1,13 +1,20 @@
+bugs:
+. fix graphics on big-endian
+. convert DAC sound ourselves (SDL is broken)
+. turning sound on during game disables throttling for about 2s
+. comm: send and handle pause/unpause packets
+. test comm support
+
+regressions:
 . readd smooth
+. update man page (especially for config file)
+
+features:
 . osd for fullscreen, smooth
 . option: yuv for fullscreen, rgb for windowed
 . option: yuv only if hardware accelerated
-. convert DAC sound ourselves (SDL is broken)
 . movie captures
 . reset game
 . change emulation speed (run faster/slower)
-. turning sound on during game disables throttling for about 2s
-. test comm support
-. comm: handle pause/unpause packets
 . gui
 . speedup (sound, cpu)

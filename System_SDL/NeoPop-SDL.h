@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.9 2004/07/09 10:34:31 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.10 2004/07/09 21:42:40 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -143,6 +143,10 @@ BOOL system_graphics_init(void);
 void system_graphics_update(void);
 
 void system_input_update(void);
+
+void system_osd(const char *, ...);
+void system_osd_display(void);
+int system_osd_init(void);
 
 const char *system_npev_name(enum neopop_event);
 int system_npev_parse(const char *, char **);

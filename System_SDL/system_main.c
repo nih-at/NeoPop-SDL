@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.34 2004/07/09 10:34:31 dillo Exp $ */
+/* $NiH: system_main.c,v 1.35 2004/07/09 21:42:41 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -89,6 +89,8 @@ system_VBL(void)
     long throttle_diff;
     int newsec;
 
+    system_osd_display();
+    /* XXX: honour frame skip */
     system_graphics_update();
 
     system_input_update();
@@ -297,6 +299,9 @@ main(int argc, char *argv[])
 	fprintf(stderr, "cannot turn on sound: %s\n", SDL_GetError());
 	mute = TRUE;
     }
+
+    if (system_osd_init() == FALSE)
+	fprintf(stderr, "OSD font unusable, OSD disabled\n");
 
     if (comms_mode != COMMS_NONE)
 	system_comms_connect();

@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.17 2004/06/23 17:19:04 dillo Exp $ */
+/* $NiH: system_input.c,v 1.18 2004/07/09 21:42:40 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -219,10 +219,12 @@ handle_event(enum neopop_event ev, int type)
 	case NPEV_GUI_FRAMESKIP_DECREMENT:
 	    if (system_frameskip_key > 1)
 		system_frameskip_key--;
+	    system_osd("frameskip %d", system_frameskip_key);
 	    break;
 	case NPEV_GUI_FRAMESKIP_INCREMENT:
 	    if (system_frameskip_key < 7)
 		system_frameskip_key++;
+	    system_osd("frameskip %d", system_frameskip_key);
 	    break;
 	    
 	case NPEV_GUI_FULLSCREEN_OFF:
@@ -239,6 +241,7 @@ handle_event(enum neopop_event ev, int type)
 	case NPEV_GUI_MAGNIFY_2:
 	case NPEV_GUI_MAGNIFY_3:
 	    graphics_mag_req = ev-NPEV_GUI_MAGNIFY_1+1;
+	    system_osd("magnification %d", graphics_mag_req);
 	    break;
 	    
 	case NPEV_GUI_MENU:
@@ -247,12 +250,15 @@ handle_event(enum neopop_event ev, int type)
 	    
 	case NPEV_GUI_MUTE_OFF:
 	    mute = 0;
+	    system_osd("sound off");
 	    break;
 	case NPEV_GUI_MUTE_ON:
 	    mute = 1;
+	    system_osd("sound on");
 	    break;
 	case NPEV_GUI_MUTE_TOGGLE:
 	    mute = !mute;
+	    system_osd("sound %s", mute ? "off" : "on");
 	    break;
 	    
 	case NPEV_GUI_QUIT:
@@ -261,6 +267,7 @@ handle_event(enum neopop_event ev, int type)
 	    
 	case NPEV_GUI_SCREENSHOT:
 	    system_screenshot();
+	    system_osd("screenshot saved");
 	    break;
 	    
 	case NPEV_GUI_SMOOTH_OFF:
@@ -275,16 +282,20 @@ handle_event(enum neopop_event ev, int type)
 	    
 	case NPEV_GUI_STATE_LOAD:
 	    system_state_load();
+	    system_osd("state %d loaded", state_slot);
 	    break;
 	case NPEV_GUI_STATE_SAVE:
 	    system_state_save();
+	    system_osd("state %d saved", state_slot);
 	    break;
 
 	case NPEV_GUI_STATE_SLOT_DECREMENT:
-	    state_slot = (state_slot-1)%10;
+	    state_slot = (state_slot+9)%10;
+	    system_osd("slot %d selected", state_slot);
 	    break;
 	case NPEV_GUI_STATE_SLOT_INCREMENT:
 	    state_slot = (state_slot+1)%10;
+	    system_osd("slot %d selected", state_slot);
 	    break;
 
 	case NPEV_LAST:

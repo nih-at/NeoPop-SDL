@@ -2,10 +2,10 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.56)
-AC_REVISION([$NiH: configure.ac,v 1.3 2002/12/02 14:29:15 wiz Exp $])
+AC_REVISION([$NiH: configure.ac,v 1.4 2002/12/03 13:12:16 wiz Exp $])
 AC_INIT([neopop-SDL],[0.1])
-AC_CONFIG_SRCDIR([SDL/system_main.c])
-AC_CONFIG_HEADERS([SDL/config.h])
+AC_CONFIG_SRCDIR([System_SDL/system_main.c])
+AC_CONFIG_HEADERS([System_SDL/config.h])
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([dist-bzip2])
 
@@ -48,5 +48,5 @@ AC_CHECK_HEADER(png.h,
     [AC_MSG_WARN([PNG library not found -- using BMP screenshots])])
 
 
-AC_CONFIG_FILES([Makefile SDL/Makefile])
+AC_CONFIG_FILES([Makefile System_SDL/Makefile])
 AC_OUTPUT

@@ -1,4 +1,4 @@
-SUBDIRS=SDL
+SUBDIRS=System_SDL
 
 EXTRA_DIST=bugs.html readme.txt Core
 

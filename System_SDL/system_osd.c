@@ -1,4 +1,4 @@
-/* $NiH: system_osd.c,v 1.2 2004/07/10 02:38:02 dillo Exp $
+/* $NiH: system_osd.c,v 1.3 2004/07/11 23:32:11 dillo Exp $
 
   system_osd.c -- on-screen display
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -42,8 +42,18 @@ static _u16 font[CHAR_SIZE*FONT_NCHAR];
 
 static int font_usable;
 
-static char osd[SCREEN_WIDTH/FONT_WIDTH];
+static char osd[SCREEN_WIDTH/FONT_WIDTH+1];
 static int osd_timer;
+
+static _u16 osd_line[SCREEN_WIDTH*FONT_HEIGHT];
+static _u16 pause_line[SCREEN_WIDTH*FONT_HEIGHT];
+
+#define PAUSE_LINE	(SCREEN_HEIGHT-FONT_HEIGHT)/2
+#define OSD_LINE	(SCREEN_HEIGHT-FONT_HEIGHT)
+
+#define DARKEN(x)	(((x)>>1) & 0x0777)
+
+static void display_string(int, int, const char *);
 
 
 
@@ -121,24 +131,71 @@ system_osd(const char *fmt, ...)
 void
 system_osd_display(void)
 {
-    int i, x, y;
-    _u16 *base;
-
     if (!font_usable || osd_timer == 0)
 	return;
 
-    if (--osd_timer == 0) {
-	if (paused)
-	    system_osd((paused & PAUSED_LOCAL) ? "paused" : "remote paused");
+    if (--osd_timer > 0)
+	display_string(0, OSD_LINE, osd);
+    else if (paused)
+	    memcpy(cfb+SCREEN_WIDTH*OSD_LINE, osd_line,
+		   SCREEN_WIDTH*sizeof(_u16)*FONT_HEIGHT);
+
+    if (paused)
+	system_graphics_update();
+}
+
+
+
+void
+system_osd_pause(int which)
+{
+    int i;
+    char *s;
+
+    if (which == paused)
+	return;
+
+    if (which == 0) {
+	/* leaving pause: next frame update restores cfb */
+	return;
+    }
+    if (paused == 0) {
+	/* entering pause: darken display and save lines used by OSD */
+
+	for (i=0; i<SCREEN_WIDTH*SCREEN_HEIGHT; i++)
+	    cfb[i] = DARKEN(cfb[i]);
+	memcpy(pause_line, cfb+SCREEN_WIDTH*PAUSE_LINE,
+	       SCREEN_WIDTH*sizeof(_u16)*FONT_HEIGHT);
+	memcpy(osd_line, cfb+SCREEN_WIDTH*OSD_LINE,
+	       SCREEN_WIDTH*sizeof(_u16)*FONT_HEIGHT);
+	display_string(0, OSD_LINE, osd);
     }
 
-    base = cfb + SCREEN_WIDTH*(SCREEN_HEIGHT-FONT_HEIGHT);
+    /* display paused message */
+    memcpy(cfb+SCREEN_WIDTH*PAUSE_LINE, pause_line,
+	   SCREEN_WIDTH*sizeof(_u16)*FONT_HEIGHT);
     
-    for (i=0; osd[i]; i++) {
+    s = (which & PAUSED_LOCAL) ? "PAUSED" : "REMOTE PAUSED";
+    display_string((SCREEN_WIDTH-strlen(s)*FONT_WIDTH)/2, PAUSE_LINE, s);
+
+    system_graphics_update();
+}
+
+
+
+static void
+display_string(int x0, int y0, const char *s)
+{
+    int i, x, y;
+    _u16 *base;
+
+    base = cfb + SCREEN_WIDTH*y0+x0;
+    
+    for (i=0; s[i]; i++) {
 	for (y=0; y<FONT_HEIGHT; y++)
 	    for (x=0; x<FONT_WIDTH; x++)
 		base[y*SCREEN_WIDTH+x]
-		    = font[(osd[i]-32)*CHAR_SIZE+y*FONT_HEIGHT+x];
+		    = font[(s[i]-32)*CHAR_SIZE+y*FONT_HEIGHT+x];
 	base += FONT_WIDTH;
     }
 }

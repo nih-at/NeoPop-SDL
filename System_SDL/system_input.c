@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.22 2004/07/21 09:34:26 dillo Exp $ */
+/* $NiH: system_input.c,v 1.23 2004/07/21 10:35:38 wiz Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -46,7 +46,7 @@ static void handle_event(enum neopop_event, int);
 static void emit_key(int, int);
 
 static void set_mute(int);
-
+static void set_paused(int);
 
 
 
@@ -258,17 +258,13 @@ handle_event(enum neopop_event ev, int type)
 	    break;
 
 	case NPEV_GUI_PAUSE_ON:
-	    paused |= PAUSED_LOCAL;
-	    system_osd("paused");
+	    set_paused(paused|PAUSED_LOCAL);
 	    break;
 	case NPEV_GUI_PAUSE_OFF:
-	    paused &= ~PAUSED_LOCAL;
-	    system_osd("%s", paused ? "remote paused" : "");
+	    set_paused(paused&~PAUSED_LOCAL);
 	    break;
 	case NPEV_GUI_PAUSE_TOGGLE:
-	    paused ^= PAUSED_LOCAL;
-	    system_osd("%s", ((paused&PAUSED_LOCAL) ? "paused"
-			      : paused ? "remote paused" : ""));
+	    set_paused(paused^PAUSED_LOCAL);
 	    break;
 
 	case NPEV_GUI_QUIT:
@@ -345,4 +341,13 @@ set_mute(int val)
 
     mute = val;
     system_osd("sound %s", mute ? "off" : "on");
+}
+
+
+
+static void
+set_paused(int val)
+{
+    system_osd_pause(val);
+    paused = val;
 }

@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.43 2004/07/22 10:11:16 dillo Exp $ */
+/* $NiH: system_main.c,v 1.44 2004/07/22 10:31:20 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -94,7 +94,7 @@ system_VBL(void)
 
     system_osd_display();
 
-    if (++frameskip_counter == system_frameskip_key) {
+    if (!paused && ++frameskip_counter == system_frameskip_key) {
 	system_graphics_update();
 	frameskip_counter = 0;
     }

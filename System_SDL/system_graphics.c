@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.20 2004/07/21 09:34:26 dillo Exp $ */
+/* $NiH: system_graphics.c,v 1.21 2004/07/21 09:36:47 dillo Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -296,12 +296,11 @@ system_graphics_update(void)
 		     (Uint8 *)magfb, SCREEN_WIDTH*2*sizeof(Uint16),
 		     SCREEN_WIDTH, SCREEN_HEIGHT);
 		break;
-#if 0
 	    case 3:
-		HQ3x((Uint8 *)cfb, SCREEN_WIDTH, (Uint8 *)magfb, w,
+		HQ3x((Uint8 *)cfb, SCREEN_WIDTH*sizeof(Uint16),
+		     (Uint8 *)magfb, SCREEN_WIDTH*3*sizeof(Uint16),
 		     SCREEN_WIDTH, SCREEN_HEIGHT);
 		break;
-#endif
 	    }
 
 	    fbp = magfb;

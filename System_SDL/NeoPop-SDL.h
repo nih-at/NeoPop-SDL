@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.15 2004/07/14 10:15:38 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.16 2004/07/21 09:34:26 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -194,6 +194,7 @@ void system_state_load(void);
 void system_state_save(void);
 
 void HQ2x(const Uint8 *, Uint32, Uint8 *, Uint32, int, int);
+void HQ3x(const Uint8 *, Uint32, Uint8 *, Uint32, int, int);
 
 extern int do_exit;
 extern int paused;

@@ -14,7 +14,8 @@ VPATH=$(top_srcdir)/Core:$(top_srcdir)/Core/TLCS-900h:$(top_srcdir)/Core/z80:$(t
 
 bin_PROGRAMS=NeoPop-SDL
 man_MANS=NeoPop-SDL.6 neopoprc.5
-noinst_HEADERS=NeoPop-SDL.h system_hq2x.h system_hq_intern.h unzip.h font.xpm
+noinst_HEADERS=NeoPop-SDL.h system_hq2x.h system_hq3x.h system_hq_intern.h \
+	unzip.h font.xpm
 
 nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c dma.c flash.c gfx.c \
 	gfx_scanline_mono.c gfx_scanline_colour.c interrupt.c mem.c neopop.c \
@@ -26,7 +27,7 @@ nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c dma.c flash.c gfx.c \
 	TLCS900h_interpret_dst.c TLCS900h_disassemble_dst.c \
 	dasm.c Z80.c
 NeoPop_SDL_SOURCES=system_bindings.c system_comms.c system_graphics.c \
-	system_hq2x.c \
+	system_hq2x.c system_hq3x.c \
 	system_input.c system_io.c system_language.c \
 	system_main.c system_names.c system_osd.c system_rc.c system_rom.c \
 	system_screenshot.c system_sound.c unzip.c

@@ -1,4 +1,4 @@
-/* $NiH: system_rc.c,v 1.6 2004/07/09 18:37:28 dillo Exp $ */
+/* $NiH: system_rc.c,v 1.7 2004/07/09 21:42:41 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -395,12 +395,19 @@ system_rc_read_file(const char *filename)
 	    break;
 
 	case NPRC_YUV:
-	    if ((i=rc_parse_boolean(p, &p)) == -1)
+	    if ((i=find_name(p, &p, yuv_names, COMMS_LAST)) == -1) {
+		rc_error("unknown yuv setting [%s]", p);
 		break;
+	    }
 	    use_yuv = i;
 	    break;
+
+	case NPRC_YUV_SOFTWARE:
+	    if ((i=rc_parse_boolean(p, &p)) == -1)
+		break;
+	    use_software_yuv = i;
+	    break;
 	}
-	
 
 	if (!error_line) {
 	    p += strspn(p, " \t");

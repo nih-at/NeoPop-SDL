@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.16 2004/07/10 02:39:35 dillo Exp $ */
+/* $NiH: system_graphics.c,v 1.17 2004/07/14 00:38:54 dillo Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -32,12 +32,18 @@ int graphics_mag_smooth = 1;
 
 /* use YUV overlay (hardware scaling) */
 int use_yuv;
+/* use YUV overlay even if not hardware accelerated */
+int use_software_yuv;
 
 /* display structure */
 static SDL_Surface *disp = NULL;
 
+/* YUV overlay */
 static SDL_Overlay *over = NULL;
+/* scale rectangle for fullscreen and windowed */
 static SDL_Rect orect_fs, orect_win;
+/* use YUV in current setting */
+static int use_yuv_now;
 
 /* displayed graphics is how big compared to original size? 1: normal size,
  * 2: double size, 3: triple size */
@@ -52,8 +58,12 @@ static BOOL system_graphics_screen_init(int mfactor);
 static BOOL system_graphics_mag_smooth(void);
 #endif
 
-static Uint32 lookup[16*16*16];
+/* lookup table for display surface pixels */
+static Uint32 rgb_lookup[16*16*16];
+/* lookup table for YUV overlay pixels */
+static Uint32 yuv_lookup[16*16*16];
 
+/* convert 4bit colour component to 8bit */
 #define CONV4TO8(x)	(((x)<<4)|(x))
 
 BOOL
@@ -97,6 +107,11 @@ system_graphics_init(void)
 	    fprintf(stderr, "unsupported YUV overlay format\n");
 	    use_yuv = 0;
 	}
+	if (!use_software_yuv && !over->hw_overlay) {
+	    fprintf(stderr, "not using software YUV overlay\n");
+	    SDL_FreeYUVOverlay(over);
+	    use_yuv = 0;
+	}
     }
 	    
     if (use_yuv) {
@@ -107,27 +122,27 @@ system_graphics_init(void)
 	    r = CONV4TO8(i&0xf);
 	    g = CONV4TO8((i>>4)&0xf);
 	    b = CONV4TO8(i>>8);
+
+	    /* see http://www.fourcc.org/fccyvrgb.php#mikes_answer */
 	    
-	    y = (((r *  263) + (g * 516) + (b * 100)) >> 10) + 16;
-	    u = (((r *  450) - (g * 377) - (b *  73)) >> 10) + 128;
-	    v = (((r * -152) - (g * 298) + (b * 450)) >> 10) + 128;
-	    if (y < 0) y = 0; if (y > 255) y = 255;
-	    if (u < 0) u = 0; if (u > 255) u = 255;
-	    if (v < 0) v = 0; if (v > 255) v = 255;
+	    y = (((r * 16982) + (g * 32828) + (b * 6475)) >> 16) + 16;
+	    u = ((r * 28656) - (g * 23995) - (b * 4660) + 8355840) >> 16;
+	    v = (-(r * 9671) - (g * 18985) + (b * 28656) + 8355840) >> 16;
 	    
 #ifdef LSB_FIRST
-	    lookup[i] = (u<<24)|(y<<16)|(v<<8)|y;
+	    yuv_lookup[i] = (u<<24)|(y<<16)|(v<<8)|y;
 #else
-	    lookup[i] = (y<<24)|(v<<16)|(y<<8)|u;
+	    yuv_nlookup[i] = (y<<24)|(v<<16)|(y<<8)|u;
 #endif
 	}
     }
-    else
+
+    if (use_yuv < YUV_ALWAYS)
 	for (i=0; i<16*16*16; i++)
-	    lookup[i] = SDL_MapRGB(disp->format,
-				   CONV4TO8(i&0xf),
-				   CONV4TO8((i>>4)&0xf),
-				   CONV4TO8(i>>8));
+	    rgb_lookup[i] = SDL_MapRGB(disp->format,
+				       CONV4TO8(i&0xf),
+				       CONV4TO8((i>>4)&0xf),
+				       CONV4TO8(i>>8));
 
     /* set window caption */
     SDL_WM_SetCaption(PROGRAM_NAME, NULL);
@@ -148,7 +163,7 @@ system_graphics_fullscreen_toggle(void)
     /* hide mouse pointer in fullscreen mode */
     if (SDL_ShowCursor(-1) == fs_mode)
 	    SDL_ShowCursor(1-fs_mode);
-    if (use_yuv)
+    if (use_yuv >= YUV_FULLSCREEN)
 	system_graphics_screen_init(graphics_mag_actual);
 }
 
@@ -162,7 +177,7 @@ system_graphics_screen_init(int mfactor)
     if (fs_mode)
 	flags |= SDL_FULLSCREEN;
 
-    if (use_yuv && fs_mode) {
+    if (use_yuv >= YUV_FULLSCREEN && fs_mode) {
 	w = orect_fs.w;
 	h = orect_fs.h;
     }
@@ -178,10 +193,16 @@ system_graphics_screen_init(int mfactor)
 
     disp = disp_new;
 
-    if (use_yuv && !fs_mode) {
+    if (fs_mode && use_yuv >= YUV_FULLSCREEN)
+	use_yuv_now = 1;
+    else if ((mfactor > 1 && use_yuv >= YUV_MAGNIFIED)
+	     || use_yuv >= YUV_ALWAYS) {
+	use_yuv_now = 1;
 	orect_win.w = w;
 	orect_win.h = h;
     }
+    else
+	use_yuv_now = 0;
 
     return TRUE;
 }
@@ -376,11 +397,21 @@ system_graphics_mag_smooth(void)
 }
 #endif
 
+/* set pixel, magnification 1 */
 #define SET1	(line[x] = lookup[*(fbp++)])
+/* set pixel, magnification 2 */
 #define SET2	(line[pitch+x+1] = line[pitch+x] = line[x+1] = SET1)
+/* set pixel, magnification 3 */
 #define SET3	(line[pitch*2+x+2] = line[pitch*2+x+1] = line[pitch*2+x] = \
 		 line[pitch+x+2] = line[x+2] = SET2)
 
+/*
+  convert framebuffer.
+    T: type of pixels
+    S: size of pixels (in bytes)
+    F: magnification factor
+    P: pointer to pixels b
+*/
 #define LOOP(T, S, F, P)	{		\
     T *line;					\
 						\
@@ -393,6 +424,11 @@ system_graphics_mag_smooth(void)
     }						\
 }
 
+/*
+  convert framebuffer for given display depth
+    T: type of pixels
+    S: size of pixels (in bytes)
+*/   
 #define SWITCH(T, S)				\
         pitch = disp->pitch/S;			\
 	switch(graphics_mag_actual) {		\
@@ -410,6 +446,7 @@ system_graphics_mag_smooth(void)
 void
 system_graphics_update(void)
 {
+    Uint32 *lookup;
     int x, y, pitch;
     _u16 *fbp;
 
@@ -425,15 +462,17 @@ system_graphics_update(void)
 	    graphics_mag_actual = graphics_mag_req;
     }
 
-    if (use_yuv) {
+    if (use_yuv_now) {
 	SDL_LockYUVOverlay(over);
 	pitch = over->pitches[0]/4;
+	lookup = yuv_lookup;
 	LOOP(Uint32, 4, 1, over->pixels[0]);
 	SDL_UnlockYUVOverlay(over);
 
 	SDL_DisplayYUVOverlay(over, (fs_mode ? &orect_fs : &orect_win));
     }
     else {
+	lookup = rgb_lookup;
 	switch (disp->format->BytesPerPixel) {
 	case 1:
 	    SWITCH(Uint8, 1);

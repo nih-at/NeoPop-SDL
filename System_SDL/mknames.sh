@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $NiH$
+# $NiH: mknames.sh,v 1.3 2004/06/23 17:19:04 dillo Exp $
 
 #  mknames.sh -- create names arrays
 #  Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -50,6 +50,14 @@ const char *comms_names[] = {
 EOF
 
 sed -n 's/^[	 ]*COMMS_\([A-Z0-9_]*\),.*/    "\1",/p' "$1" | tr A-Z_ 'a-z-'
+
+cat <<EOF
+};
+
+const char *yuv_names[] = {
+EOF
+
+sed -n 's/^[	 ]*YUV_\([A-Z0-9_]*\),.*/    "\1",/p' "$1" | tr A-Z_ 'a-z-'
 
 cat <<EOF
 };

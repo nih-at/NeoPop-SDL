@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.37 2004/07/10 02:29:20 dillo Exp $ */
+/* $NiH: system_main.c,v 1.38 2004/07/11 23:32:11 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -191,7 +191,8 @@ main(int argc, char *argv[])
     /* output sample rate */
     samplerate = DEFAULT_SAMPLERATE;
     /* use YUV overlay (hardware scaling) */
-    use_yuv = 1;
+    use_yuv = DEFAULT_YUV;
+    use_software_yuv = 0;
     /* directories for save files */
     flash_dir = "~/.neopop";
     state_dir = ".";

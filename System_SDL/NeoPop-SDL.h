@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.12 2004/07/10 02:29:20 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.13 2004/07/11 23:32:11 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -84,6 +84,7 @@ enum nprc {
     NPRC_SOUND,
     NPRC_USE_ROM_NAME,
     NPRC_YUV,
+    NPRC_YUV_SOFTWARE,
 
     NPRC_LAST
 };
@@ -132,9 +133,19 @@ enum comms_mode {
     COMMS_LAST
 };
 
+enum {
+    YUV_NEVER,
+    YUV_FULLSCREEN,
+    YUV_MAGNIFIED,
+    YUV_ALWAYS,
+
+    YUV_LAST
+};
+
 #define NGP_FPS 59.95			/* frames per second */
 
 #define DEFAULT_SAMPLERATE	44100	/* default sample rate */
+#define DEFAULT_YUV	YUV_MAGNIFIED
 
 #define PAUSED_LOCAL	1
 #define PAUSED_REMOTE	2
@@ -189,6 +200,7 @@ extern int comms_port;
 extern char *comms_host;
 extern int samplerate;
 extern int use_yuv;
+extern int use_software_yuv;
 extern char *state_dir;
 extern char *flash_dir;
 extern int use_rom_name;
@@ -198,3 +210,4 @@ extern enum neopop_event bindings[];
 extern const char *comms_names[];
 extern const char *npev_names[];
 extern const char *nprc_names[];
+extern const char *yuv_names[];

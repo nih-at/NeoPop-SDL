@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_rc.c,v 1.3 2004/06/23 17:19:05 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -366,7 +366,7 @@ system_rc_read_file(const char *filename)
 	case NPRC_SOUND:
 	    if ((i=rc_parse_boolean(p, &p)) == -1)
 		break;
-	    mute = i;
+	    mute = !i;
 	    break;
 	}
 

@@ -1,7 +1,7 @@
-/* $NiH: system_io.c,v 1.9 2004/07/09 21:42:40 dillo Exp $ */
+/* $NiH: system_io.c,v 1.10 2004/07/10 00:49:52 dillo Exp $ */
 /*
   system_io.c -- read/write flash files 
-  Copyright (C) 2002-2003 Thomas Klausner
+  Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
   The author can be contacted at <wiz@danbala.tuwien.ac.at>

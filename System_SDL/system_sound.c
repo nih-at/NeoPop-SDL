@@ -1,7 +1,7 @@
-/* $NiH: system_sound.c,v 1.18 2004/07/09 10:34:32 dillo Exp $ */
+/* $NiH: system_sound.c,v 1.19 2004/07/10 02:29:20 dillo Exp $ */
 /*
   system_sound.c -- sound support functions
-  Copyright (C) 2002-2003 Thomas Klausner
+  Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
   The author can be contacted at <wiz@danbala.tuwien.ac.at>

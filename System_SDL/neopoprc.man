@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: neopoprc.mdoc,v 1.4 2004/07/22 01:49:02 wiz Exp 
-.\" $NiH: neopoprc.mdoc,v 1.4 2004/07/22 01:49:02 wiz Exp $
+.\" from NiH: neopoprc.mdoc,v 1.5 2004/07/22 10:31:19 dillo Exp 
+.\" $NiH: neopoprc.mdoc,v 1.5 2004/07/22 10:31:19 dillo Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -169,6 +169,14 @@ section below.
 .Bq int
 Sample rate at which to play audio.
 Defaults to 44100.
+.TP 13
+\fBscreenshot-dir\fR
+.Bq string
+Path to directory in which to store screenshots.
+Defaults to
+``\fB.\fR.''
+If only the last path component does not exist, the directory
+is created automatically.
 .TP 13
 \fBsmooth\fR
 .Bq boolean

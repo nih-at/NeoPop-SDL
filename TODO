@@ -5,6 +5,7 @@ bugs:
 . comm support not working
 . add emulator options chunk (language, colour +?)
 . don't save unused/unchanging parts of Z80_regs
+. exit if no ROM loaded
 . fix Core compiler warnings
 
 regressions:
@@ -18,7 +19,8 @@ features:
 . auto frame skip rate
 . hqx i386 asm versions
 . configure: test for altivec
-. movie captures
+. movie captures options: 2x, 3x, smooth, bitrates
+. start/stop/pause movie capture
 . reset game
 . change emulation speed (run faster/slower)
 . gui menu

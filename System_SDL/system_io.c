@@ -1,4 +1,4 @@
-/* $NiH: system_io.c,v 1.8 2003/10/16 17:29:45 wiz Exp $ */
+/* $NiH: system_io.c,v 1.9 2004/07/09 21:42:40 dillo Exp $ */
 /*
   system_io.c -- read/write flash files 
   Copyright (C) 2002-2003 Thomas Klausner
@@ -204,6 +204,7 @@ make_file_name(const char *dir, const char *ext, int writing)
 	name = rom.filename;
     len = strlen(dir)+strlen(name)+strlen(ext)+3;
 
+    home = NULL;
     if (strncmp(dir, "~/", 2) == 0) {
 	home = getenv("HOME");
 	if (home == NULL)

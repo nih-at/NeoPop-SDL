@@ -31,7 +31,8 @@
 
 	* System_SDL/system_osd.c (osd_init, display_string,
 	string_width), System_SDL/system_main (main), System_SDL/system_rc
-	(system_rc_read_file), font.xpm, NeoPop-SDL.h, neopoprc.mdoc: use
+	(system_rc_read_file), System_SDL/font.xpm,
+	System_SDL/NeoPop-SDL.h, System_SDL/neopoprc.mdoc: use
 	proportional font with black border and transparent background.
 	make colour configurable via config file.
 	
@@ -49,7 +50,8 @@
 
 2004-07-22  Thomas Klausner  <wiz@danbala.tuwien.ac.at>
 
-	* NeoPop-SDL.mdoc: update.  * neopoprc.mdoc: add.
+	* System_SDL/NeoPop-SDL.mdoc: update.
+	* System_SDL/neopoprc.mdoc: add.
 
 2004-07-21  Dieter Baron  <dillo@danbala.tuwien.ac.at>
 
@@ -65,8 +67,8 @@
 
 2004-07-10  Dieter Baron  <dillo@danbala.tuwien.ac.at>
 	
-	* font.xpm, System_SDL/system_osd.h, System_SDL/system_main.c
-	(system_VBL): add on-screen display.
+	* System_SDL/font.xpm, System_SDL/system_osd.h,
+	System_SDL/system_main.c (system_VBL): add on-screen display.
 	
 	* System_SDL/system_main.c, System_SDL/system_sound.c: add pause
 	support.
@@ -78,8 +80,8 @@
 	System_SDL/system_sound.c: rewrite to use ring buffer to pass
 	audio chunks betweeen main thread and sound thread.
 	
-	* System_SDL/system_rom.c (rom_load), unzip.c, unzip.h: add
-	support to load ROMs from zip archives.
+	* System_SDL/system_rom.c (rom_load), System_SDL/unzip.c,
+	System_SDL/unzip.h: add support to load ROMs from zip archives.
 
 	* System_SDL/system_io.c (system_state_load,
 	System_SDL/system_state_save, system_io_flash_read,
@@ -100,7 +102,7 @@
 
 2004-06-23  Dieter Baron  <dillo@danbala.tuwien.ac.at>
 	
-	* NeoPop-SDL.h, mknames.sh, System_SDL/system_bindings.c,
+	* System_SDL/NeoPop-SDL.h, System_SDL/mknames.sh, System_SDL/system_bindings.c,
 	neopoprc.mdoc, System_SDL/system_input.c (system_input_update,
 	emit_key, handle_event, set_mute, set_fullscreen, set_paused):
 	make key bindings configurable.

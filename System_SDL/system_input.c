@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.24 2004/07/22 12:13:07 dillo Exp $ */
+/* $NiH: system_input.c,v 1.25 2004/07/22 12:25:08 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -61,7 +61,11 @@ system_input_update(void)
 	case SDL_QUIT:
 	    do_exit = 1;
 	    break;
-	    
+
+	case SDL_VIDEOEXPOSE:
+	    need_redraw = TRUE;
+	    break;
+
 	case SDL_KEYUP:
 	case SDL_KEYDOWN:
 	    {

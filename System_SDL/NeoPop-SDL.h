@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.20 2004/07/22 12:13:07 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.21 2004/07/22 12:25:08 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -218,6 +218,7 @@ extern char *screenshot_dir;
 extern int use_rom_name;
 extern int state_slot;
 extern int fs_mode;
+extern int need_redraw;
 
 extern Uint32 hqx_lookup[16*16*16];
 

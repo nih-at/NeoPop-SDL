@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.23 2004/07/22 12:25:08 dillo Exp $ */
+/* $NiH: system_graphics.c,v 1.24 2004/07/23 09:54:33 wiz Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -52,6 +52,8 @@ static int graphics_mag_actual = 1;
 /* display in full screen mode? */
 int fs_mode = 0;
 
+/* did we get a VIDEOEXPOSE event? */
+int need_redraw;
 
 static BOOL system_graphics_screen_init(int mfactor);
 
@@ -153,6 +155,7 @@ system_graphics_init(void)
 
     SDL_Flip(disp);
 
+    need_redraw = FALSE;
     return TRUE;
 }
 
@@ -277,6 +280,11 @@ system_graphics_update(void)
 	else
 	    graphics_mag_actual = graphics_mag_req;
     }
+
+    if (paused && !(use_yuv_now && need_redraw))
+	return;
+
+    need_redraw = FALSE;
 
     fbp = cfb;
     w = SCREEN_WIDTH;

@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: neopoprc.mdoc,v 1.9 2004/07/25 10:58:42 wiz Exp 
-.\" $NiH: neopoprc.mdoc,v 1.9 2004/07/25 10:58:42 wiz Exp $
+.\" from NiH: neopoprc.mdoc,v 1.10 2004/07/25 11:23:33 wiz Exp 
+.\" $NiH: neopoprc.mdoc,v 1.10 2004/07/25 11:23:33 wiz Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -403,15 +403,3 @@ state-dir ~/.neopop/states
 NeoPop-SDL(6)
 .PP
 \fIhttp://www.nih.at/NeoPop-SDL/\fR
-.SH "AUTHORS"
-neopop_uk
-<neopop_uk@yahoo.co.uk>
-wrote the original NeoPop emulator.
-Marat Fayzullin
-provided the z80 core for sound.
-Thomas Klausner
-<wiz@danbala.tuwien.ac.at>
-ported it to SDL.
-Dieter Baron
-<dillo@danbala.tuwien.ac.at>
-made lots of improvements.

@@ -1,0 +1,213 @@
+.\" $NiH$
+.\"
+.\" Copyright (c) 2003 Thomas Klausner.
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above
+.\"    copyright notice, this list of conditions and the following
+.\"    disclaimer in the documentation and/or other materials provided
+.\"    with the distribution.
+.\" 3. The name of the author may not be used to endorse or promote
+.\"    products derived from this software without specific prior
+.\"    written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THOMAS KLAUSNER ``AS IS'' AND ANY
+.\" EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+.\" PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR
+.\" CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+.\" SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+.\" LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+.\" USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+.\" ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+.\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+.\" OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.Dd October 16, 2003
+.Dt NEOPOP-SDL 1
+.Os
+.Sh NAME
+.Nm NeoPop-SDL
+.Nd NeoGeo Pocket (Color) emulator
+.Sh SYNOPSIS
+.Nm
+.Op Fl ceghjMmSsv
+.Op Fl f Ar count
+.Op Fl l Ar state
+.Ar filename
+.Sh DESCRIPTION
+.Nm
+is a NeoGeo Pocket emulator using SDL.
+.Pp
+The following options are supported:
+.Bl -tag -width XfXcountXX
+.It Fl c
+Start in colour mode (default: automatic).
+See also
+.Fl g .
+.It Fl e
+Emulate English language NeoGeo Pocket (default).
+See also
+.Fl j .
+.It Fl f Ar count
+Set frameskip to
+.Ar count .
+The default frameskip is 1.
+Frameskip 2 means that every second frame is shown, thus speeding
+up emulation speed since showing the graphics on screen is skipped
+half of the time.
+However, animation will be less smooth.
+.It Fl g
+Start in greyscale mode (default: automatic).
+See also
+.Fl c .
+.It Fl h
+Show a short help message explaining the options.
+.It Fl j
+Emulate Japanese language NeoGeo Pocket.
+Some ROMs will show Japanese text instead of English
+if these option is chosen.
+See also
+.Fl e .
+.It Fl l Ar state
+Load start state from file
+.Ar state .
+.It Fl M
+Do not use smoothed magnification modes.
+See also
+.Fl m .
+.It Fl m
+Use smoothed magnification modes (default).
+In double- and triple-size mode, the graphics will look less
+blocky, but this option has quite a performance impact.
+.It Fl S
+Silent mode.
+See also
+.Fl s .
+.It Fl s
+With sound (default).
+.It Fl v
+Display the version number.
+.El
+.Ar filename
+should obviously be a NeoGeo Pocket ROM file.
+.Ss KEYS
+Currently, the keys are fixed.
+The movement keys are:
+.Ic I
+for up,
+.Ic K
+for down,
+.Ic J
+for left, and
+.Ic L
+for right.
+.Pp
+The buttons are:
+.Bl -tag -width XoptionXbuttonX
+.It Button A
+.Ic A
+or
+.Ic SHIFT .
+.It Button B
+.Ic S
+or
+.Ic CTRL .
+.It Option button
+.Ic D
+or
+.Ic TAB .
+.El
+.Pp
+Other keys:
+.Pp
+.Ic M
+toggles music and sound effects during game.
+.Pp
+.Ic 1 ,
+.Ic 2 ,
+and
+.Ic 3
+set the magnication factor:
+.Ic 1
+is normal (160x152),
+.Ic 2
+is doubled in both directions, and
+.Ic 3
+tripled.
+Please note that bigger screens are slower to display,
+even more so if smooth magnification is enabled (see
+.Fl m
+and
+.Ic B
+below).
+.Pp
+.Ic B
+toggles between blocky and smooth magnification (defaults
+to smooth).
+The algorithm used for smooth 2x magnification (without
+blur) is AdvanceMAME Scale2x, the one used for 3x is homebrewn.
+Smooth animation is slower than blocky.
+.Pp
+.Ic F
+switches between full-screen and windowed mode.
+.Pp
+.Ic \&+
+and
+.Ic \&=
+increase frameskip while
+.Ic \&-
+decreases frameskip.
+The default frameskip is one, if the
+.Fl f
+option was not used.
+A frameskip of
+.Ar n
+means one in
+.Ar n
+frames is shown, thus speeding up emulation at the
+cost of less smooth animation.
+.Pp
+.Ic F3
+loads and
+.Ic F4
+writes the current emulator state from/to
+.Ar filename.ngs
+in the current directory.
+.Pp
+.Ic F12
+saves a screenshot in the current directory.
+The name of the output file is
+.Dq Pa neopop-ROMNAMEXXX.ext ,
+where
+.Ar ROMNAME
+is the internal name of the rom and
+.Ar XXX
+is the number of the screenshot starting from 0; special
+care is taken not to overwrite existing screenshots.
+If the PNG library was found during compilation, screenshots are saved
+as PNGs, otherwise as BMPs.
+.Pp
+.Ic ESC
+quits the emulator.
+.Sh AUTHORS
+.An neopop_uk
+.Aq neopop_uk@yahoo.co.uk
+wrote the original NeoPop emulator
+using
+.An Marat Fayzullin Ns No 's
+z80 core.
+.An Thomas Klausner
+.Aq tk@giga.or.at
+ported it to SDL.
+.Sh BUGS
+Please see the
+.Pa TODO
+and
+.Pa bugs-core.html
+files.

@@ -1,4 +1,4 @@
-/* $NiH: system_osd.c,v 1.3 2004/07/11 23:32:11 dillo Exp $
+/* $NiH: system_osd.c,v 1.4 2004/07/22 12:13:07 dillo Exp $
 
   system_osd.c -- on-screen display
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -134,11 +134,12 @@ system_osd_display(void)
     if (!font_usable || osd_timer == 0)
 	return;
 
-    if (--osd_timer > 0)
-	display_string(0, OSD_LINE, osd);
-    else if (paused)
+    if (paused)
 	    memcpy(cfb+SCREEN_WIDTH*OSD_LINE, osd_line,
 		   SCREEN_WIDTH*sizeof(_u16)*FONT_HEIGHT);
+    
+    if (--osd_timer > 0)
+	display_string(0, OSD_LINE, osd);
 
     if (paused)
 	system_graphics_update();
@@ -168,7 +169,8 @@ system_osd_pause(int which)
 	       SCREEN_WIDTH*sizeof(_u16)*FONT_HEIGHT);
 	memcpy(osd_line, cfb+SCREEN_WIDTH*OSD_LINE,
 	       SCREEN_WIDTH*sizeof(_u16)*FONT_HEIGHT);
-	display_string(0, OSD_LINE, osd);
+	if (osd_timer > 0)
+	    display_string(0, OSD_LINE, osd);
     }
 
     /* display paused message */

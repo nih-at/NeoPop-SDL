@@ -3,6 +3,7 @@
 /* XXX */
 char *FlashDirectory="/home/wiz/.neopop";
 
+/* copied from Win32 version */
 BOOL
 system_io_rom_read(char* filename, _u8* buffer, _u32 bufferLength)
 {

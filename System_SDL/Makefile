@@ -1,4 +1,5 @@
 CC?=	gcc
+CFLAGS=-g
 CFLAGS+=	`sdl-config --cflags` -I../Core/z80  -I../Core/TLCS-900h \
 		-I../Core -D__cdecl=
 LDFLAGS+=	`sdl-config --libs`

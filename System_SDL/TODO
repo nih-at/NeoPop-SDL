@@ -1,11 +1,13 @@
-. video support
+. video
  . zoom
-. throttling
-. show frame rate
-. audio support
+ . fs/windowed
+ . fps
+ . throttled mode
+. audio
+ . work at all
 . menus
  . pause
  . reset
 . zip support
 . config file
-
+. save states

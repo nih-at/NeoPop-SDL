@@ -26,7 +26,7 @@ system_message(char *vaMessage, ...)
     vprintf(vaMessage, vl);
     va_end(vl);
 }
-         
+
 void
 system_VBL(void)
 {
@@ -40,7 +40,7 @@ system_VBL(void)
     /* XXX: do throttling */
     /* XXX: show frame rate */
 #endif
-    
+
     return;
 }
 
@@ -100,7 +100,7 @@ main(int argc, char *argv[])
 
     if (argc > 0) {
 	system_load_rom(argv[0]);
-    }    
+    }
 
     reset();
 
@@ -110,7 +110,9 @@ main(int argc, char *argv[])
 	emulate();
     } while (i<1000000);
 
+#if 0
     sleep(4);
+#endif
 
     system_unload_rom();
 #if 0
@@ -118,4 +120,6 @@ main(int argc, char *argv[])
     system_input_shutdown();
     system_graphics_shutdown();
 #endif
+
+    return 0;
 }

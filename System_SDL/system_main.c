@@ -87,6 +87,8 @@ main(int argc, char *argv[])
 
     /* auto-select colour mode */
     system_colour = COLOURMODE_AUTO;
+    /* default to English as language for now */
+    language_english = TRUE;
 
     if (system_graphics_init() == FALSE) {
 	fprintf(stderr, "cannot create window: %s\n", SDL_GetError());

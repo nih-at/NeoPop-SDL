@@ -1,8 +1,8 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: NeoPop-SDL.mdoc,v 1.10 2003/10/20 12:58:17 wiz Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.10 2003/10/20 12:58:17 wiz Exp $
+.\" from NiH: NeoPop-SDL.mdoc,v 1.11 2004/07/14 22:18:02 wiz Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.11 2004/07/14 22:18:02 wiz Exp $
 .\"
-.\" Copyright (c) 2003 Thomas Klausner.
+.\" Copyright (c) 2003, 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
 .\"
 .\" Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 .\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 .\" OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
-.TH NEOPOP-SDL 1 "October 16, 2003" NiH
+.TH NEOPOP-SDL 1 "July 14, 2004" NiH
 .SH "NAME"
 NeoPop-SDL \- NeoGeo Pocket (Color) emulator
 .SH "SYNOPSIS"
@@ -55,7 +55,7 @@ See also
 \fB-g\fR.
 .TP 12
 \fB-e\fR
-Emulate English language NeoGeo Pocket (default).
+Emulate an English language NeoGeo Pocket (default).
 See also
 \fB-j\fR.
 .TP 12
@@ -77,7 +77,7 @@ See also
 Show a short help message explaining the options.
 .TP 12
 \fB-j\fR
-Emulate Japanese language NeoGeo Pocket.
+Emulate a Japanese language NeoGeo Pocket.
 Some ROMs will show Japanese text instead of English
 if this option is chosen.
 See also
@@ -134,17 +134,17 @@ The buttons are:
 Button A
 \fBA\fR
 or
-\fBSHIFT.\fR
+\fBSHIFT\fR.
 .TP 17
 Button B
 \fBS\fR
 or
-\fBCTRL.\fR
+\fBCTRL\fR.
 .TP 17
 Option button
 \fBD\fR
 or
-\fBTAB.\fR
+\fBTAB\fR.
 .RE
 .PP
 Other keys:
@@ -152,8 +152,8 @@ Other keys:
 \fBM\fR
 toggles music and sound effects during game.
 .PP
-\fB1,\fR
-\fB2,\fR
+\fB1\fR,
+\fB2\fR,
 and
 \fB3\fR
 set the magnication factor:
@@ -228,6 +228,8 @@ as PNGs, otherwise as BMPs.
 \fBESC\fR
 quits the emulator.
 .SH "SEE ALSO"
+neopoprc(5)
+.PP
 \fIhttp://www.nih.at/NeoPop-SDL/\fR
 .SH "AUTHORS"
 neopop_uk
@@ -238,6 +240,9 @@ provided the z80 core for sound.
 Thomas Klausner
 <wiz@danbala.tuwien.ac.at>
 ported it to SDL.
+Dieter Baron
+<dillo@danbala.tuwien.ac.at>
+made lots of improvements.
 .SH "BUGS"
 Please see the
 \fIDOCDIR/bugs-core.html\fR

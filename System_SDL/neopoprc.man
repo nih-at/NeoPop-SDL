@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: neopoprc.mdoc,v 1.5 2004/07/22 10:31:19 dillo Exp 
-.\" $NiH: neopoprc.mdoc,v 1.5 2004/07/22 10:31:19 dillo Exp $
+.\" from NiH: neopoprc.mdoc,v 1.7 2004/07/24 00:07:43 dillo Exp 
+.\" $NiH: neopoprc.mdoc,v 1.7 2004/07/24 00:07:43 dillo Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -123,9 +123,8 @@ Has no default.
 .Bq string
 Path to the directory where Flash RAM images should be saved.
 Defaults to
-``\fB~/.neopop\fR.''
-If only the last path component does not exist, the directory
-is created automatically.
+``\fB~/.neopop/flash\fR.''
+If the directory does not exist, it is created automatically.
 .TP 11
 \fBframeskip\fR
 .Bq int (1..7)
@@ -165,6 +164,11 @@ For details, please see the
 BINDINGS
 section below.
 .TP 13
+\fBosd-colour\fR
+.Bq string
+Colour to use for on-screen display, in RGB with either one or two hex
+digits per colour component.  Default is white (fff).
+.TP 13
 \fBsamplerate\fR
 .Bq int
 Sample rate at which to play audio.
@@ -175,8 +179,7 @@ Defaults to 44100.
 Path to directory in which to store screenshots.
 Defaults to
 ``\fB.\fR.''
-If only the last path component does not exist, the directory
-is created automatically.
+If the directory does not exist, it is created automatically.
 .TP 13
 \fBsmooth\fR
 .Bq boolean
@@ -189,9 +192,8 @@ Ignored in YUV overlay mode.
 .Bq string
 Path to directory in which to store save states.
 Defaults to
-``\fB.\fR.''
-If only the last path component does not exist, the directory
-is created automatically.
+``\fB~/.neopop/state\fR.''
+If the directory does not exist, it is created automatically.
 .TP 13
 \fBsound\fR
 .Bq boolean

@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_main.c,v 1.20 2002/12/02 14:29:20 wiz Exp $ */
 
 #include <sys/time.h>
 #include <math.h>
@@ -29,10 +29,11 @@ usage(int exitcode)
 	   "Usage: %s [-cefghjMmSsv] [game]\n"
 	   "\t-c\t\tstart in colour mode (default: automatic)\n"
 	   "\t-e\t\temulate English language NeoGeo Pocket (default)\n"
-	   "\t-f count\tset frameskip to count (default: 1)\n"
+	   "\t-f count\tframeskip: show one in `count' frames (default: 1)\n"
 	   "\t-g\t\tstart in greyscale mode (default: automatic)\n"
 	   "\t-h\t\tshow this short help\n"
 	   "\t-j\t\temulate Japanese language NeoGeo Pocket\n"
+	   "\t-l state\tload start state from file `state'\n"
 	   "\t-M\t\tdo not use smoothed magnification modes\n"
 	   "\t-m\t\tuse smoothed magnification modes (default)\n"
 	   "\t-S\t\tsilent mode\n"
@@ -98,10 +99,12 @@ system_VBL(void)
 int
 main(int argc, char *argv[])
 {
+    char *start_state;
     int ch;
     int i;
 
     prg = argv[0];
+    start_state = NULL;
 
     /* some defaults, to be changed by getopt args */
     /* auto-select colour mode */
@@ -115,7 +118,7 @@ main(int argc, char *argv[])
     /* show every frame */
     system_frameskip_key = 1;
 
-    while ((ch=getopt(argc, argv, "cef:ghjMmSsv")) != -1) {
+    while ((ch=getopt(argc, argv, "cef:ghjl:MmSsv")) != -1) {
 	switch (ch) {
 	case 'c':
 	    system_colour = COLOURMODE_COLOUR;
@@ -136,6 +139,9 @@ main(int argc, char *argv[])
 	    break;
 	case 'j':
 	    language_english = FALSE;
+	    break;
+	case 'l':
+	    start_state = optarg;
 	    break;
 	case 'M':
 	    graphics_mag_smooth = 0;
@@ -201,6 +207,8 @@ main(int argc, char *argv[])
 
     reset();
     SDL_PauseAudio(0);
+    if (start_state != NULL)
+	state_restore(start_state);
 
     gettimeofday(&throttle_last, NULL);
     i = 200;

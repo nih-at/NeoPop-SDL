@@ -289,12 +289,10 @@ void* translate_address_write(_u32 address)
 
 void post_write(_u32 address)
 {
-	_u8 *addr;
 	address &= 0xFFFFFF;
 
-	addr = (_u8*)(ram + 0xb8);
 	//Direct Access to Sound Chips
-	if (((addr[1] << 8) | addr[0]) == 0xAA55)
+	if ((*(_u16*)(ram + 0xb8)) == htole16(0xAA55))
 	{
 		if (address == 0xA1)	Write_SoundChipTone(ram[0xA1]);
 		if (address == 0xA0)	Write_SoundChipNoise(ram[0xA0]);
@@ -332,20 +330,20 @@ _u8 loadB(_u32 address)
 
 _u16 loadW(_u32 address)
 {
-	_u8* ptr = translate_address_read(address);
+	_u16* ptr = translate_address_read(address);
 	if (ptr == NULL)
 		return 0;
 	else
-		return (_u16)(ptr[1] << 8) | ptr[0];
+		return le16toh(*ptr);
 }
 
 _u32 loadL(_u32 address)
 {
-	_u8* ptr = translate_address_read(address);
+	_u32* ptr = translate_address_read(address);
 	if (ptr == NULL)
 		return 0;
 	else
-		return (_u32)(ptr[3]<<24) | (_u32)(ptr[2]<<16) | (_u32)(ptr[1]<<8) | (_u32)ptr[0];
+		return le32toh(*ptr);
 }
 
 //=============================================================================
@@ -366,34 +364,30 @@ void storeB(_u32 address, _u8 data)
 
 void storeW(_u32 address, _u16 data)
 {
-	_u8* ptr = translate_address_write(address);
+	_u16* ptr = translate_address_write(address);
 
 	//Write
 	if (ptr)
 	{
-		if (ptr == ram+0x8004)
+		if ((_u8*)ptr == ram+0x8004)
 			printf("HIT16: %d\n", data);
-		ptr[0] = data & 0xff;
-		ptr[1] = (data>>8) & 0xff;
+		*ptr = htole16(data);
 		post_write(address);
 	}
 }
 
 void storeL(_u32 address, _u32 data)
 {
-	_u8* ptr = translate_address_write(address);
+	_u32* ptr = translate_address_write(address);
 
 	//Write
 	if (ptr)
 	{
-		if (ptr == ram+0x8004)
+		if ((_u8*)ptr == ram+0x8004)
 			printf("HIT32: %d\n", data);
-		if (ptr == ram+0x8002)
+		if ((_u8*)ptr == ram+0x8002)
 			printf("HIT32-: %d\n", data);
-		ptr[0] = data & 0xff;
-		ptr[1] = (data>>8) & 0xff;
-		ptr[2] = (data>>16) & 0xff;
-		ptr[3] = (data>>24) & 0xff;
+		*ptr = htole32(data);
 		post_write(address);
 	}
 }
@@ -460,12 +454,9 @@ void reset_memory(void)
 
 	if (rom.data)
 	{
-		*(_u32*)(ram + 0x6C00) = rom_header->startPC;		//Start
-		le32toh(*(_u32*)(ram + 0x6C00));
-		*(_u16*)(ram + 0x6E82) = 
-			*(_u16*)(ram + 0x6C04) = rom_header->catalog;	//Catalog
-		le16toh(*(_u16*)(ram + 0x6E82));
-		le16toh(*(_u16*)(ram + 0x6C04));
+		*(_u32*)(ram + 0x6C00) = htole32(rom_header->startPC);	//Start
+		*(_u16*)(ram + 0x6E82) = 				//Catalog
+			*(_u16*)(ram + 0x6C04) = htole16(rom_header->catalog);
 
 		*( _u8*)(ram + 0x6E84) = 
 			*( _u8*)(ram + 0x6C06) = rom_header->subCatalog;	//Sub-Cat
@@ -483,10 +474,8 @@ void reset_memory(void)
 	}
 	else
 	{
-		*(_u32*)(ram + 0x6C00) = 0x00FF970A;	//Start
-		le32toh(*(_u32*)(ram + 0x6C00));
-		*(_u16*)(ram + 0x6C04) = 0xFFFF;		//Catalog
-		le16toh(*(_u16*)(ram + 0x6C04));
+		*(_u32*)(ram + 0x6C00) = htole32(0x00FF970A);	//Start
+		*(_u16*)(ram + 0x6C04) = htole16(0xFFFF);	//Catalog
 
 		*( _u8*)(ram + 0x6C06) = 0x00;			//Sub-Cat
 		sprintf(ram + 0x6C08, "NEOGEOPocket");	//bios rom 'Name'
@@ -523,8 +512,7 @@ void reset_memory(void)
 
 	//Interrupt table
 	for (i = 0; i < 0x12; i++) {
-		*(_u32*)(ram + 0x6FB8 + (i * 4)) = 0x00FF23DF;
-		le32toh(*(_u32*)(ram + 0x6FB8 + (i * 4)));
+		*(_u32*)(ram + 0x6FB8 + (i * 4)) = htole32(0x00FF23DF);
 	}
 
 

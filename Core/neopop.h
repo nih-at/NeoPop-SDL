@@ -491,11 +491,11 @@ RomHeader;
 
 #ifdef BIGENDIAN
 #ifndef le32toh
-#define le32toh(l)	((l) = (((l)>>24) & 0xff) | (((l)>>8) & 0xff00) \
+#define le32toh(l)	((((l)>>24) & 0xff) | (((l)>>8) & 0xff00) \
 			 (((l)<<8) & 0xff0000) | (((l)<<24) & 0xff000000))
 #endif
 #ifndef le16toh
-#define le16toh(l)	((l) = (((l)>>8) & 0xff) | (((l)<<8) & 0xff00))
+#define le16toh(l)	((((l)>>8) & 0xff) | (((l)<<8) & 0xff00))
 #endif
 #else
 #ifndef le32toh

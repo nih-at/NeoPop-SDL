@@ -238,11 +238,11 @@ void iBIOSHLE(void)
 
 				for (j = 0; j < 8; j++, c<<=1)
 				{
-					_u16 data16 = *(_u16*)(ram + dst);
-					le16toh(data16);
+					_u16 data16;
+
+					data16 = le16toh(*(_u16*)(ram + dst));
 					data16 <<= 2;
-					le16toh(data16);
-					*(_u16*)(ram + dst) = data16;
+					*(_u16*)(ram + dst) = htole16(data16);
 
 					if (c & 0x80)	ram[dst] |= a;
 					else			ram[dst] |= b;

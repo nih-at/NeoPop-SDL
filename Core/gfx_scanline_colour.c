@@ -133,8 +133,6 @@ static void gfx_draw_scroll1(_u8 depth)
 	//Draw Foreground scroll plane (Scroll 1)
 	for (tx = 0; tx < 32; tx++)
 	{
-		data16;
-
 		data16 = le16toh(*(_u16*)(ram + 0x9000 + ((tx + ((line >> 3) << 5)) << 1)));
 		
 		//Draw the line of the tile
@@ -155,8 +153,6 @@ static void gfx_draw_scroll2(_u8 depth)
 	//Draw Background scroll plane (Scroll 2)
 	for (tx = 0; tx < 32; tx++)
 	{
-		data16;
-
 		data16 = le16toh(*(_u16*)(ram + 0x9800 + ((tx + ((line >> 3) << 5)) << 1)));
 		
 		//Draw the line of the tile

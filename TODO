@@ -5,6 +5,7 @@ bugs:
 . comm support not working
 . add emulator options chunk (language, colour +?)
 . don't save unused/unchanging parts of Z80_regs
+. fix Core compiler warnings
 
 regressions:
 . update ChangeLog for chunk snapshots, video

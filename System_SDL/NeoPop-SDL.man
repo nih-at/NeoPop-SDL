@@ -237,6 +237,8 @@ neopop_uk
 wrote the original NeoPop emulator.
 Marat Fayzullin
 provided the z80 core for sound.
+Gilles Vollant
+provided simple portable unzip code.
 Thomas Klausner
 <wiz@danbala.tuwien.ac.at>
 ported it to SDL.

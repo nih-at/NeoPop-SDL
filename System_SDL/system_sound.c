@@ -1,4 +1,4 @@
-/* $NiH: system_sound.c,v 1.14 2003/10/15 12:30:03 wiz Exp $ */
+/* $NiH: system_sound.c,v 1.15 2003/10/16 17:29:46 wiz Exp $ */
 /*
   system_sound.c -- sound support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -58,6 +58,10 @@ system_sound_init(void)
     desired.callback = system_sound_callback;
     desired.userdata = NULL;
 
+    if (SDL_InitSubSystem(SDL_INIT_AUDIO) == -1) {
+	fprintf(stderr, "Cannot initialize audio: %s\n", SDL_GetError());
+	return FALSE;
+    }
     if (SDL_OpenAudio(&desired, NULL) == -1) {
 	fprintf(stderr, "Cannot initialize audio: %s\n", SDL_GetError());
 	return FALSE;

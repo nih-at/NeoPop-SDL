@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.24 2003/10/16 17:29:45 wiz Exp $ */
+/* $NiH: system_main.c,v 1.25 2003/10/17 23:00:12 wiz Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2003 Thomas Klausner
@@ -195,11 +195,16 @@ main(int argc, char *argv[])
     }
 
     /* initialize SDL and create standard-sized surface */
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0) {
        fprintf(stderr, "cannot initialize SDL: %s\n", SDL_GetError());
        exit(1);
     }
     atexit(SDL_Quit);
+
+    if (SDL_NumJoysticks() > 0) {
+	SDL_JoystickOpen(0);
+	SDL_JoystickEventState(SDL_ENABLE);
+    }
 
     if (system_graphics_init() == FALSE) {
 	fprintf(stderr, "cannot create window: %s\n", SDL_GetError());

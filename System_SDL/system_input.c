@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.8 2003/10/15 12:30:02 wiz Exp $ */
+/* $NiH: system_input.c,v 1.9 2003/10/16 17:29:45 wiz Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -73,18 +73,27 @@ system_input_update(void)
 	    case SDLK_b:
 		graphics_mag_smooth = graphics_mag_smooth ? 0 : 1;
 		break;
+	    case SDLK_RETURN:
+		printf("enter [%d]\n", evt.key.keysym.mod);
+		if ((evt.key.keysym.mod & KMOD_ALT) == 0)
+		    break;
+		/* fallthrough */
 	    case SDLK_f:
 		system_graphics_fullscreen_toggle();
 		break;
 	    case SDLK_i:
+	    case SDLK_UP:
 		ram[0x6F82] |= INPUT_MASK_UP;
 		break;
 	    case SDLK_k:
+	    case SDLK_DOWN:
 		ram[0x6F82] |= INPUT_MASK_DOWN;
 		break;
 	    case SDLK_j:
+	    case SDLK_LEFT:
 		ram[0x6F82] |= INPUT_MASK_LEFT;
 		break;
+	    case SDLK_RIGHT:
 	    case SDLK_l:
 		ram[0x6F82] |= INPUT_MASK_RIGHT;
 		break;
@@ -116,15 +125,19 @@ system_input_update(void)
 	case SDL_KEYUP:
 	    switch(evt.key.keysym.sym) {
 	    case SDLK_i:
+	    case SDLK_UP:
 		ram[0x6F82] &= ~INPUT_MASK_UP;
 		break;
 	    case SDLK_k:
+	    case SDLK_DOWN:
 		ram[0x6F82] &= ~INPUT_MASK_DOWN;
 		break;
 	    case SDLK_j:
+	    case SDLK_LEFT:
 		ram[0x6F82] &= ~INPUT_MASK_LEFT;
 		break;
 	    case SDLK_l:
+	    case SDLK_RIGHT:
 		ram[0x6F82] &= ~INPUT_MASK_RIGHT;
 		break;
 	    case SDLK_LSHIFT:
@@ -148,6 +161,52 @@ system_input_update(void)
 	    break;
 	case SDL_QUIT:
 	    do_exit = 1;
+	    break;
+	case SDL_JOYAXISMOTION:
+	    {
+		int neg, pos;
+
+		switch (evt.jaxis.axis) {
+		case 0:
+		    neg = INPUT_MASK_LEFT;
+		    pos = INPUT_MASK_RIGHT;
+		    break;
+		case 1:
+		    neg = INPUT_MASK_UP;
+		    pos = INPUT_MASK_DOWN;
+		    break;
+	        default:
+		    neg = pos = 0;
+		    break;
+		}
+		if (neg == 0)
+		    break;
+		ram[0x6F82] &= ~(neg|pos);
+		if (evt.jaxis.value < -10922)
+		    ram[0x6F82] |= neg;
+		if (evt.jaxis.value > 10922)
+		    ram[0x6F82] |= pos;
+	    }
+	    break;
+        case SDL_JOYBUTTONDOWN:
+	    switch (evt.jbutton.button) {
+	    case 0:
+		ram[0x6F82] |= INPUT_MASK_BUTTON_A;
+		break;
+	    case 1:
+		ram[0x6F82] |= INPUT_MASK_BUTTON_B;
+		break;
+	    }
+	    break;
+        case SDL_JOYBUTTONUP:
+	    switch (evt.jbutton.button) {
+	    case 0:
+		ram[0x6F82] &= ~INPUT_MASK_BUTTON_A;
+		break;
+	    case 1:
+		ram[0x6F82] &= ~INPUT_MASK_BUTTON_B;
+		break;
+	    }
 	    break;
 	default:
 	    /* ignore */

@@ -1,4 +1,4 @@
-/* $NiH: system_video.c,v 1.1 2004/08/08 16:56:56 dillo Exp $ */
+/* $NiH: system_video.c,v 1.2 2004/08/09 17:35:57 wiz Exp $ */
 /*
   system_video.c -- record video
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -28,8 +28,6 @@
 
 #include <ffmpeg/avformat.h>
 
-#define DO_AUDIO
-
 #define VIDEO_BITRATE	1200000
 #define AUDIO_BITRATE	128000
 
@@ -56,9 +54,7 @@ system_video_close(void)
     return 0;
 #else
     avcodec_close(&st_v->codec);
-#ifdef DO_AUDIO
     avcodec_close(&st_a->codec);
-#endif
 
     av_write_trailer(oc);
     url_fclose(&oc->pb);
@@ -118,7 +114,6 @@ system_video_open(const char *fname)
     x_off = (c->width - SCREEN_WIDTH) / 2;
     y_off = (c->height - SCREEN_HEIGHT) / 2;
 
-#ifdef DO_AUDIO
     if ((st_a=av_new_stream(oc, 1)) == NULL)
 	return -1;
     c = &st_a->codec;
@@ -127,7 +122,6 @@ system_video_open(const char *fname)
     c->bit_rate = AUDIO_BITRATE;
     c->sample_rate = samplerate;
     c->channels = 1;
-#endif
 
     if (av_set_parameters(oc, NULL) < 0)
 	return -1;
@@ -147,14 +141,12 @@ system_video_open(const char *fname)
 	    return -1;
     }
 
-#ifdef DO_AUDIO
     c = &st_a->codec;
     if ((cd=avcodec_find_encoder(c->codec_id)) < 0)
 	return -1;
     if (avcodec_open(c, cd) < 0)
 	return -1;
     buf_aoff = 0;
-#endif
 
     if (url_fopen(&oc->pb, oc->filename, URL_WRONLY) < 0)
 	return -1;
@@ -171,7 +163,6 @@ void
 system_video_write_aframe(unsigned char *samples, int bpf)
 {
 #ifdef HAVE_FFMPEG
-#ifdef DO_AUDIO
     AVCodecContext *c;
     int size, len;
 
@@ -197,7 +188,6 @@ system_video_write_aframe(unsigned char *samples, int bpf)
 	    buf_aoff = 0;
 	}
     }
-#endif
 #endif /* HAVE_FFMPEG */
 }
 

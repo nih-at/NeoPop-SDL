@@ -24,7 +24,7 @@ static _u8 read1(const _u8 *);
 static _u16 read2(const _u8 *);
 static _u32 read4(const _u8 *);
 static _u8 *read_chunk_data(FILE *, _u32);
-static void read_soundchip(SoundChip *, _u8 **);
+static void read_soundchip(SoundChip *, const _u8 **);
 static void read_REGS(const _u8 *);
 
 static void write1(_u8 *, _u8);
@@ -262,9 +262,9 @@ static _u8 *read_chunk_data(FILE *fp, _u32 size)
 	return data;
 }
 
-static void read_soundchip(SoundChip *chip, _u8 **pp)
+static void read_soundchip(SoundChip *chip, const _u8 **pp)
 {
-	_u8 *p;
+	const _u8 *p;
 	int i;
 
 	p = *pp;

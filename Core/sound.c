@@ -123,7 +123,9 @@ static _u16 sample_chip_tone(void)
 
 	int vol[4];
 	unsigned int out;
+#if 0
 	int left;
+#endif
 
 	/* vol[] keeps track of how long each square wave stays */
 	/* in the 1 position during the sample period. */
@@ -158,6 +160,7 @@ static _u16 sample_chip_tone(void)
 		if (toneChip.Output[i]) vol[i] -= toneChip.Count[i];
 	}
 
+#if 0
 	left = STEP;
 	do
 	{
@@ -180,6 +183,7 @@ static _u16 sample_chip_tone(void)
 
 		left -= nextevent;
 	} while (left > 0);
+#endif
 
 
 	out = vol[0] * toneChip.Volume[0] + vol[1] * toneChip.Volume[1] +
@@ -194,7 +198,9 @@ static _u16 sample_chip_tone(void)
 
 static _u16 sample_chip_noise(void)
 {
+#if 0
 	int i;
+#endif
 
 	int vol[4];
 	unsigned int out;
@@ -204,6 +210,7 @@ static _u16 sample_chip_noise(void)
 	/* in the 1 position during the sample period. */
 	vol[0] = vol[1] = vol[2] = vol[3] = 0;
 
+#if 0
 	for (i = 0; i < 3; i++)
 	{
 		if (noiseChip.Output[i]) vol[i] += noiseChip.Count[i];
@@ -232,6 +239,7 @@ static _u16 sample_chip_noise(void)
 		}
 		if (noiseChip.Output[i]) vol[i] -= noiseChip.Count[i];
 	}
+#endif
 
 	left = STEP;
 	do

@@ -33,50 +33,50 @@
 
 	//Bank 0
 	{
-		(_u8*)&(gprBank[0][0]) + 1,
-		(_u8*)&(gprBank[0][0]) + 0,
-		(_u8*)&(gprBank[0][1]) + 1,
-		(_u8*)&(gprBank[0][1]) + 0,
-		(_u8*)&(gprBank[0][2]) + 1,
-		(_u8*)&(gprBank[0][2]) + 0,
-		(_u8*)&(gprBank[0][3]) + 1,
-		(_u8*)&(gprBank[0][3]) + 0,
+		(_u8*)&(gprBank[0][0]) + BYTE1,
+		(_u8*)&(gprBank[0][0]) + BYTE0,
+		(_u8*)&(gprBank[0][1]) + BYTE1,
+		(_u8*)&(gprBank[0][1]) + BYTE0,
+		(_u8*)&(gprBank[0][2]) + BYTE1,
+		(_u8*)&(gprBank[0][2]) + BYTE0,
+		(_u8*)&(gprBank[0][3]) + BYTE1,
+		(_u8*)&(gprBank[0][3]) + BYTE0,
 	},
 
 	//Bank 1
 	{
-		(_u8*)&(gprBank[1][0]) + 1,
-		(_u8*)&(gprBank[1][0]) + 0,
-		(_u8*)&(gprBank[1][1]) + 1,
-		(_u8*)&(gprBank[1][1]) + 0,
-		(_u8*)&(gprBank[1][2]) + 1,
-		(_u8*)&(gprBank[1][2]) + 0,
-		(_u8*)&(gprBank[1][3]) + 1,
-		(_u8*)&(gprBank[1][3]) + 0,
+		(_u8*)&(gprBank[1][0]) + BYTE1,
+		(_u8*)&(gprBank[1][0]) + BYTE0,
+		(_u8*)&(gprBank[1][1]) + BYTE1,
+		(_u8*)&(gprBank[1][1]) + BYTE0,
+		(_u8*)&(gprBank[1][2]) + BYTE1,
+		(_u8*)&(gprBank[1][2]) + BYTE0,
+		(_u8*)&(gprBank[1][3]) + BYTE1,
+		(_u8*)&(gprBank[1][3]) + BYTE0,
 	},
 	
 	//Bank 2
 	{
-		(_u8*)&(gprBank[2][0]) + 1,
-		(_u8*)&(gprBank[2][0]) + 0,
-		(_u8*)&(gprBank[2][1]) + 1,
-		(_u8*)&(gprBank[2][1]) + 0,
-		(_u8*)&(gprBank[2][2]) + 1,
-		(_u8*)&(gprBank[2][2]) + 0,
-		(_u8*)&(gprBank[2][3]) + 1,
-		(_u8*)&(gprBank[2][3]) + 0,
+		(_u8*)&(gprBank[2][0]) + BYTE1,
+		(_u8*)&(gprBank[2][0]) + BYTE0,
+		(_u8*)&(gprBank[2][1]) + BYTE1,
+		(_u8*)&(gprBank[2][1]) + BYTE0,
+		(_u8*)&(gprBank[2][2]) + BYTE1,
+		(_u8*)&(gprBank[2][2]) + BYTE0,
+		(_u8*)&(gprBank[2][3]) + BYTE1,
+		(_u8*)&(gprBank[2][3]) + BYTE0,
 	},
 
 	//Bank 3
 	{
-		(_u8*)&(gprBank[3][0]) + 1,
-		(_u8*)&(gprBank[3][0]) + 0,
-		(_u8*)&(gprBank[3][1]) + 1,
-		(_u8*)&(gprBank[3][1]) + 0,
-		(_u8*)&(gprBank[3][2]) + 1,
-		(_u8*)&(gprBank[3][2]) + 0,
-		(_u8*)&(gprBank[3][3]) + 1,
-		(_u8*)&(gprBank[3][3]) + 0,
+		(_u8*)&(gprBank[3][0]) + BYTE1,
+		(_u8*)&(gprBank[3][0]) + BYTE0,
+		(_u8*)&(gprBank[3][1]) + BYTE1,
+		(_u8*)&(gprBank[3][1]) + BYTE0,
+		(_u8*)&(gprBank[3][2]) + BYTE1,
+		(_u8*)&(gprBank[3][2]) + BYTE0,
+		(_u8*)&(gprBank[3][3]) + BYTE1,
+		(_u8*)&(gprBank[3][3]) + BYTE0,
 	}
 
 //=============================================================================

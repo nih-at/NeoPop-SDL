@@ -38,6 +38,19 @@
 #include "neopop.h"
 #include "TLCS900h_registers.h"
 
+#include <sys/endian.h>
+#if _BYTE_ORDER == _BIG_ENDIAN
+#define BYTE0	3
+#define BYTE1	2
+#define BYTE2	1
+#define BYTE3	0
+#else
+#define BYTE0	0
+#define BYTE1	1
+#define BYTE2	2
+#define BYTE3	3
+#endif
+
 //=============================================================================
 
 _u32 pc, gprBank[4][4], gpr[4];

@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_io.c,v 1.5 2002/12/02 14:25:23 wiz Exp $ */
 
 #include <sys/stat.h>
 #include <errno.h>
@@ -41,7 +41,7 @@ write_file_from_buffer(char *filename, _u8 *buffer, _u32 len)
     FILE *fp;
     _u32 written;
 
-    if ((fp=fopen(filename, "rb")) == NULL)
+    if ((fp=fopen(filename, "wb")) == NULL)
 	return FALSE;
 
     while ((written=fwrite(buffer, 1, len, fp)) < len) {
@@ -89,6 +89,28 @@ validate_dir(char *path)
     }
 
     return TRUE;
+}
+
+void
+system_state_load(void)
+{
+    char fn[256];
+
+    snprintf(fn, sizeof(fn), "%s.ngs", rom.filename);
+    state_restore(fn);
+
+    return;
+}
+
+void
+system_state_save(void)
+{
+    char fn[256];
+
+    snprintf(fn, sizeof(fn), "%s.ngs", rom.filename);
+    state_store(fn);
+
+    return;
 }
 
 BOOL

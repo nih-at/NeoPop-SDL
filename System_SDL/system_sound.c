@@ -1,4 +1,4 @@
-/* $NiH: system_sound.c,v 1.20 2004/07/10 02:39:36 dillo Exp $ */
+/* $NiH: system_sound.c,v 1.21 2004/07/11 23:32:12 dillo Exp $ */
 /*
   system_sound.c -- sound support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -20,7 +20,6 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <assert.h>
 #include "NeoPop-SDL.h"
 
 #define MAX_FRAMES	60
@@ -35,9 +34,9 @@
 /* following may need to be set higher power of two */
 
 int samplerate;		/* desired output sample rate */
-int spf;		/* samples per frame */
-int bpf;		/* bytes per frame */
-int dac_bpf;		/* bytes of DAC data per frame */
+static int spf;		/* samples per frame */
+static int bpf;		/* bytes per frame */
+static int dac_bpf;	/* bytes of DAC data per frame */
 
 static SDL_AudioCVT acvt;
 static Uint8 silence_value;
@@ -171,11 +170,6 @@ system_sound_update(int nframes)
     sound_frame_read_old = sound_frame_read;
 
     /* SDL_UnlockAudio(); */
-
-#if 0
-    printf("update: left: %d, consumed: %d, wanted: %d\n",
-	   i, consumed, nframes);
-#endif
 
     for (; i<nframes; i++) {
 	if (mute || paused)

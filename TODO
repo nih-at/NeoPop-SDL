@@ -1,14 +1,15 @@
 bugs:
++ update NEWS and ChangeLog
++ yuv command line option
++ look at -l: where does it look for save states
++ screenshots should use make_file_name
++ take a look at defaults for flash-dir, state-dir
 + osd handling during pause sucks
++ comm: check remote for NULL
 . get exactly one frame's worth of DAC data each frame
 . convert DAC sound ourselves (SDL is broken)
 . comm: send and handle pause/unpause packets
-. test comm support
-
-regressions:
-+ update man page
-+ document key and event names (rc ``map'' arguments)
-+ update NEWS and ChangeLog
+. comm support not working
 
 features:
 + osd for fullscreen
@@ -18,5 +19,6 @@ features:
 . movie captures
 . reset game
 . change emulation speed (run faster/slower)
-. gui
+. gui menu
 . speedup (sound, cpu)
+. speed up 2x/3x modes

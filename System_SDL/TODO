@@ -7,6 +7,8 @@
 . menus
  . pause
  . reset
+. joystick support
+. input configurable
 . zip support
 . config file
 . save states

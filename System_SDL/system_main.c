@@ -1,7 +1,7 @@
-/* $NiH: system_main.c,v 1.29 2004/06/23 01:24:43 dillo Exp $ */
+/* $NiH: system_main.c,v 1.30 2004/06/23 16:59:56 dillo Exp $ */
 /*
   system_main.c -- main program
-  Copyright (C) 2002-2003 Thomas Klausner
+  Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
   The author can be contacted at <wiz@danbala.tuwien.ac.at>

@@ -1,7 +1,7 @@
-/* $NiH: system_input.c,v 1.15 2004/06/23 01:24:43 dillo Exp $ */
+/* $NiH: system_input.c,v 1.16 2004/06/23 05:50:36 wiz Exp $ */
 /*
   system_input.c -- input support functions
-  Copyright (C) 2002-2003 Thomas Klausner
+  Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
   The author can be contacted at <wiz@danbala.tuwien.ac.at>

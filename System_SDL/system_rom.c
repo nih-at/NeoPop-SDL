@@ -1,7 +1,7 @@
-/* $NiH: system_rom.c,v 1.11 2004/06/21 03:29:25 wiz Exp $ */
+/* $NiH: system_rom.c,v 1.12 2004/06/22 03:37:52 wiz Exp $ */
 /*
   system_rom.c -- ROM loading support
-  Copyright (C) 2002-2003 Thomas Klausner
+  Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
   The author can be contacted at <wiz@danbala.tuwien.ac.at>

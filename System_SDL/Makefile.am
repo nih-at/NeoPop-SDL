@@ -13,7 +13,7 @@ VPATH=$(top_srcdir)/Core:$(top_srcdir)/Core/TLCS-900h:$(top_srcdir)/Core/z80:$(t
 .PATH=${VPATH}
 
 bin_PROGRAMS=NeoPop-SDL
-man_MANS=NeoPop-SDL.6
+man_MANS=NeoPop-SDL.6 neopoprc.5
 noinst_HEADERS=NeoPop-SDL.h unzip.h font.xpm
 
 nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c dma.c flash.c gfx.c \
@@ -35,9 +35,13 @@ NeoPop-SDL.6: NeoPop-SDL.${MANFMT} Makefile
 	sed "s|DOCDIR|${docdir}|g" ${srcdir}/NeoPop-SDL.${MANFMT} > $@.$$$$ && \
 		mv $@.$$$$ $@
 
+neopoprc.5: neopoprc.${MANFMT} Makefile
+	cp ${srcdir}/neopoprc.${MANFMT} $@
+
 system_names.c: mknames.sh NeoPop-SDL.h
 	sh ${srcdir}/mknames.sh ${srcdir}/NeoPop-SDL.h > $@.$$$$ && \
 		mv $@.$$$$ $@
 
-EXTRA_DIST=	NeoPop-SDL.mdoc NeoPop-SDL.man mknames.sh
-DISTCLEANFILES=	NeoPop-SDL.6
+EXTRA_DIST=	NeoPop-SDL.mdoc NeoPop-SDL.man mknames.sh \
+		neopoprc.mdoc neopoprc.man
+DISTCLEANFILES=	NeoPop-SDL.6 neopoprc.5

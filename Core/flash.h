@@ -49,6 +49,9 @@ void flash_read(void);
 //Marks flash blocks for saving.
 void flash_write(_u32 start_address, _u16 length);
 
+//Create data structure with flash contents
+_u8 *flash_prepare(int *);
+
 //Stores the flash data
 void flash_commit(void);
 

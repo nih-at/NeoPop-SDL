@@ -249,7 +249,7 @@ void flash_write(_u32 start_address, _u16 length)
 			return; //Nothing to do, block already registered.
 		}
 
-		//Got this block with but it's length is too short
+		//Got this block with but its length is too short
 		if (blocks[i].start_address == start_address &&
 			blocks[i].data_length < length)
 		{
@@ -269,13 +269,29 @@ void flash_write(_u32 start_address, _u16 length)
 //-----------------------------------------------------------------------------
 void flash_commit(void)
 {
+	_u8 *flashdata;
+	int length;
+
+	flashdata = flash_prepare(&length);
+	
+	//Try to Write flash buffer
+	system_io_flash_write(flashdata, length);
+
+	free(flashdata);
+}
+
+
+_u8 *flash_prepare(int *lenp)
+{
 	int i;
 	FlashFileHeader header;
 	_u8 *flashdata, *fileptr;
 
 	//No flash data?
-	if (block_count == 0)
-		return;
+	if (block_count == 0) {
+		*lenp = 0;
+		return NULL;
+	}
 
 	//Optimise before writing
 	optimise_blocks();
@@ -313,10 +329,7 @@ void flash_commit(void)
 		}
 	}
 
-	//Try to Write flash buffer
-	system_io_flash_write(flashdata, header.total_file_length);
-
-	free(flashdata);
+	*lenp = header.total_file_length;
+	return flashdata;
 }
-
 //=============================================================================

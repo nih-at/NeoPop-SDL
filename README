@@ -16,5 +16,10 @@ You can find the NeoPop-SDL homepage at
 and the NeoPop core homepage at
 	http://neopop.emuxhaven.net/
 
+If you package this program, please reference either of
+        ftp.nih.at /pub/nih/NeoPop-SDL/
+        http://www.nih.at/NeoPop-SDL/
+as the master distribution site.
+
 Send comments, bug reports, and praise to
-Thomas Klausner <wiz@danbala.tuwien.ac.at>.
+	Thomas Klausner <wiz@danbala.tuwien.ac.at>.

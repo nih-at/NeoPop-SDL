@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.23 2003/10/15 12:30:03 wiz Exp $ */
+/* $NiH: system_main.c,v 1.24 2003/10/16 17:29:45 wiz Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2003 Thomas Klausner
@@ -139,7 +139,7 @@ main(int argc, char *argv[])
     /* show every frame */
     system_frameskip_key = 1;
 
-    while ((ch=getopt(argc, argv, "cef:ghjl:MmSsv")) != -1) {
+    while ((ch=getopt(argc, argv, "cef:ghjl:MmSsV")) != -1) {
 	switch (ch) {
 	case 'c':
 	    system_colour = COLOURMODE_COLOUR;
@@ -176,7 +176,7 @@ main(int argc, char *argv[])
 	case 's':
 	    mute = FALSE;
 	    break;
-	case 'v':
+	case 'V':
 	    printversion();
 	    exit(0);
 	    break;

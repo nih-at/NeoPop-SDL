@@ -24,8 +24,10 @@
 typedef unsigned char byte;   /* This type is exactly 1 byte  */
 typedef unsigned short word;  /* This type is exactly 2 bytes */
 
+#if 0 /* removed by neopop_uk */
 static int PrintHex;          /* Print hexadecimal codes      */
 static unsigned long Counter; /* Address counter              */
+#endif
 
 /*static - Removed by neopop_uk */ int DAsm(char *S,byte *A);
     /* This function will disassemble a single command and    */
@@ -312,7 +314,7 @@ int DAsm(char *S,byte *A)
 /** main() ****************************************************/        
 /** This is the main function from which execution starts.   **/
 /**************************************************************/
-/*		Function removed by neopop_uk
+#if 0 /*		Function removed by neopop_uk */
 int main(int argc,char *argv[])
 {
   FILE *F;
@@ -371,4 +373,4 @@ int main(int argc,char *argv[])
 
   fclose(F);return(0);
 }
-*/
+#endif

@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.44 2004/07/22 10:31:20 dillo Exp $ */
+/* $NiH: system_main.c,v 1.45 2004/07/22 12:13:07 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -92,14 +92,13 @@ system_VBL(void)
     long throttle_diff;
     int newsec;
 
+    system_input_update();
     system_osd_display();
 
     if (!paused && ++frameskip_counter == system_frameskip_key) {
 	system_graphics_update();
 	frameskip_counter = 0;
     }
-
-    system_input_update();
 
     newsec = 0;
     gettimeofday(&current_time, NULL);

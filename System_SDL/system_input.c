@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.14 2004/06/23 00:06:13 dillo Exp $ */
+/* $NiH: system_input.c,v 1.15 2004/06/23 01:24:43 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -72,7 +72,7 @@ system_input_update(void)
 		case SDLK_RCTRL:
 		case SDLK_LALT:
 		case SDLK_RALT:
-		    /* shit keys are never considered shifted */
+		    /* shift keys are never considered shifted */
 		    c = NPKS_SH_NONE;
 		    break;
 		default:

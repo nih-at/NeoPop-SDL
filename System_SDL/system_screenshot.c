@@ -1,21 +1,10 @@
-/* $NiH$ */
+/* $NiH: system_screenshot.c,v 1.1 2002/12/02 14:31:27 wiz Exp $ */
 
 #include "config.h"
 #include "neopop-SDL.h"
-#include <stdio.h>
-
-#if !defined(HAVE_LIBPNG)
-int
-system_screenshot(void)
-{
-    fprintf(stderr, "PNG library not found during compilation -- "
-	    "screenshot feature disabled\n");
-    return -1;
-}
-#else /* HAVE LIBPNG */
 #include <sys/stat.h>
 #include <errno.h>
-#include <png.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 static char *
@@ -40,6 +29,63 @@ sanename(char *name)
     return strdup(sanename);
 }
 
+static char *
+get_screenshot_name(const char *ext)
+{
+    static int scount;
+    char name[100], *romname;
+    struct stat sb;
+
+    if ((romname=sanename(rom.name)) == NULL)
+	return NULL;
+
+    do {
+	snprintf(name, sizeof(name), "neopop-%s%03d.%s", romname,
+		 scount, ext);
+	if (stat(name, &sb) == -1 && errno == ENOENT)
+	    return strdup(name);
+	scount++;
+    } while (scount < 1000);
+
+    return NULL;
+}
+
+#if !defined(HAVE_LIBPNG)
+int
+system_screenshot(void)
+{
+    SDL_Surface *image;
+    char *bmpname;
+    int ret;
+
+    ret = 0;
+
+    if ((bmpname=get_screenshot_name("bmp")) == NULL)
+	return -1;
+
+    image = SDL_CreateRGBSurfaceFrom(cfb, SCREEN_WIDTH,
+				     SCREEN_HEIGHT, 16,
+				     sizeof(_u16)*SCREEN_WIDTH,
+				     0x000f, 0x00f0, 0x0f00, 0);
+    if (image == NULL) {
+	free(bmpname);
+	return -1;
+    }
+
+    if (SDL_SaveBMP(image, bmpname) < 0) {
+	fprintf(stderr, "Saving screenshot to `%s' failed: %s\n",
+		bmpname, SDL_GetError());
+	ret = -1;
+    }
+
+    SDL_FreeSurface(image);
+    free(bmpname);
+
+    return ret;
+}
+#else /* HAVE LIBPNG */
+#include <png.h>
+
 static void
 converter(png_structp ptr, png_row_infop row_info, png_bytep row)
 {
@@ -60,26 +106,6 @@ converter(png_structp ptr, png_row_infop row_info, png_bytep row)
     memcpy(row, out, sizeof(out));
     return;
 }
-
-static char *
-get_screenshot_name(void)
-{
-    static int scount;
-    char name[100], *romname;
-    struct stat sb;
-
-    if ((romname=sanename(rom.name)) == NULL)
-	return NULL;
-
-    do {
-	snprintf(name, sizeof(name), "neopop-%s%03d.png", romname, scount);
-	if (stat(name, &sb) == -1 && errno == ENOENT)
-	    return strdup(name);
-	scount++;
-    } while (scount < 1000);
-
-    return NULL;
-}
     
 int
 system_screenshot(void)
@@ -95,7 +121,7 @@ system_screenshot(void)
 
     ret = 0;
     /* get file name */
-    if ((pngname=get_screenshot_name()) == NULL)
+    if ((pngname=get_screenshot_name("png")) == NULL)
 	return -1;
 
     /* open file for writing */

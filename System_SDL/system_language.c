@@ -1,3 +1,5 @@
+/* $NiH$ */
+
 #include "neopop.h"
 
 /* copied from Win32/system_language.c */
@@ -23,7 +25,11 @@ static STRING_TAG string_tags[]={
     { "EROMOPEN",     "Cannot open ROM file" },
     { "EZIPNONE",     "No roms found" } ,
     { "EZIPBAD",      "Corrupted ZIP file" },
-    { "EZIPFIND",     "Cannot find ZIP file" }
+    { "EZIPFIND",     "Cannot find ZIP file" },
+
+    { "ABORT",	      "Abort" },
+    { "DISCON",	      "Disconnect" },
+    { "CONNEC",	      "Connected" }
 };
 
 char *

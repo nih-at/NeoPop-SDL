@@ -21,6 +21,7 @@ features:
 . configure: test for altivec
 . movie captures options: 2x, 3x, smooth, bitrates
 . start/stop/pause movie capture
+. event recording
 . reset game
 . change emulation speed (run faster/slower)
 . gui menu

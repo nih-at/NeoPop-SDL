@@ -3,6 +3,6 @@
 . reset game
 . turn sound off/on during game
 . test comm support
-. comm: handle pause/unpause packages
+. comm: handle pause/unpause packets
 . gui
 . speedup

@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.32 2004/07/05 12:26:55 dillo Exp $ */
+/* $NiH: system_main.c,v 1.33.2.5 2004/07/08 23:36:33 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -27,8 +27,6 @@
 #include <unistd.h>
 #include "config.h"
 #include "NeoPop-SDL.h"
-
-#define NGP_FPS 59.95
 
 char *prg;
 struct timeval throttle_last;
@@ -85,55 +83,78 @@ void
 system_VBL(void)
 {
     static int frame_counter = 0;
-    struct timeval current_time;
+    static long time_spent = 0;
+    static int last_sec = 0;
+    struct timeval current_time, time_diff;
     long throttle_diff;
-    struct timespec ts, tsrem;
+    int newsec;
 
     system_graphics_update();
 
     system_input_update();
 
-    if (mute == FALSE)
-	system_sound_update();
-
-    /* throttling */
-    throttle_last.tv_usec += throttle_rate;
-    if (throttle_last.tv_usec > 1000000) {
-	throttle_last.tv_sec += throttle_last.tv_usec/1000000;
-	throttle_last.tv_usec %= 1000000;
-    }
+    newsec = 0;
     gettimeofday(&current_time, NULL);
-    throttle_diff = (throttle_last.tv_sec - current_time.tv_sec) * 1000000
-	+ (throttle_last.tv_usec - current_time.tv_usec);
-    
-#if 0
-    printf("cur: %ld.%06ld, next: %ld.%06ld, sleep: %ld\n",
-	   current_time.tv_sec, current_time.tv_usec,
-	   throttle_last.tv_sec, throttle_last.tv_usec,
-	   throttle_diff);
-#endif
-    
-    if (throttle_diff < 0)
-	throttle_last = current_time;
-    else {
-	ts.tv_sec = throttle_diff / 1000000000;
-	ts.tv_nsec = throttle_diff % 1000000000;
-	while (nanosleep(&ts, &tsrem) < 0 && errno == EINTR)
-	    ts = tsrem;
+    if (current_time.tv_sec != last_sec) {
+	newsec = 1;
+	last_sec = current_time.tv_sec;
     }
-    
-    if (frame_counter++ > NGP_FPS) {
+
+    if (mute == FALSE) {
+	timersub(&current_time, &throttle_last, &time_diff);
+	throttle_diff = (time_diff.tv_sec*1000000 + time_diff.tv_usec);
+
+	if (time_spent == 0)
+	    time_spent = throttle_diff;
+	else
+	    time_spent = (time_spent*9 + throttle_diff) / 10;
+
+#if 0
+	printf("%4ld", time_spent*10/throttle_rate), fflush(stdout);
+	printf("time spent: %ld.%06ld, frames spent: %ld\n",
+	       time_diff.tv_sec, time_diff.tv_usec, frames_spent);
+#endif
+
+	system_sound_update(time_spent/throttle_rate + 1);
+
+	/* XXX: we should include the time spent calculating samples */
+	gettimeofday(&current_time, NULL);
+	throttle_last = current_time;
+    }
+    else {
+	throttle_last.tv_usec += throttle_rate;
+	if (throttle_last.tv_usec > 1000000) {
+	    throttle_last.tv_usec -= 1000000;
+	    throttle_last.tv_sec++;
+	}
+	timersub(&throttle_last, &current_time, &time_diff);
+	throttle_diff = (time_diff.tv_sec*1000000 + time_diff.tv_usec);
+	
+	if (throttle_diff > 0) {
+	    SDL_Delay(throttle_diff/1000);
+	}
+	else if (throttle_diff < -2*throttle_rate) {
+	    time_diff.tv_sec = 0;
+	    time_diff.tv_usec = -2*throttle_rate;
+	    timersub(&current_time, &time_diff, &throttle_last);
+	}
+    }
+
+    frame_counter++;
+    if (newsec) {
 	char title[128];
-	int fps;
-
-	frame_counter = 0;
-	fps = (int)(1000000/(throttle_rate-throttle_diff)+.5);
-
-	(void)snprintf(title, sizeof(title), PROGRAM_NAME " - %s - %dfps/FS%d",
-		       rom.name, fps, system_frameskip_key);
 
 	/* set window caption */
+	if (graphics_mag_req > 1)
+	    (void)snprintf(title, sizeof(title),
+			   PROGRAM_NAME " - %s - %dfps/FS%d",
+			   rom.name, frame_counter, system_frameskip_key);
+	else
+	    (void)snprintf(title, sizeof(title), PROGRAM_NAME " %dfps",
+			   frame_counter);
 	SDL_WM_SetCaption(title, NULL);
+
+	frame_counter = 0;
     }
 
     return;
@@ -164,6 +185,10 @@ main(int argc, char *argv[])
     comms_mode = COMMS_NONE;
     comms_port = 7846;
     comms_host = NULL;
+    /* output sample rate */
+    samplerate = DEFAULT_SAMPLERATE;
+    /* use YUV overlay (hardware scaling) */
+    use_yuv = 1;
 
     system_bindings_init();
     system_rc_read();
@@ -293,11 +318,13 @@ main(int argc, char *argv[])
     i = 200;
     do {
 	emulate();
+#if 0
 	if (i-- == 0 && !mute) {
 	    /* for the sound thread */
 	    SDL_Delay(1);
 	    i = 200;
 	}
+#endif
     } while (do_exit == 0);
 
     system_rom_unload();

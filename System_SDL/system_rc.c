@@ -1,4 +1,4 @@
-/* $NiH: system_rc.c,v 1.3 2004/06/23 17:19:05 dillo Exp $ */
+/* $NiH: system_rc.c,v 1.4.2.2 2004/07/08 12:11:35 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -362,13 +362,26 @@ system_rc_read_file(const char *filename)
 		break;
 	    graphics_mag_smooth = i;
 	    break;
-	    
+
+	case NPRC_SAMPLERATE:
+	    if ((i=rc_parse_int(p, &p, 8000, 48000)) == INT_MIN)
+		break;
+	    samplerate = i;
+	    break;
+
 	case NPRC_SOUND:
 	    if ((i=rc_parse_boolean(p, &p)) == -1)
 		break;
 	    mute = !i;
 	    break;
+
+	case NPRC_YUV:
+	    if (i=rc_parse_boolean(p, &p) == -1)
+		break;
+	    use_yuv = i;
+	    break;
 	}
+	
 
 	if (!error_line) {
 	    p += strspn(p, " \t");

@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.7 2004/06/23 16:59:56 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.8.2.3 2004/07/08 12:11:34 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -72,8 +72,10 @@ enum nprc {
     NPRC_LANGUAGE,
     NPRC_MAGNIFY,
     NPRC_MAP,
+    NPRC_SAMPLERATE,
     NPRC_SMOOTH,
     NPRC_SOUND,
+    NPRC_YUV,
 
     NPRC_LAST
 };
@@ -122,6 +124,10 @@ enum comms_mode {
     COMMS_LAST
 };
 
+#define NGP_FPS 59.95			/* frames per second */
+
+#define DEFAULT_SAMPLERATE	44100	/* default sample rate */
+
 void system_bindings_init(void);
 
 BOOL system_comms_connect(void);
@@ -153,7 +159,7 @@ void system_sound_chipreset(void);
 BOOL system_sound_init(void);
 void system_sound_shutdown(void);
 void system_sound_silence(void);
-void system_sound_update(void);
+void system_sound_update(int);
 
 void system_state_load(void);
 void system_state_save(void);
@@ -164,6 +170,8 @@ extern int graphics_mag_smooth;
 extern int comms_mode;
 extern int comms_port;
 extern char *comms_host;
+extern int samplerate;
+extern int use_yuv;
 
 extern enum neopop_event bindings[];
 extern const char *comms_names[];

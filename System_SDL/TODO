@@ -11,3 +11,4 @@
 . zip support
 . config file
 . save states
+. fix for bigendian? [memory code, register macros]

@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.30 2004/06/23 16:59:56 dillo Exp $ */
+/* $NiH: system_main.c,v 1.31 2004/06/23 17:19:04 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -22,6 +22,7 @@
 */
 
 #include <sys/time.h>
+#include <errno.h>
 #include <math.h>
 #include <unistd.h>
 #include "config.h"
@@ -85,7 +86,8 @@ system_VBL(void)
 {
     static int frame_counter = 0;
     struct timeval current_time;
-    _u32 throttle_diff;
+    long throttle_diff;
+    struct timespec ts, tsrem;
 
     system_graphics_update();
 
@@ -95,22 +97,37 @@ system_VBL(void)
 	system_sound_update();
 
     /* throttling */
-    do {
-	gettimeofday(&current_time, NULL);
-	if (current_time.tv_sec == throttle_last.tv_sec)
-	    throttle_diff = current_time.tv_usec - throttle_last.tv_usec;
-	else
-	    throttle_diff = 1000000 + current_time.tv_usec
-		- throttle_last.tv_usec;
-    } while (throttle_diff < throttle_rate);
-    throttle_last = current_time;
-
+    throttle_last.tv_usec += throttle_rate;
+    if (throttle_last.tv_usec > 1000000) {
+	throttle_last.tv_sec += throttle_last.tv_usec/1000000;
+	throttle_last.tv_usec %= 1000000;
+    }
+    gettimeofday(&current_time, NULL);
+    throttle_diff = (throttle_last.tv_sec - current_time.tv_sec) * 1000000
+	+ (throttle_last.tv_usec - current_time.tv_usec);
+    
+#if 0
+    printf("cur: %ld.%06ld, next: %ld.%06ld, sleep: %ld\n",
+	   current_time.tv_sec, current_time.tv_usec,
+	   throttle_last.tv_sec, throttle_last.tv_usec,
+	   throttle_diff);
+#endif
+    
+    if (throttle_diff < 0)
+	throttle_last = current_time;
+    else {
+	ts.tv_sec = throttle_diff / 1000000000;
+	ts.tv_nsec = throttle_diff % 1000000000;
+	while (nanosleep(&ts, &tsrem) < 0 && errno == EINTR)
+	    ts = tsrem;
+    }
+    
     if (frame_counter++ > NGP_FPS) {
 	char title[128];
 	int fps;
 
 	frame_counter = 0;
-	fps = (int)(1000000/throttle_diff+.5);
+	fps = (int)(1000000/(throttle_rate-throttle_diff+.5);
 
 	(void)snprintf(title, sizeof(title), PROGRAM_NAME " - %s - %dfps/FS%d",
 		       rom.name, fps, system_frameskip_key);

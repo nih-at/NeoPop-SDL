@@ -1,5 +1,15 @@
 SDL port of NeoPop, a portable SNK NeoGeo Pocket emulator.
 
+For installation, you'll need SDL (Simple DirectMedia Layer), see
+	http://www.libsdl.org
+If you want to save screenshots in PNG format, you'll need libpng, see
+	http://www.libpng.org/pub/png/
+
+You can get a list of command line options with the -h flag; the keys
+are described below.
+
+Send comments, bug reports, and praise to Thomas Klausner <tk@giga.or.at>.
+
 Keys
 ----
 

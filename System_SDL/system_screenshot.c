@@ -1,4 +1,4 @@
-/* $NiH: system_screenshot.c,v 1.8 2004/07/22 10:31:20 dillo Exp $ */
+/* $NiH: system_screenshot.c,v 1.9 2004/07/25 10:40:51 wiz Exp $ */
 /*
   system_screenshot.c -- screenshot functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -49,11 +49,15 @@ get_screenshot_name(const char *ext)
 	snprintf(countext, strlen(ext)+4, "%03d%s",
 		 scount, ext);
 	name = system_make_file_name(screenshot_dir, countext, 1);
-	if (stat(name, &sb) == -1 && errno == ENOENT)
+	if (stat(name, &sb) == -1 && errno == ENOENT) {
+	    free(countext);
 	    return name;
+	}
 	free(name);
 	scount++;
     } while (scount < 1000);
+
+    free(countext);
 
     return NULL;
 }

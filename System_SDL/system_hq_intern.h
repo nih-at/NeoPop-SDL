@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_hq_intern.h,v 1.2 2004/07/21 09:34:02 dillo Exp $ */
 /* Adapted for NeoPop-SDL by Dieter Baron and Thomas Klausner */
 
 /* ScummVM - Scumm Interpreter
@@ -27,8 +27,8 @@
 #ifndef COMMON_SCALER_INTERN_H
 #define COMMON_SCALER_INTERN_H
 
-int redblueMask = 0x0f0f;
-int greenMask = 0x00f0;
+#define redblueMask	0x0f0f
+#define greenMask	0x00f0
 
 
 /**

@@ -1,4 +1,6 @@
-.\" $NiH: neopoprc.man,v 1.1 2004/07/14 22:18:02 wiz Exp $
+.\" Converted with mdoc2man 0.2
+.\" from NiH: neopoprc.mdoc,v 1.4 2004/07/22 01:49:02 wiz Exp 
+.\" $NiH: neopoprc.mdoc,v 1.4 2004/07/22 01:49:02 wiz Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -28,7 +30,7 @@
 .\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 .\" OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
-.TH NEOPOPRC 5 "July 14, 2004" NiH
+.TH NEOPOPRC 5 "July 22, 2004" NiH
 .SH "NAME"
 neopoprc \- NeoPop-SDL config file
 .SH "DESCRIPTION"
@@ -40,6 +42,8 @@ NeoPop-SDL(1).
 Lines starting with a hash mark
 .Pq Sq #
 are ignored.
+All keywords and values (except for paths) are case-insensitive.
+Command-line options override config file settings.
 .PP
 The configuration values can be of the following types:
 .RS
@@ -65,8 +69,7 @@ string
 A string.
 .RE
 .PP
-The following keywords are understood
-the:
+The following keywords are understood:
 .RS
 .TP 17
 colour
@@ -120,7 +123,9 @@ Has no default.
 .Bq string
 Path to the directory where Flash RAM images should be saved.
 Defaults to
-``\fI~/.neopop.\fR''
+``\fB~/.neopop\fR.''
+If only the last path component does not exist, the directory
+is created automatically.
 .TP 11
 \fBframeskip\fR
 .Bq int (1..7)
@@ -150,13 +155,14 @@ Defaults to
 .Bq int (1..3)
 Magnification factor for the graphics display.
 Defaults to 1 (no magnification).
+Not used in YUV fullscreen mode.
 .TP 13
 \fBmap\fR
 Assign a
 NeoPop-SDL(1)
 event to a key.
 For details, please see the
-KEYS
+BINDINGS
 section below.
 .TP 13
 \fBsamplerate\fR
@@ -167,16 +173,17 @@ Defaults to 44100.
 \fBsmooth\fR
 .Bq boolean
 Smooth display when magnified.
-.\" XXX
-Currently unimplemented.
 Defaults to
 \fBon.\fR
+Ignored in YUV overlay mode.
 .TP 13
 \fBstate-dir\fR
 .Bq string
 Path to directory in which to store save states.
 Defaults to
-``\fI. .\fR''
+``\fB.\fR.''
+If only the last path component does not exist, the directory
+is created automatically.
 .TP 13
 \fBsound\fR
 .Bq boolean
@@ -220,12 +227,169 @@ Use a YUV overlay even if scaling is not hardware accelerated.
 Defaults to
 \fBoff.\fR
 .RE
-.SH "KEYS"
-XXX
-Describe the map keyword and the possible values both left
-and right.
+.SH "BINDINGS"
+The
+\fBmap\fR
+keyword can be used to set key bindings.
+The following actions can be bound:
+.RS
+.TP 3
+\fBnone\fR
+No action.
+Can be used to remove a key binding.
+.PP
+.TP 3
+\fBjoy up\fR
+.TP 3
+\fBjoy down\fR
+.TP 3
+\fBjoy left\fR
+.TP 3
+\fBjoy right\fR
+.TP 3
+\fBjoy button a\fR
+.TP 3
+\fBjoy button b\fR
+.TP 3
+\fBjoy option\fR
+NeoGeo Pocket Gamepad.
+.PP
+.TP 3
+\fBgui frameskip decrement\fR
+.TP 3
+\fBgui frameskip increment\fR
+Decrease/increase frameskip.
+.PP
+.TP 3
+\fBgui fullscreen off\fR
+.TP 3
+\fBgui fullscreen on\fR
+.TP 3
+\fBgui fullscreen toggle\fR
+Turn fullscreen mode off, on, or toggle it.
+.PP
+.TP 3
+\fBgui magnify 1\fR
+.TP 3
+\fBgui magnify 2\fR
+.TP 3
+\fBgui magnify 3\fR
+Set graphics magnification factor.
+.PP
+.\".It \fBgui menu\fR
+.TP 3
+\fBgui mute off\fR
+.TP 3
+\fBgui mute on\fR
+.TP 3
+\fBgui mute toggle\fR
+Turn sound and music on, off, or toggle it.
+.PP
+.TP 3
+\fBgui pause off\fR
+.TP 3
+\fBgui pause on\fR
+.TP 3
+\fBgui pause toggle\fR
+Pause or unpause game.
+.PP
+.TP 3
+\fBgui quit\fR
+Exit the emulator.
+.PP
+.TP 3
+\fBgui screenshot\fR
+Make a screenshot.
+.PP
+.TP 3
+\fBgui smooth off\fR
+.TP 3
+\fBgui smooth on\fR
+.TP 3
+\fBgui smooth toggle\fR
+Choose whether to use a smoothing filter.
+.PP
+.TP 3
+\fBgui state load\fR
+.TP 3
+\fBgui state save\fR
+Load or save a game state.
+.PP
+.TP 3
+\fBgui state slot decrement\fR
+.TP 3
+\fBgui state slot increment\fR
+Decrease or increase the current game state slot.
+Goes from 0 to 9 and then wraps around to 0 again.
+.RE
+.PP
+The key events use the names from the SDL library;
+see
+SDLKey(3)
+for details.
+Additionally,
+\fBC-\fR
+can be prepended for the control key, and
+\fBA-\fR
+or
+\fBM-\fR
+for the alt key.
+See also the
+EXAMPLES
+section below.
+.PP
+The following joystick events are known:
+.RS
+.TP 5
+\fBjoy \fBm Dv axis Ar n Ar neg|pos\fR\fR
+On joystick
+\fBm\fR
+axis
+\fBn\fR
+the negative or positive direction.
+.TP 5
+\fBjoy \fBm Dv button Ar n\fR\fR
+Button
+\fBn\fR
+on joystick
+\fBm.\fR
+.TP 5
+\fBjoy \fBm Dv hat Ar n Ar up|left|down|right\fR\fR
+On joystick
+\fBm\fR
+hat
+\fBn\fR
+direction up, left, down, or right.
+.RE
+.SH "FILES"
+\fB~/.neopop/neopoprc\fR
+Location of the config file.
+.SH "EXAMPLES"
+To exit the emulator with
+.Sy ALT-F4,
+add the following line to your
+\fB~/.neopop/neopoprc\fR:
+.IP
+map A-F4 = gui quit
+.PP
+.PP
+To simulate a NeoGeo Pocket option key with
+button 5 on the second joystick use:
+.IP
+map joy 2 button 5 = joy option
+.PP
+.PP
+To save all game states and flash saves in subdirectories
+of
+\fB~/.neopop\fR:
+.IP
+flash-dir ~/.neopop/flash
+.PP
+.IP
+state-dir ~/.neopop/states
+.PP
 .SH "SEE ALSO"
-NeoPOP-SDL(1)
+NeoPop-SDL(1)
 .PP
 \fIhttp://www.nih.at/NeoPop-SDL/\fR
 .SH "AUTHORS"

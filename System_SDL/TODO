@@ -3,6 +3,7 @@
  . fs/windowed
  . fps
  . throttled mode
+ . screenshot
 . menus
  . pause
  . reset

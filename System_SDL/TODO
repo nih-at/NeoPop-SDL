@@ -5,6 +5,7 @@
 . input keys configurable
 . zip support
 . config file
+. keys for frameskipping
 x save states
 . comm support
 x cleanup:

@@ -1,4 +1,4 @@
-/* $NiH: system_comms.c,v 1.6 2004/06/23 16:59:56 dillo Exp $ */
+/* $NiH: system_comms.c,v 1.7 2004/06/23 17:19:04 dillo Exp $ */
 /*
   system_comms.c -- comm port support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -257,7 +257,7 @@ comms_shutdown(void)
 	sockset = NULL;
     }
 }
-#endif /* HAVE_LIBSD_NET */
+#endif /* HAVE_LIBSDL_NET */
 
 
 
@@ -286,5 +286,5 @@ comms_write_message(int type, _u8 data)
 	printf("write error on socket: %s\n", SDLNet_GetError());
 	comms_shutdown();
     }
-#endif /* HAVE_LIBSD_NET */
+#endif /* HAVE_LIBSDL_NET */
 }

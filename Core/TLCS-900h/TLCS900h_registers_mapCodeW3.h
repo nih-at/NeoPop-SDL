@@ -32,28 +32,28 @@
 */
 
 	//BANK 0
-	(_u16*)(((_u8*)&gprBank[0][0]) + BYTE0), (_u16*)(((_u8*)&gprBank[0][0]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[0][1]) + BYTE0), (_u16*)(((_u8*)&gprBank[0][1]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[0][2]) + BYTE0), (_u16*)(((_u8*)&gprBank[0][2]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[0][3]) + BYTE0), (_u16*)(((_u8*)&gprBank[0][3]) + BYTE2),
+	(_u16*)(((_u8*)&gprBank[0][0]) + WORD0), (_u16*)(((_u8*)&gprBank[0][0]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[0][1]) + WORD0), (_u16*)(((_u8*)&gprBank[0][1]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[0][2]) + WORD0), (_u16*)(((_u8*)&gprBank[0][2]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[0][3]) + WORD0), (_u16*)(((_u8*)&gprBank[0][3]) + WORD1),
 
 	//BANK 1
-	(_u16*)(((_u8*)&gprBank[1][0]) + BYTE0), (_u16*)(((_u8*)&gprBank[1][0]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[1][1]) + BYTE0), (_u16*)(((_u8*)&gprBank[1][1]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[1][2]) + BYTE0), (_u16*)(((_u8*)&gprBank[1][2]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[1][3]) + BYTE0), (_u16*)(((_u8*)&gprBank[1][3]) + BYTE2),
+	(_u16*)(((_u8*)&gprBank[1][0]) + WORD0), (_u16*)(((_u8*)&gprBank[1][0]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[1][1]) + WORD0), (_u16*)(((_u8*)&gprBank[1][1]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[1][2]) + WORD0), (_u16*)(((_u8*)&gprBank[1][2]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[1][3]) + WORD0), (_u16*)(((_u8*)&gprBank[1][3]) + WORD1),
 
 	//BANK 2
-	(_u16*)(((_u8*)&gprBank[2][0]) + BYTE0), (_u16*)(((_u8*)&gprBank[2][0]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[2][1]) + BYTE0), (_u16*)(((_u8*)&gprBank[2][1]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[2][2]) + BYTE0), (_u16*)(((_u8*)&gprBank[2][2]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[2][3]) + BYTE0), (_u16*)(((_u8*)&gprBank[2][3]) + BYTE2),
+	(_u16*)(((_u8*)&gprBank[2][0]) + WORD0), (_u16*)(((_u8*)&gprBank[2][0]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[2][1]) + WORD0), (_u16*)(((_u8*)&gprBank[2][1]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[2][2]) + WORD0), (_u16*)(((_u8*)&gprBank[2][2]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[2][3]) + WORD0), (_u16*)(((_u8*)&gprBank[2][3]) + WORD1),
 
 	//BANK 3
-	(_u16*)(((_u8*)&gprBank[3][0]) + BYTE0), (_u16*)(((_u8*)&gprBank[3][0]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[3][1]) + BYTE0), (_u16*)(((_u8*)&gprBank[3][1]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[3][2]) + BYTE0), (_u16*)(((_u8*)&gprBank[3][2]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[3][3]) + BYTE0), (_u16*)(((_u8*)&gprBank[3][3]) + BYTE2),
+	(_u16*)(((_u8*)&gprBank[3][0]) + WORD0), (_u16*)(((_u8*)&gprBank[3][0]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[3][1]) + WORD0), (_u16*)(((_u8*)&gprBank[3][1]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[3][2]) + WORD0), (_u16*)(((_u8*)&gprBank[3][2]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[3][3]) + WORD0), (_u16*)(((_u8*)&gprBank[3][3]) + WORD1),
 
 	(_u16*)&rErr,(_u16*)&rErr,(_u16*)&rErr,(_u16*)&rErr,
 	(_u16*)&rErr,(_u16*)&rErr,(_u16*)&rErr,(_u16*)&rErr,
@@ -75,20 +75,20 @@
 	(_u16*)&rErr,(_u16*)&rErr,(_u16*)&rErr,(_u16*)&rErr,
 
 	//Previous Bank
-	(_u16*)(((_u8*)&gprBank[2][0]) + BYTE0), (_u16*)(((_u8*)&gprBank[2][0]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[2][1]) + BYTE0), (_u16*)(((_u8*)&gprBank[2][1]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[2][2]) + BYTE0), (_u16*)(((_u8*)&gprBank[2][2]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[2][3]) + BYTE0), (_u16*)(((_u8*)&gprBank[2][3]) + BYTE2),
+	(_u16*)(((_u8*)&gprBank[2][0]) + WORD0), (_u16*)(((_u8*)&gprBank[2][0]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[2][1]) + WORD0), (_u16*)(((_u8*)&gprBank[2][1]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[2][2]) + WORD0), (_u16*)(((_u8*)&gprBank[2][2]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[2][3]) + WORD0), (_u16*)(((_u8*)&gprBank[2][3]) + WORD1),
 
 	//Current Bank
-	(_u16*)(((_u8*)&gprBank[3][0]) + BYTE0), (_u16*)(((_u8*)&gprBank[3][0]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[3][1]) + BYTE0), (_u16*)(((_u8*)&gprBank[3][1]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[3][2]) + BYTE0), (_u16*)(((_u8*)&gprBank[3][2]) + BYTE2),
-	(_u16*)(((_u8*)&gprBank[3][3]) + BYTE0), (_u16*)(((_u8*)&gprBank[3][3]) + BYTE2),
+	(_u16*)(((_u8*)&gprBank[3][0]) + WORD0), (_u16*)(((_u8*)&gprBank[3][0]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[3][1]) + WORD0), (_u16*)(((_u8*)&gprBank[3][1]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[3][2]) + WORD0), (_u16*)(((_u8*)&gprBank[3][2]) + WORD1),
+	(_u16*)(((_u8*)&gprBank[3][3]) + WORD0), (_u16*)(((_u8*)&gprBank[3][3]) + WORD1),
 	
-	(_u16*)((_u8*)&(gpr[0]) + BYTE0),	(_u16*)((_u8*)&(gpr[0]) + BYTE2),
-	(_u16*)((_u8*)&(gpr[1]) + BYTE0),	(_u16*)((_u8*)&(gpr[1]) + BYTE2),
-	(_u16*)((_u8*)&(gpr[2]) + BYTE0),	(_u16*)((_u8*)&(gpr[2]) + BYTE2),
-	(_u16*)((_u8*)&(gpr[3]) + BYTE0),	(_u16*)((_u8*)&(gpr[3]) + BYTE2),
+	(_u16*)((_u8*)&(gpr[0]) + WORD0),	(_u16*)((_u8*)&(gpr[0]) + WORD1),
+	(_u16*)((_u8*)&(gpr[1]) + WORD0),	(_u16*)((_u8*)&(gpr[1]) + WORD1),
+	(_u16*)((_u8*)&(gpr[2]) + WORD0),	(_u16*)((_u8*)&(gpr[2]) + WORD1),
+	(_u16*)((_u8*)&(gpr[3]) + WORD0),	(_u16*)((_u8*)&(gpr[3]) + WORD1),
 
 //=============================================================================

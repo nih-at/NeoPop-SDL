@@ -44,11 +44,15 @@
 #define BYTE1	2
 #define BYTE2	1
 #define BYTE3	0
+#define WORD0	2
+#define WORD1	0
 #else
 #define BYTE0	0
 #define BYTE1	1
 #define BYTE2	2
 #define BYTE3	3
+#define WORD0	0
+#define WORD1	2
 #endif
 
 //=============================================================================

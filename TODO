@@ -3,6 +3,7 @@ bugs:
 . convert DAC sound ourselves (SDL is broken)
 . comm: send and handle pause/unpause packets
 . comm support not working
+. add emulator options chunk (language, colour +?)
 
 regressions:
 . update ChangeLog for chunk snapshots

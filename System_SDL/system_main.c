@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.38 2004/07/11 23:32:11 dillo Exp $ */
+/* $NiH: system_main.c,v 1.39 2004/07/14 09:48:30 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -83,6 +83,7 @@ system_message(char *vaMessage, ...)
 void
 system_VBL(void)
 {
+    static int frameskip_counter = 0;
     static int frame_counter = 0;
     static long time_spent = 0;
     static int last_sec = 0;
@@ -91,8 +92,11 @@ system_VBL(void)
     int newsec;
 
     system_osd_display();
-    /* XXX: honour frame skip */
-    system_graphics_update();
+
+    if (++frameskip_counter == system_frameskip_key) {
+	system_graphics_update();
+	frameskip_counter = 0;
+    }
 
     system_input_update();
 

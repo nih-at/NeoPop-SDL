@@ -3,6 +3,11 @@
 
 #include "NeoPop-SDL.h"
 
+static const char *bool_name[] = {
+    "no", "yes",
+    "off", "on"
+};
+
 static const char *colour_name[] = {
     "greyscale",
     "colour",
@@ -12,11 +17,6 @@ static const char *colour_name[] = {
 static const char *lang_name[] = {
     "japanese",
     "english"
-};
-
-static const char *bool_name[] = {
-    "no", "yes",
-    "off", "on"
 };
 
 static const char *shift_name[] = {
@@ -202,6 +202,14 @@ system_npks_parse(const char *name, char **end)
 
 
 
+int
+system_rc_parse_comms_mode(const char *mode)
+{
+    return find_name(mode, NULL, comms_names, COMMS_LAST);
+}
+
+
+
 void
 system_rc_read(void)
 {
@@ -243,7 +251,7 @@ system_rc_read_file(const char *filename)
 	
 	switch (cmd) {
 	case -1:
-	    rc_error("unknown command [%s]", cmd);
+	    rc_error("unknown command [%s]", b);
 	    break;
 	    
 	case NPRC_COLOUR:
@@ -253,6 +261,26 @@ system_rc_read_file(const char *filename)
 		break;
 	    }
 	    system_colour = i;
+	    break;
+
+	case NPRC_COMMS_MODE:
+	    if ((i=find_name(p, &p, comms_names, COMMS_LAST)) == -1) {
+		rc_error("unknown comms mode [%s]", p);
+		break;
+	    }
+	    comms_mode = i;
+	    break;
+	    
+	case NPRC_COMMS_PORT:
+	    if ((i=rc_parse_int(p, &p, 1, 0xffff)) == INT_MIN)
+		break;
+	    comms_port = i;
+	    break;
+	    
+	case NPRC_COMMS_REMOTE:
+	    /* XXX: check for legal host name (syntax) */
+	    comms_host = strdup(p);
+	    p += strlen(p);
 	    break;
 
 	case NPRC_FRAMESKIP:

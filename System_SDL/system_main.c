@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.28 2004/06/23 00:06:13 dillo Exp $ */
+/* $NiH: system_main.c,v 1.29 2004/06/23 01:24:43 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2003 Thomas Klausner
@@ -49,7 +49,8 @@ usage(int exitcode)
 {
     printversion();
     printf("NeoGeo Pocket emulator\n\n"
-	   "Usage: %s [-cefghjMmSsv] [game]\n"
+	   "Usage: %s [-cefghjMmSsv] [-C mode] [-P port] [-R remove] [game]\n"
+	   "\t-C mode\tspecify comms mode (none, server, client; default: none)\n"
 	   "\t-c\t\tstart in colour mode (default: automatic)\n"
 	   "\t-e\t\temulate English language NeoGeo Pocket (default)\n"
 	   "\t-f count\tframeskip: show one in `count' frames (default: 1)\n"
@@ -59,6 +60,8 @@ usage(int exitcode)
 	   "\t-l state\tload start state from file `state'\n"
 	   "\t-M\t\tdo not use smoothed magnification modes\n"
 	   "\t-m\t\tuse smoothed magnification modes (default)\n"
+	   "\t-P port\tspecify port number to use for comms (default: 7846)\n"
+	   "\t-R host\tspecify host to connect to as comms client\n"
 	   "\t-S\t\tsilent mode\n"
 	   "\t-s\t\twith sound (default)\n"
 	   "\t-v\t\tshow version number\n", prg);
@@ -140,12 +143,24 @@ main(int argc, char *argv[])
     mute = FALSE;
     /* show every frame */
     system_frameskip_key = 1;
+    /* interlink defaults (port taken from System_Win32) */
+    comms_mode = COMMS_NONE;
+    comms_port = 7846;
+    comms_host = NULL;
 
     system_bindings_init();
     system_rc_read();
 
-    while ((ch=getopt(argc, argv, "cef:ghjl:MmSsV")) != -1) {
+    while ((ch=getopt(argc, argv, "C:cef:ghjl:MmP:R:SsV")) != -1) {
 	switch (ch) {
+	case 'C':
+	    i = system_rc_parse_comms_mode(optarg);
+	    if (i == -1) {
+		/* XXX: error message */
+	    }
+	    else
+		comms_mode = i;
+	    break;
 	case 'c':
 	    system_colour = COLOURMODE_COLOUR;
 	    break;
@@ -174,6 +189,19 @@ main(int argc, char *argv[])
 	    break;
 	case 'm':
 	    graphics_mag_smooth = 1;
+	    break;
+	case 'P':
+	    i = atoi(optarg);
+	    if (i == 0) {
+		/* XXX: error message */
+	    }
+	    else
+		comms_port = i;
+	    break;
+	case 'R':
+	    if (comms_host)
+		free(comms_host);
+	    comms_host = strdup(optarg);
 	    break;
 	case 'S':
 	    mute = TRUE;
@@ -220,6 +248,9 @@ main(int argc, char *argv[])
 	fprintf(stderr, "cannot turn on sound: %s\n", SDL_GetError());
 	mute = TRUE;
     }
+
+    if (comms_mode != COMMS_NONE)
+	system_comms_connect();
 
     /*
      * Throttle rate is number_of_ticks_per_second divided by number

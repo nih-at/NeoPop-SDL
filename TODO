@@ -2,6 +2,7 @@
 . pause game
 . reset game
 . turn sound off/on during game
-. comm support
+. test comm support
 . fix audio
 . gui
+. speedup

@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.5 2004/06/23 00:06:13 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.6 2004/06/23 01:24:42 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2003 Thomas Klausner
@@ -64,6 +64,9 @@ enum neopop_event {
 
 enum nprc {
     NPRC_COLOUR,
+    NPRC_COMMS_MODE,
+    NPRC_COMMS_PORT,
+    NPRC_COMMS_REMOTE,
     NPRC_FRAMESKIP,
     NPRC_FULLSCREEN,
     NPRC_LANGUAGE,
@@ -111,16 +114,33 @@ enum npks_shift {
 #define NPKS_JOY_HAT(n, i)	(NPKS_JOY(n)+NPKS_JOY_HAT_OFFSET+4*(i))
 #define NPKS_JOY_BUTTON(n, i)	(NPKS_JOY(n)+NPKS_JOY_BUTTON_OFFSET+(i))
 
-extern enum neopop_event bindings[];
-extern const char *npev_names[];
-extern const char *nprc_names[];
+enum comms_mode {
+    COMMS_NONE,
+    COMMS_SERVER,
+    COMMS_CLIENT,
 
+    COMMS_LAST
+};
+
+void system_bindings_init(void);
+
+BOOL system_comms_connect(void);
+void system_comms_pause(BOOL);
 
 void system_graphics_fullscreen_toggle(void);
 BOOL system_graphics_init(void);
 void system_graphics_update(void);
 
 void system_input_update(void);
+
+const char *system_npev_name(enum neopop_event);
+int system_npev_parse(const char *, char **);
+const char *system_npks_name(int);
+int system_npks_parse(const char *, char **);
+
+void system_rc_read(void);
+void system_rc_read_file(const char *);
+int system_rc_parse_comms_mode(const char *);
 
 void system_rom_changed(void);
 BOOL system_rom_load(char *);
@@ -141,13 +161,11 @@ void system_state_save(void);
 extern int do_exit;
 extern int graphics_mag_req;
 extern int graphics_mag_smooth;
+extern int comms_mode;
+extern int comms_port;
+extern char *comms_host;
 
-void system_bindings_init(void);
-
-void system_rc_read(void);
-void system_rc_read_file(const char *);
-
-const char *system_npev_name(enum neopop_event);
-int system_npev_parse(const char *, char **);
-const char *system_npks_name(int);
-int system_npks_parse(const char *, char **);
+extern enum neopop_event bindings[];
+extern const char *comms_names[];
+extern const char *npev_names[];
+extern const char *nprc_names[];

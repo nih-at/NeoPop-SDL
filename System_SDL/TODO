@@ -8,5 +8,4 @@
 . config file
 . comm support
 x cleanup:
- . SDL -> System_SDL
  . add license to all files

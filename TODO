@@ -1,7 +1,6 @@
 bugs:
 + update NEWS and ChangeLog
-+ screenshots should use make_file_name
-+ take a look at defaults for flash-dir, state-dir
++ take a look at defaults for flash-dir, state-dir, screenshot-dir
 + osd handling during pause sucks
 . get exactly one frame's worth of DAC data each frame
 . convert DAC sound ourselves (SDL is broken)

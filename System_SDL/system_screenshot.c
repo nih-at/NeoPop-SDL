@@ -1,4 +1,4 @@
-/* $NiH: system_screenshot.c,v 1.6 2003/10/20 12:57:44 wiz Exp $ */
+/* $NiH: system_screenshot.c,v 1.7 2004/07/14 10:15:38 dillo Exp $ */
 /*
   system_screenshot.c -- screenshot functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -28,43 +28,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static char *
-sanename(char *name)
-{
-    char sanename[100];
-    int start, end, span;
-
-    end = snprintf(sanename, sizeof(sanename), "%s", rom.name);
-    /* sanitize file name */
-    start = 0;
-    while (start < end) {
-	span = strspn(sanename+start, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		      "abcdefghijklmnopqrstuvwxyz0123456789-_");
-	start += span;
-	if (start < end) {
-	    sanename[start] = '_';
-	    start++;
-	}
-    };
-
-    return strdup(sanename);
-}
+char *screenshot_dir;
 
 static char *
 get_screenshot_name(const char *ext)
 {
     static int scount;
-    char name[100], *romname;
+    char *name;
     struct stat sb;
 
-    if ((romname=sanename(rom.name)) == NULL)
-	return NULL;
-
     do {
-	snprintf(name, sizeof(name), "NeoPop-%s%03d.%s", romname,
-		 scount, ext);
+	name = system_make_file_name(screenshot_dir, ext, 1);
 	if (stat(name, &sb) == -1 && errno == ENOENT)
-	    return strdup(name);
+	    return name;
+	free(name);
 	scount++;
     } while (scount < 1000);
 

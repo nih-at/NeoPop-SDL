@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.42 2004/07/22 09:38:42 dillo Exp $ */
+/* $NiH: system_main.c,v 1.43 2004/07/22 10:11:16 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -199,14 +199,15 @@ main(int argc, char *argv[])
     use_yuv = DEFAULT_YUV;
     use_software_yuv = 0;
     /* directories for save files */
-    flash_dir = "~/.neopop";
-    state_dir = ".";
+    flash_dir = strdup("~/.neopop");
+    screenshot_dir = strdup(".");
+    state_dir = strdup(".");
     /* use rom name rather than file name for save files */
     use_rom_name = FALSE;
     /* state save slot */
     state_slot = 0;
 
-    /* initialize SDL and create standard-sized surface */
+    /* initialize SDL */
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0) {
        fprintf(stderr, "cannot initialize SDL: %s\n", SDL_GetError());
        exit(1);

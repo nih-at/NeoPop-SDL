@@ -1,4 +1,4 @@
-/* $NiH: system_io.c,v 1.11 2004/07/10 02:39:35 dillo Exp $ */
+/* $NiH: system_io.c,v 1.12 2004/07/10 14:13:51 dillo Exp $ */
 /*
   system_io.c -- read/write flash files 
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -31,9 +31,6 @@ char *state_dir;
 char *flash_dir;
 int use_rom_name;
 int state_slot;
-
-static char *make_file_name(const char *, const char *, int);
-
 
 static BOOL
 read_file_to_buffer(char *filename, _u8 *buffer, _u32 len)
@@ -126,7 +123,7 @@ system_state_load(void)
     char *fn, ext[4];
 
     sprintf(ext, "ng%c", (state_slot ? state_slot+'0' : 's'));
-    if ((fn=make_file_name(state_dir, ext, FALSE)) == NULL)
+    if ((fn=system_make_file_name(state_dir, ext, FALSE)) == NULL)
 	return;
     state_restore(fn);
     free(fn);
@@ -140,7 +137,7 @@ system_state_save(void)
     char *fn, ext[4];
 
     sprintf(ext, "ng%c", (state_slot ? state_slot+'0' : 's'));
-    if ((fn=make_file_name(state_dir, ext, TRUE)) == NULL)
+    if ((fn=system_make_file_name(state_dir, ext, TRUE)) == NULL)
 	return;
     state_store(fn);
     free(fn);
@@ -160,7 +157,7 @@ system_io_flash_read(_u8* buffer, _u32 len)
     char *fn;
     int ret;
 
-    if ((fn=make_file_name(flash_dir, "ngf", FALSE)) == NULL)
+    if ((fn=system_make_file_name(flash_dir, "ngf", FALSE)) == NULL)
 	return FALSE;
     ret = read_file_to_buffer(fn, buffer, len);
     free(fn);
@@ -173,7 +170,7 @@ system_io_flash_write(_u8* buffer, _u32 len)
     char *fn;
     int ret;
 
-    if ((fn=make_file_name(flash_dir, "ngf", TRUE)) == NULL)
+    if ((fn=system_make_file_name(flash_dir, "ngf", TRUE)) == NULL)
 	return FALSE;
     ret = write_file_from_buffer(fn, buffer, len);
     free(fn);
@@ -192,8 +189,8 @@ system_io_state_write(char *filename, _u8 *buffer, _u32 len)
     return write_file_from_buffer(filename, buffer, len);
 }
 
-static char *
-make_file_name(const char *dir, const char *ext, int writing)
+char *
+system_make_file_name(const char *dir, const char *ext, int writing)
 {
     char *fname, *name, *home, *p;
     int len;
@@ -223,6 +220,7 @@ make_file_name(const char *dir, const char *ext, int writing)
     if (writing && !validate_dir(fname))
 	return NULL;
 
+    /* XXX: maybe replace all but [-_A-Za-z0-9] */
     p = fname+strlen(fname);
     sprintf(p, "/%s.%s", name, ext);
     while (*(++p))

@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.17 2004/07/21 10:00:33 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.18 2004/07/22 09:38:41 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -79,6 +79,7 @@ enum nprc {
     NPRC_MAGNIFY,
     NPRC_MAP,
     NPRC_SAMPLERATE,
+    NPRC_SCREENSHOT_DIR,
     NPRC_SMOOTH,
     NPRC_STATE_DIR,
     NPRC_SOUND,
@@ -164,6 +165,8 @@ void system_graphics_update(void);
 
 void system_input_update(void);
 
+char *system_make_file_name(const char *, const char *, int);
+
 void system_osd(const char *, ...);
 void system_osd_display(void);
 int system_osd_init(void);
@@ -210,6 +213,7 @@ extern int use_yuv;
 extern int use_software_yuv;
 extern char *state_dir;
 extern char *flash_dir;
+extern char *screenshot_dir;
 extern int use_rom_name;
 extern int state_slot;
 

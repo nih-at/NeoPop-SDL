@@ -1,4 +1,4 @@
-/* $NiH: system_rc.c,v 1.9 2004/07/14 22:11:57 dillo Exp $ */
+/* $NiH: system_rc.c,v 1.10 2004/07/22 09:38:42 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -317,6 +317,7 @@ system_rc_read_file(const char *filename)
 
 	case NPRC_FLASH_DIR:
 	    p += strspn(p, " \t");
+	    free(flash_dir);
 	    flash_dir = strdup(p);
 	    p += strlen(p);
 	    break;
@@ -372,6 +373,13 @@ system_rc_read_file(const char *filename)
 	    }
 	    break;
 	    
+	case NPRC_SCREENSHOT_DIR:
+	    p += strspn(p, " \t");
+	    free(screenshot_dir);
+	    screenshot_dir = strdup(p);
+	    p += strlen(p);
+	    break;
+
 	case NPRC_SMOOTH:
 	    if ((i=rc_parse_boolean(p, &p)) == -1)
 		break;
@@ -392,6 +400,7 @@ system_rc_read_file(const char *filename)
 
 	case NPRC_STATE_DIR:
 	    p += strspn(p, " \t");
+	    free(state_dir);
 	    state_dir = strdup(p);
 	    p += strlen(p);
 	    break;

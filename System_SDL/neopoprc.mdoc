@@ -1,4 +1,4 @@
-.\" $NiH: neopoprc.mdoc,v 1.3 2004/07/22 01:44:38 wiz Exp $
+.\" $NiH: neopoprc.mdoc,v 1.4 2004/07/22 01:49:02 wiz Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -147,6 +147,13 @@ section below.
 .Bq int
 Sample rate at which to play audio.
 Defaults to 44100.
+.It Dv screenshot-dir
+.Bq string
+Path to directory in which to store screenshots.
+Defaults to
+.Dq Pa \&. .
+If only the last path component does not exist, the directory
+is created automatically.
 .It Dv smooth
 .Bq boolean
 Smooth display when magnified.

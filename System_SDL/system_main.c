@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.40 2004/07/21 10:10:40 dillo Exp $ */
+/* $NiH: system_main.c,v 1.41 2004/07/22 00:35:32 wiz Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -64,7 +64,8 @@ usage(int exitcode)
 	   "\t-R host\t\tspecify host to connect to as comms client\n"
 	   "\t-S\t\tsilent mode\n"
 	   "\t-s\t\twith sound (default)\n"
-	   "\t-v\t\tshow version number\n", prg);
+	   "\t-v\t\tshow version number\n"
+	   "\t-y mode\t\tspecify for which modes to use YUV\n", prg);
 
     exit(exitcode);
 }
@@ -215,7 +216,7 @@ main(int argc, char *argv[])
     system_bindings_init();
     system_rc_read();
 
-    while ((ch=getopt(argc, argv, "C:cef:ghjl:MmP:R:SsV")) != -1) {
+    while ((ch=getopt(argc, argv, "C:cef:ghjl:MmP:R:SsVy:")) != -1) {
 	switch (ch) {
 	case 'C':
 	    i = system_rc_parse_comms_mode(optarg);
@@ -276,6 +277,14 @@ main(int argc, char *argv[])
 	case 'V':
 	    printversion();
 	    exit(0);
+	    break;
+	case 'y':
+	    i = system_rc_parse_yuv(optarg);
+	    if (i == -1) {
+		/* XXX: error message */
+	    }
+	    else
+		use_yuv = i;
 	    break;
 	default:
 	    usage(1);

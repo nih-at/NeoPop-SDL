@@ -1,4 +1,4 @@
-/* $NiH: system_rc.c,v 1.8 2004/07/14 09:48:30 dillo Exp $ */
+/* $NiH: system_rc.c,v 1.9 2004/07/14 22:11:57 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -229,6 +229,14 @@ int
 system_rc_parse_comms_mode(const char *mode)
 {
     return find_name(mode, NULL, comms_names, COMMS_LAST);
+}
+
+
+
+int
+system_rc_parse_yuv(const char *mode)
+{
+    return find_name(mode, NULL, yuv_names, YUV_LAST);
 }
 
 

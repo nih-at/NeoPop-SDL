@@ -1,4 +1,4 @@
-.\" $NiH: NeoPop-SDL.mdoc,v 1.13 2004/07/22 00:45:21 wiz Exp $
+.\" $NiH: NeoPop-SDL.mdoc,v 1.14 2004/07/22 01:44:38 wiz Exp $
 .\"
 .\" Copyright (c) 2003, 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -42,6 +42,7 @@
 .Op Fl l Ar state
 .Op Fl P Ar port
 .Op Fl R Ar host
+.Op Fl y Ar mode
 .Ar filename
 .Sh DESCRIPTION
 .Nm
@@ -131,6 +132,13 @@ See also
 .Fl S .
 .It Fl V
 Display the version number.
+.It Fl y Ar mode
+Specify when to use YUV overlay, can be one of
+.Dv never , fullscreen , magnified ,
+or
+.Dv always .
+Default is
+.Dv magnified .
 .El
 .Ar filename
 should obviously be a NeoGeo Pocket ROM file, unzipped or zipped.

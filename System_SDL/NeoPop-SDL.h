@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.16 2004/07/21 09:34:26 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.17 2004/07/21 10:00:33 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -176,6 +176,7 @@ int system_npks_parse(const char *, char **);
 void system_rc_read(void);
 void system_rc_read_file(const char *);
 int system_rc_parse_comms_mode(const char *);
+int system_rc_parse_yuv(const char *);
 
 void system_rom_changed(void);
 BOOL system_rom_load(char *);

@@ -1,0 +1,148 @@
+------------------------------------------------------
+System_Win32\docs\changelog.txt
+------------------------------------------------------
+Alterations made to the Win32 version.
+------------------------------------------------------
+
+03 AUG 2002 - neopop_uk
+=======================
+- Removed the debugger executable from the binary release.
+- Moved 'mute' into the common code.
+
+04 AUG 2002 - neopop_uk
+=======================
+- Removed the header links between the system and core code. These
+	linked sections are now unified in 'neopop.h'
+
+06 AUG 2002 - neopop_uk
+=======================================
+- Optimised the graphics update, adding 6% more speed on my machine.
+- Removed "system_graphics_clear" as it's surplus.
+
+08 AUG 2002 - neopop_uk
+=======================================
+- Used performance timers for greater accuracy, 
+	and made the caption only update every second for speed.
+
+- I've analysed the sound-chip wave-form an it have the same bad effects
+	as when NeoPop plays it back. This proves that the problems definitely
+	lie in the DirectSound code, and the buffering method i've used.
+
+- I finally think i've fixed the sound buffering, my mistake was to
+	use a static block length, rather than a dynamic one. This was causing
+	the sound play and write cursors to get too close causing corruption.
+
+09 AUG 2002 - neopop_uk
+=======================================
+- Fixed the problem that was causing incorrect menus to be disabled when
+	loading from the command line. Added new function to system_main.c 
+	called: windows_load_rom which acts as a wrapper for system_load_rom
+	with the extra menu manipulation added too.
+
+- 11 and 22 khz sound don't work very well with the smaller sound buffer,
+	I have decided to remove the sound frequency options and lock it to 44khz.
+
+- Added an MRU list to the Game menu. Quite simple - but I hope it doesn't
+	leak all over the place!
+
+10 AUG 2002 - neopop_uk
+=======================================
+- MRU access from the menu moves the item up the list. This allows it to
+	maintain an MRU list ordered by time.
+
+11 AUG 2002 - neopop_uk
+=======================================
+- Added support for multiple joysticks.
+
+16 AUG 2002 - neopop_uk
+=======================================
+- Changed the MRU code again. It should ALWAYS be sorted now...
+
+17 AUG 2002 - neopop_uk
+=======================================
+- Added Win32 version number to the 'about' dialog box.
+- Moved default configuration to a seperate function (good idea Caz!).
+
+18 AUG 2002 - neopop_uk
+=======================================
+- Added language packs for patching of the menu items, strings and dialogs.
+
+22 AUG 2002 - neopop_uk
+=======================================
+- Fixed language patching of dialogs.
+- Changed file format to make it easier.
+
+27 AUG 2002 - neopop_uk
+=======================================
+- Added full-screen / windowed modes, use Alt-Enter to switch.
+- Made optimisations to both graphics update methods.
+- Added popup menu for recent files.
+
+28 AUG 2002 - neopop_uk
+=======================================
+- Added link-up support! mostly contained in the 'system_comms' files.
+
+30 AUG 2002 - neopop_uk
+=======================================
+- Fixed switching from full-screen mode to windowed leaving the window
+in an 'always on-top' state.
+
+04 SEP 2002 - neopop_uk
+=======================================
+- In an effort to make the debugger easier to use, i've simplified the
+dialog (and the code behind it) - and added a new breakpoints view. This
+will allow easier expansion for multiple breakpoints and for other more
+complex functionality.
+
+- Added "run to address" mode using a special, restricted breakpoint.
+
+05 SEP 2002 - neopop_uk
+=======================================
+- Added "jump to address" which sets the TLCS-900h PC to the address.
+
+- Finished off the debugger "watch" window. The only thing that remains
+is the save and load feature.
+
+06 SEP 2002 - neopop_uk
+=======================================
+- Fixed a bug with translating file selector filters, the windows filter
+information appended to the language section wasn't being added correctly.
+
+- Added the implementation of the new comms function 'system_comms_poll'.
+
+################ 1.05 RELEASE ##################
+
+08 SEP 2002 - neopop_uk
+=======================================
+- Made windowed mode window height 1 pixel shorter, this was a throwback
+from something else I was fiddling with and forgot to fix.
+
+- Added some more translations to various areas.
+
+09 SEP 2002 - neopop_uk
+=======================================
+- Added loads of stuff to do with the misc. dialog. 
+- Added adaptoid d-pad support.
+- Added a new document for direct sound, in the docs folder.
+
+10 SEP 2002 - neopop_uk
+=======================================
+- Put frameskipping back in again.
+
+- I've made sound emulation more consistant, the sound chips are only
+reset when the system is, not when the sound buffers are cleared. This
+makes long-term sounds (like drum patterns) remain, even over a saved state.
+
+- Added full screen width stretching in full-screen mode.
+
+################ 1.06 RELEASE ##################
+
+
+
+
+
+
+
+
+
+

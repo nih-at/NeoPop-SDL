@@ -1,0 +1,79 @@
+
+Possibly useful direct sound information
+========================================
+
+(For reference, this data was compiled using an SB Live 1024
+on Windows 98 / DirectX 8.1, latest drivers, etc.)
+
+
+W = Write Cursor
+P = Play Cursor
+L = Last Write Cursor (from previous frame)
+
+W-P = Write - Play = Number of bytes ahead of play cursor
+W-L = Write - Last = Number of bytes ahead of last write cursor (bytes / frame)
+
+(I use ~ to mean "approximately equal", value has been rounded.)
+
+
+Chip Buffer
+===========
+
+Frequency = 44100hz, 16bit
+Channels = 2 (mono track is written to both channels, 
+this is because mono caused pops and clicks for some reason.)
+
+Rate = 176400 bytes / sec.
+Buffer Length = 35280 (= 0.2s at this speed)
+
+
+W-P		W-L
+
+3436	3204
+3436	2824
+3436	3076
+3436	3204
+3436	3032
+
+		3068 (avg)
+
+(W-P / Rate) ~ 19.5ms
+
+(W-L / Rate) ~ 17.4ms 
+             
+
+DAC Buffer
+==========
+
+Frequency = 8000hz, 8bit
+Channels = 1
+
+Rate = 8000 bytes / sec.
+Buffer Length = 3200 (= 0.4s at this speed)
+
+
+W-P		W-L
+
+156		131
+156		122
+156		134
+156		152
+156		135
+
+		135 (avg)
+
+(W-P / Rate) = 19.5ms
+
+(W-L / Rate) ~ 16.9ms
+			 
+
+================
+
+In conclusion is seems that DirectSound's write cursor is
+always about 19.5ms ahead of the play cursor, at whatever
+sample rate. The constant byte offset can easily be calculated:
+
+offset' = SampleRate * BytesPerSample * 0.0195
+
+offset = offset' - (offset' % BytesPerSample)
+

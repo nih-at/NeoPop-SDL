@@ -1,0 +1,801 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.K.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Game"
+    BEGIN
+        MENUITEM "Load Rom...\tF1",             ID_GAME_LOADROM
+        POPUP "Recent"
+        BEGIN
+            MENUITEM "MRU1",                        ID_GAME_MRU1
+            MENUITEM "MRU2",                        ID_GAME_MRU2
+            MENUITEM "MRU3",                        ID_GAME_MRU3
+            MENUITEM "MRU4",                        ID_GAME_MRU4
+            MENUITEM "MRU5",                        ID_GAME_MRU5
+            MENUITEM "MRU6",                        ID_GAME_MRU6
+            MENUITEM "MRU7",                        ID_GAME_MRU7
+            MENUITEM "MRU8",                        ID_GAME_MRU8
+            MENUITEM SEPARATOR
+            MENUITEM "Clear List",                  ID_GAME_RESETMRU
+        END
+        MENUITEM "Unload Rom",                  ID_GAME_UNLOADROM
+        MENUITEM SEPARATOR
+        MENUITEM "Reset\tF3",                   ID_GAME_RESET
+        MENUITEM "Pause\tPause",                ID_GAME_PAUSE, CHECKED
+        MENUITEM SEPARATOR
+        MENUITEM "Save State...\tF6",           ID_GAME_SAVESTATE
+        MENUITEM "Load State...\tF9",           ID_GAME_LOADSTATE
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",                        ID_GAME_EXIT
+    END
+    POPUP "Options"
+    BEGIN
+        POPUP "System Type"
+        BEGIN
+            MENUITEM "NeoGeo Pocket",               ID_OPTIONS_DISPLAYTYPE_GREYSCALE
+
+            MENUITEM "NeoGeo Pocket Colour",        ID_OPTIONS_DISPLAYTYPE_COLOUR
+            , CHECKED
+            MENUITEM SEPARATOR
+            MENUITEM "Auto Detect",                 ID_OPTIONS_DISPLAYTYPE_AUTO
+
+        END
+        POPUP "System Language"
+        BEGIN
+            MENUITEM "English",                     ID_OPTIONS_LANGUAGE_ENGLISH
+            , CHECKED
+            MENUITEM "Japanese",                    ID_OPTIONS_LANGUAGE_JAPANESE
+
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Controls...",                 ID_OPTIONS_CONTROLS
+        MENUITEM "Paths...",                    ID_OPTIONS_PATHS
+        MENUITEM "Misc. Options...",            ID_OPTIONS_MISC
+        MENUITEM SEPARATOR
+        MENUITEM "Fullscreen\tEsc",             ID_OPTIONS_FULLSCREEN
+        POPUP "Window Size"
+        BEGIN
+            MENUITEM "Zoom x1",                     ID_OPTIONS_ZOOMX1
+            MENUITEM "Zoom x2",                     ID_OPTIONS_ZOOMX2
+            MENUITEM "Zoom x3",                     ID_OPTIONS_ZOOMX3
+            MENUITEM "Zoom x4",                     ID_OPTIONS_ZOOMX4
+        END
+        POPUP "Frameskip"
+        BEGIN
+            MENUITEM "FS0: Show all frames",        ID_FRAMESKIP_FS0
+            MENUITEM SEPARATOR
+            MENUITEM "FS1: 1 in 2 frames shown",    ID_FRAMESKIP_FS1
+            MENUITEM "FS2: 1 in 3 frames shown",    ID_FRAMESKIP_FS2
+            MENUITEM "FS3: 1 in 4 frames shown",    ID_FRAMESKIP_FS3
+            MENUITEM "FS4: 1 in 5 frames shown",    ID_FRAMESKIP_FS4
+            MENUITEM "FS5: 1 in 6 frames shown",    ID_FRAMESKIP_FS5
+            MENUITEM "FS6: 1 in 7 frames shown",    ID_FRAMESKIP_FS6
+            MENUITEM SEPARATOR
+            MENUITEM "Decrease Frameskip\tF11",     ID_FRAMESKIP_LESS
+            MENUITEM "Increase Frameskip\tF12",     ID_FRAMESKIP_MORE
+        END
+        MENUITEM "Mute\tF8",                    ID_OPTIONS_MUTE, CHECKED
+        MENUITEM SEPARATOR
+        MENUITEM "Link-up...",                  ID_OPTIONS_CONNECT
+    END
+    POPUP "Help"
+    BEGIN
+        MENUITEM "Default",                     ID_HELP_LANGUAGE, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "About NeoPop...",             ID_HELP_ABOUTNEOPOP
+    END
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON                ICON    DISCARDABLE     "icon.ico"
+IDI_GO                  ICON    DISCARDABLE     "go.ico"
+IDI_STOP                ICON    DISCARDABLE     "stop.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CONTROLS DIALOG DISCARDABLE  0, 0, 277, 166
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "NeoPop - Controls"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,5,115,65,15
+    PUSHBUTTON      "Default",IDDEFAULT,5,135,65,15
+    COMBOBOX        IDC_COMBOJOY,10,15,135,55,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOU,45,50,60,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOL,15,70,60,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOR,80,70,60,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOD,45,90,60,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOO,160,15,65,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOKO,160,30,65,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOB,160,65,65,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOKB,160,80,65,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOA,160,115,65,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBOKA,160,130,65,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "AutoFire - A",IDC_CHECKA,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,80,120,65,10
+    CONTROL         "AutoFire - B",IDC_CHECKB,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,80,135,65,10
+    CTEXT           "Button",IDC_BUTTONLABEL1,230,17,35,10
+    CTEXT           "Key",IDC_KEYLABEL1,230,32,35,10
+    GROUPBOX        "Option",IDC_OPTION,155,5,115,45
+    GROUPBOX        "Button A",IDC_BUTTONA,155,105,115,45
+    CTEXT           "Button",IDC_BUTTONLABEL3,230,117,35,10
+    CTEXT           "Key",IDC_KEYLABEL3,230,132,35,10
+    CTEXT           "Button",IDC_BUTTONLABEL2,230,67,35,10
+    CTEXT           "Key",IDC_KEYLABEL2,230,82,35,10
+    GROUPBOX        "Button B",IDC_BUTTONB,155,55,115,45
+    GROUPBOX        "D-Pad (Keyboard)",IDC_DPAD,5,35,145,75
+    GROUPBOX        "Select Joystick",IDC_SELECT_JOYSTICK,5,5,145,28
+    CONTROL         "Control with the N64 D-Pad using an adaptoid.",
+                    IDC_ADAPTOID,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,80,
+                    150,190,15
+END
+
+IDD_ABOUT DIALOG DISCARDABLE  0, 0, 180, 161
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "NeoPop - About"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,50,65,80,14
+    CTEXT           "%NEOPOP_VERSION%",IDC_VERSION,10,40,160,10
+    LTEXT           "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;",
+                    IDC_STATIC,5,95,170,34
+    LTEXT           "either version 2 of the License, or (at your option) any later version. See also the license.txt file for additional informations.",
+                    IDC_STATIC,5,130,170,25
+    CTEXT           "by neopop_uk",IDC_STATIC,10,25,160,10
+    CTEXT           "NeoPop - Emulator as in Dream-Land",IDC_STATIC,10,15,
+                    160,10
+    GROUPBOX        "",IDC_STATIC,5,5,170,80
+    CTEXT           "%NEOPOP_WIN32_VERSION%",IDC_WIN32VERSION,10,50,160,10
+END
+
+IDD_DEBUG DIALOGEX 0, 0, 251, 278
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "Debugger - NeoPop"
+FONT 8, "Courier New"
+BEGIN
+    PUSHBUTTON      "Go",IDC_GO,5,125,16,16,BS_ICON
+    PUSHBUTTON      "",IDC_STOP,25,125,16,16,BS_ICON
+    PUSHBUTTON      "Memory",IDC_MEMVIEW,110,210,60,10,BS_FLAT | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Registers",IDC_REGVIEW,110,195,60,10,BS_FLAT | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Disassemble",IDC_DISASSEMBLE,190,150,50,12,NOT 
+                    WS_TABSTOP
+    EDITTEXT        IDC_EDIT,145,150,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    GROUPBOX        "",IDC_STATIC,100,140,145,28
+    PUSHBUTTON      "Clear Msgs.",IDC_CLEAR,190,125,55,15,NOT WS_TABSTOP
+    CTEXT           "Stopped",IDC_STATUS,45,125,50,16,SS_CENTERIMAGE,
+                    WS_EX_STATICEDGE
+    PUSHBUTTON      "Code",IDC_CODEVIEW,110,180,60,10,BS_FLAT | NOT 
+                    WS_TABSTOP
+    LISTBOX         IDC_LIST,0,5,250,113,LBS_NOINTEGRALHEIGHT | 
+                    LBS_DISABLENOSCROLL | LBS_NOSEL | NOT WS_BORDER | 
+                    WS_VSCROLL
+    GROUPBOX        "Message Filters",IDC_STATIC,100,230,145,45
+    CONTROL         "Sound Output",IDC_CHECK_SOUND,"Button",BS_AUTOCHECKBOX,
+                    105,262,60,10
+    CONTROL         "Bios Calls",IDC_CHECK_BIOS,"Button",BS_AUTOCHECKBOX,105,
+                    251,55,10
+    CONTROL         "DMA Access",IDC_CHECK_DMA,"Button",BS_AUTOCHECKBOX,175,
+                    240,55,10
+    CONTROL         "Memory Errors",IDC_CHECK_MEM,"Button",BS_AUTOCHECKBOX,
+                    105,240,65,10
+    PUSHBUTTON      "Step",IDC_STEP,10,160,80,10,NOT WS_TABSTOP
+    PUSHBUTTON      "Z80 Regs.",IDC_Z80REGVIEW,175,195,60,10,BS_FLAT | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Step (Only Z80)",IDC_STEP_Z80,10,205,80,10,NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Save Msgs.",IDC_SAVE,130,125,55,15
+    PUSHBUTTON      "Step + Dis. Both",IDC_STEP_BOTH,10,190,80,10,NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Go + Disassemble",IDC_GO_DIS,10,175,80,10,NOT 
+                    WS_TABSTOP
+    CONTROL         "Comms. Output",IDC_CHECK_COMMS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,175,251,65,10
+    PUSHBUTTON      "Breakpoints",IDC_BREAKVIEW,175,180,60,10,BS_FLAT | NOT 
+                    WS_TABSTOP
+    GROUPBOX        "Views",IDC_STATIC,100,170,145,55
+    LTEXT           "ADDRESS:",IDC_STATIC,108,150,35,12,SS_CENTERIMAGE
+    PUSHBUTTON      "Run to Address",IDC_RUNTOADDRESS,10,220,80,10
+    GROUPBOX        "Actions",IDC_STATIC,5,145,90,130
+    PUSHBUTTON      "Jump to Address",IDC_JUMPTOADDRESS,10,235,80,10
+    PUSHBUTTON      "Watch",IDC_WATCHVIEW,175,210,60,10,BS_FLAT | NOT 
+                    WS_TABSTOP
+END
+
+IDD_REGVIEW DIALOG DISCARDABLE  0, 0, 283, 148
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "TLCS-900h Registers - NeoPop"
+FONT 8, "Courier New"
+BEGIN
+    PUSHBUTTON      "Apply",IDC_APPLY,160,125,40,15
+    EDITTEXT        IDC_GPR_0_XWA,25,10,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_0_XBC,25,26,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_0_XDE,25,41,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_0_XHL,25,55,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_1_XWA,94,10,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_1_XBC,94,26,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_1_XDE,94,41,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_1_XHL,94,55,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_2_XWA,165,10,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_2_XBC,165,26,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_2_XDE,165,41,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_2_XHL,165,55,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_3_XWA,235,10,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_3_XBC,235,26,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_3_XDE,235,41,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_3_XHL,235,55,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_XIX,25,85,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_XIY,25,100,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_XIZ,25,115,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_GPR_XSP,25,130,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_PC,100,120,40,12,ES_UPPERCASE | ES_AUTOHSCROLL | NOT 
+                    WS_TABSTOP
+    PUSHBUTTON      "Z",IDC_CHANGE_Z,180,100,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "H",IDC_CHANGE_H,195,100,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "V",IDC_CHANGE_V,210,100,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "N",IDC_CHANGE_N,225,100,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "C",IDC_CHANGE_C,240,100,10,10,BS_FLAT | NOT WS_TABSTOP
+    GROUPBOX        "Flags",IDC_STATIC,160,75,95,45
+    RTEXT           "PC",IDC_STATIC,85,120,10,10,SS_CENTERIMAGE
+    RTEXT           "SR",IDC_STATIC,165,85,10,10,SS_CENTERIMAGE
+    CTEXT           "0000",IDC_SR,180,85,20,10,SS_SUNKEN
+    CTEXT           "flags",IDC_FLAGS,205,85,40,10,SS_SUNKEN
+    RTEXT           "XWA",IDC_STATIC,10,10,13,10,SS_CENTERIMAGE
+    RTEXT           "XBC",IDC_STATIC,10,26,13,10,SS_CENTERIMAGE
+    RTEXT           "XDE",IDC_STATIC,10,41,13,10,SS_CENTERIMAGE
+    RTEXT           "XHL",IDC_STATIC,10,55,13,10,SS_CENTERIMAGE
+    GROUPBOX        "Bank 0",IDC_STATIC,5,0,65,70
+    RTEXT           "XWA",IDC_STATIC,80,10,13,10,SS_CENTERIMAGE
+    RTEXT           "XBC",IDC_STATIC,80,26,13,10,SS_CENTERIMAGE
+    RTEXT           "XDE",IDC_STATIC,80,41,13,10,SS_CENTERIMAGE
+    RTEXT           "XHL",IDC_STATIC,80,55,13,10,SS_CENTERIMAGE
+    GROUPBOX        "Bank 1",IDC_STATIC,75,0,65,70
+    RTEXT           "RFP / Bank",IDC_STATIC,85,85,40,10,SS_CENTERIMAGE
+    CTEXT           "0",IDC_RFP,130,85,15,10,SS_SUNKEN
+    RTEXT           "IFF / Mask",IDC_STATIC,85,100,40,10,SS_CENTERIMAGE
+    CTEXT           "0",IDC_IFF,130,100,15,10,SS_SUNKEN
+    PUSHBUTTON      "S",IDC_CHANGE_S,165,100,10,10,BS_FLAT | NOT WS_TABSTOP
+    CTEXT           "(Click to toggle)",IDC_STATIC,165,110,85,8
+    RTEXT           "XWA",IDC_STATIC,150,10,13,10,SS_CENTERIMAGE
+    RTEXT           "XBC",IDC_STATIC,150,26,13,10,SS_CENTERIMAGE
+    RTEXT           "XDE",IDC_STATIC,150,41,13,10,SS_CENTERIMAGE
+    RTEXT           "XHL",IDC_STATIC,150,55,13,10,SS_CENTERIMAGE
+    GROUPBOX        "Bank 2",IDC_STATIC,145,0,65,70
+    RTEXT           "XWA",IDC_STATIC,220,10,13,10,SS_CENTERIMAGE
+    RTEXT           "XBC",IDC_STATIC,220,26,13,10,SS_CENTERIMAGE
+    RTEXT           "XDE",IDC_STATIC,220,41,13,10,SS_CENTERIMAGE
+    RTEXT           "XHL",IDC_STATIC,220,55,13,10,SS_CENTERIMAGE
+    GROUPBOX        "Bank 3",IDC_STATIC,215,0,65,70
+    RTEXT           "XIX",IDC_STATIC,10,85,13,10,SS_CENTERIMAGE
+    RTEXT           "XIY",IDC_STATIC,10,100,13,10,SS_CENTERIMAGE
+    RTEXT           "XIZ",IDC_STATIC,10,115,13,10,SS_CENTERIMAGE
+    RTEXT           "XSP",IDC_STATIC,10,130,13,10,SS_CENTERIMAGE
+    GROUPBOX        "GPR",IDC_STATIC,5,75,65,70
+    GROUPBOX        "Others",IDC_STATIC,80,75,70,65
+END
+
+IDD_MEMVIEW DIALOG DISCARDABLE  0, 0, 379, 268
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "Memory - NeoPop"
+FONT 8, "Courier New"
+BEGIN
+    EDITTEXT        IDC_EDIT,10,15,40,12,ES_UPPERCASE | ES_AUTOHSCROLL
+    PUSHBUTTON      "<",IDC_UP,10,30,10,10
+    PUSHBUTTON      "Set",IDC_SET,20,30,20,10
+    PUSHBUTTON      ">",IDC_DOWN,40,30,10,10
+    PUSHBUTTON      "0x0000",IDC_0000,5,50,50,15
+    PUSHBUTTON      "0x4000",IDC_4000,5,70,50,15
+    PUSHBUTTON      "0x6F00",IDC_6F00,5,90,50,15
+    PUSHBUTTON      "0x7000",IDC_7000,5,110,50,15
+    PUSHBUTTON      "0x8000",IDC_8000,5,130,50,15
+    PUSHBUTTON      "0x200000",IDC_ROM,5,150,50,15
+    EDITTEXT        IDC_ADDRESS,10,210,40,12,ES_UPPERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_DATA,35,225,13,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Apply",IDC_SETDATA,10,240,40,15
+    GROUPBOX        "Address",IDC_STATIC,5,5,50,40
+    LISTBOX         IDC_LIST,60,5,315,260,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | 
+                    NOT WS_BORDER | WS_TABSTOP
+    GROUPBOX        "Alter",IDC_STATIC,5,200,50,60
+    RTEXT           "byte",IDC_STATIC,10,227,20,10
+END
+
+IDD_CODEVIEW DIALOG DISCARDABLE  0, 0, 263, 183
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "Code Viewer - NeoPop"
+FONT 8, "Courier New"
+BEGIN
+    CONTROL         "TLCS-900h",IDC_CODE_TLCS900h,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP,150,170,50,7
+    CONTROL         "Z80",IDC_CODE_Z80,"Button",BS_AUTORADIOBUTTON,205,170,
+                    50,7
+    LISTBOX         IDC_AUTO,10,100,245,66,LBS_NOINTEGRALHEIGHT | 
+                    LBS_DISABLENOSCROLL | LBS_NOSEL | NOT WS_BORDER | 
+                    WS_VSCROLL
+    GROUPBOX        "Auto Disassemble (Click to Set Address)",-1,5,90,255,90
+    LISTBOX         IDC_HISTORY,10,15,245,66,LBS_USETABSTOPS | 
+                    LBS_NOINTEGRALHEIGHT | LBS_DISABLENOSCROLL | LBS_NOSEL | 
+                    NOT WS_BORDER | WS_VSCROLL
+    GROUPBOX        "TLCS-900h Instruction History (Click to Set Address)",
+                    -1,5,5,255,80
+END
+
+IDD_PATHS DIALOG DISCARDABLE  0, 0, 207, 151
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "NeoPop - Paths"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,90,130,50,15
+    PUSHBUTTON      "Cancel",IDCANCEL,145,130,50,15
+    EDITTEXT        IDC_PATH_FLASH,10,105,130,12,ES_AUTOHSCROLL
+    GROUPBOX        "Flash Memory Path",IDC_FLASHPATH,5,95,195,28
+    PUSHBUTTON      "Browse...",IDC_BROWSE_FLASH,145,105,50,12
+    EDITTEXT        IDC_PATH_ROM,10,15,185,12,ES_AUTOHSCROLL
+    GROUPBOX        "Rom Path",IDC_ROMPATH,5,5,195,40
+    PUSHBUTTON      "Browse...",IDC_BROWSE_ROM,145,30,50,12
+    EDITTEXT        IDC_PATH_STATE,10,60,185,12,ES_AUTOHSCROLL
+    GROUPBOX        "Saved States Path",IDC_STATEPATH,5,50,195,40
+    PUSHBUTTON      "Browse...",IDC_BROWSE_STATE,145,75,50,12
+    CONTROL         "Update with the last selected path?",IDC_LAST_ROMS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,30,130,12
+    CONTROL         "Update with the last selected path?",IDC_LAST_STATE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,75,130,12
+END
+
+IDD_Z80REGVIEW DIALOG DISCARDABLE  0, 0, 271, 98
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "Z80 Registers - NeoPop"
+FONT 8, "Courier New"
+BEGIN
+    EDITTEXT        IDC_Z80_PC,25,45,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_SP,25,59,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_IX,85,80,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_IY,135,80,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    PUSHBUTTON      "S",IDC_CHANGE_S,175,30,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "Z",IDC_CHANGE_Z,190,30,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "H",IDC_CHANGE_H,205,30,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "V",IDC_CHANGE_V,220,30,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "N",IDC_CHANGE_N,235,30,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "C",IDC_CHANGE_C,250,30,10,10,BS_FLAT | NOT WS_TABSTOP
+    PUSHBUTTON      "Refresh",IDC_REFRESH,180,75,40,15
+    DEFPUSHBUTTON   "Apply",IDC_APPLY,225,75,40,15
+    EDITTEXT        IDC_Z80_AF,85,15,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_BC,85,30,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_DE,85,45,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_HL,85,60,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_AF1,135,15,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_BC1,135,30,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_DE1,135,45,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_Z80_HL1,135,60,25,12,ES_UPPERCASE | ES_AUTOHSCROLL | 
+                    NOT WS_TABSTOP
+    CTEXT           "(Click to toggle)",IDC_STATIC,175,41,85,8
+    RTEXT           "PC",IDC_STATIC,10,45,10,10,SS_CENTERIMAGE
+    RTEXT           "AF",IDC_STATIC,70,15,10,10,SS_CENTERIMAGE
+    RTEXT           "BC",IDC_STATIC,70,30,10,10,SS_CENTERIMAGE
+    RTEXT           "DE",IDC_STATIC,70,45,10,10,SS_CENTERIMAGE
+    RTEXT           "HL",IDC_STATIC,70,60,10,10,SS_CENTERIMAGE
+    RTEXT           "IX",IDC_STATIC,70,80,10,10,SS_CENTERIMAGE
+    RTEXT           "IY",IDC_STATIC,120,81,10,10,SS_CENTERIMAGE
+    CTEXT           "flags",IDC_Z80_FLAGS,215,15,40,10,SS_SUNKEN
+    RTEXT           "AF'",IDC_STATIC,115,15,15,10,SS_CENTERIMAGE
+    RTEXT           "BC'",IDC_STATIC,115,30,15,10,SS_CENTERIMAGE
+    RTEXT           "DE'",IDC_STATIC,115,45,15,10,SS_CENTERIMAGE
+    RTEXT           "HL'",IDC_STATIC,115,60,15,10,SS_CENTERIMAGE
+    RTEXT           "SP",IDC_STATIC,10,59,10,10,SS_CENTERIMAGE
+    GROUPBOX        "Flags",IDC_STATIC,170,5,95,45
+    GROUPBOX        "General",IDC_STATIC,65,5,100,90
+    GROUPBOX        "Others",IDC_STATIC,5,35,55,40
+    PUSHBUTTON      "On / Off",IDC_Z80_TOGGLE,5,10,55,15
+END
+
+IDD_CONNECT DIALOG DISCARDABLE  0, 0, 217, 151
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "NeoPop - Link-up"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "OK",IDOK,150,130,60,15
+    EDITTEXT        IDC_REMOTEIP_EDIT,95,95,60,12,ES_AUTOHSCROLL
+    GROUPBOX        "",IDC_STATIC,5,20,205,70
+    LISTBOX         IDC_MESSAGES,10,30,195,55,LBS_NOINTEGRALHEIGHT | 
+                    LBS_DISABLENOSCROLL | LBS_NOSEL | WS_DISABLED | NOT 
+                    WS_BORDER | WS_TABSTOP
+    EDITTEXT        IDC_PORT_EDIT,95,125,35,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Connect to Remote...",IDC_CONNECT_BUTTON,5,5,99,15
+    PUSHBUTTON      "Listen on Port...",IDC_LISTEN_BUTTON,110,5,99,15
+    LTEXT           "Your IP address",IDC_LOCAL_ADDRESS,5,110,85,12,
+                    SS_CENTERIMAGE
+    EDITTEXT        IDC_LOCALIP_EDIT,95,110,60,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    LTEXT           "Remote IP address",IDC_REMOTE_ADDRESS,5,95,85,12,
+                    SS_CENTERIMAGE
+    LTEXT           "Port",IDC_PORT,5,125,85,12,SS_CENTERIMAGE
+END
+
+IDD_BREAKPOINTS DIALOGEX 0, 0, 155, 135
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Breakpoints - NeoPop"
+FONT 8, "Courier New"
+BEGIN
+    PUSHBUTTON      "Set",IDC_BREAKSET1,70,15,35,11,NOT WS_TABSTOP
+    GROUPBOX        "TLCS-900h Breakpoints",IDC_STATIC,5,5,145,60
+    PUSHBUTTON      "Clear",IDC_BREAKCLEAR1,110,15,35,11,NOT WS_TABSTOP
+    PUSHBUTTON      "Set",IDC_BREAKPOINT_Z80,70,81,35,11,NOT WS_TABSTOP
+    GROUPBOX        "Z80 Breakpoint",IDC_STATIC,5,70,145,28
+    PUSHBUTTON      "Clear",IDC_BREAKCLEAR_Z80,110,81,35,11,NOT WS_TABSTOP
+    EDITTEXT        IDC_BREAKSTAT1,25,15,40,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_BREAKSTAT_Z80,25,81,40,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    PUSHBUTTON      "Set",IDC_BREAKSET2,70,30,35,11,NOT WS_TABSTOP
+    PUSHBUTTON      "Clear",IDC_BREAKCLEAR2,110,30,35,11,NOT WS_TABSTOP
+    EDITTEXT        IDC_BREAKSTAT2,25,30,40,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    PUSHBUTTON      "Set",IDC_BREAKSET3,70,45,35,11,NOT WS_TABSTOP
+    PUSHBUTTON      "Clear",IDC_BREAKCLEAR3,110,45,35,11,NOT WS_TABSTOP
+    EDITTEXT        IDC_BREAKSTAT3,25,45,40,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    CTEXT           "1:",IDC_STATIC,10,15,10,12,SS_CENTERIMAGE
+    CTEXT           "2:",IDC_STATIC,10,30,10,12,SS_CENTERIMAGE
+    CTEXT           "3:",IDC_STATIC,10,45,10,12,SS_CENTERIMAGE
+    PUSHBUTTON      "Cancel",IDC_BREAKCLEAR0,70,113,35,11,NOT WS_TABSTOP
+    EDITTEXT        IDC_BREAKSTAT0,25,113,40,12,ES_CENTER | ES_AUTOHSCROLL | 
+                    ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    GROUPBOX        "Run to address...",IDC_STATIC,5,102,145,28
+END
+
+IDD_WATCH DIALOG DISCARDABLE  0, 0, 219, 188
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "Watch - NeoPop"
+FONT 8, "Courier New"
+BEGIN
+    DEFPUSHBUTTON   "Add",IDC_ADD,165,105,50,15
+    PUSHBUTTON      "Remove",IDC_REMOVE,165,125,50,15
+    PUSHBUTTON      "Save List",IDC_SAVE,165,145,50,15
+    PUSHBUTTON      "Load List",IDC_LOAD,165,165,50,15
+    EDITTEXT        IDC_ADDRESS,115,110,40,12,ES_UPPERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_DESCRIPTION,60,125,95,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_DATA,40,160,60,12,ES_UPPERCASE | ES_AUTOHSCROLL
+    PUSHBUTTON      "Apply",IDC_APPLY,105,160,50,15
+    LISTBOX         IDC_WATCHLIST,5,15,210,80,LBS_NOINTEGRALHEIGHT | NOT 
+                    WS_BORDER | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Add",IDC_STATIC,5,100,155,45
+    RTEXT           "(TLCS-900h) Address",IDC_STATIC,10,110,100,12,
+                    SS_CENTERIMAGE
+    LTEXT           "Address",IDC_STATIC,7,5,33,8,SS_CENTERIMAGE
+    LTEXT           "Description",IDC_STATIC,90,5,105,8,SS_CENTERIMAGE
+    LTEXT           "Data.L",IDC_STATIC,47,5,28,8,SS_CENTERIMAGE
+    RTEXT           "Description",IDC_STATIC,10,125,45,12,SS_CENTERIMAGE
+    GROUPBOX        "Alter Data",IDC_STATIC,5,150,155,30
+    LTEXT           "Long:",IDC_STATIC,10,160,25,10,SS_CENTERIMAGE
+END
+
+IDD_MISC DIALOG DISCARDABLE  0, 0, 162, 90
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "NeoPop - Misc. Options"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,90,70,60,14
+    CONTROL         "Auto pause when focus is lost?",IDC_CHECK_PAUSE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,5,150,10
+    CONTROL         "Always on Top?",IDC_CHECK_ONTOP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,20,150,10
+    CONTROL         "Stretch to full-screen width?",IDC_CHECK_STRETCHX,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,35,150,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_CONTROLS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 270
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 159
+    END
+
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 173
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 154
+    END
+
+    IDD_CODEVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 256
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_PATHS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 200
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 144
+    END
+
+    IDD_Z80REGVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 264
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+
+    IDD_CONNECT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 210
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 144
+    END
+
+    IDD_BREAKPOINTS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 148
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 128
+    END
+
+    IDD_WATCH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 212
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 181
+    END
+
+    IDD_MISC, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 155
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_CONTROLS DLGINIT
+BEGIN
+    IDC_COMBOJOY, 0x403, 5, 0
+0x6f4a, 0x3179, "\000" 
+    IDC_COMBOJOY, 0x403, 5, 0
+0x6f4a, 0x3279, "\000" 
+    IDC_COMBOJOY, 0x403, 5, 0
+0x6f4a, 0x3379, "\000" 
+    IDC_COMBOU, 0x403, 3, 0
+0x7055, "\000" 
+    IDC_COMBOL, 0x403, 5, 0
+0x654c, 0x7466, "\000" 
+    IDC_COMBOR, 0x403, 6, 0
+0x6952, 0x6867, 0x0074, 
+    IDC_COMBOD, 0x403, 5, 0
+0x6f44, 0x6e77, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3120, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3220, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3320, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3420, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3520, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3620, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3720, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3820, "\000" 
+    IDC_COMBOO, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3920, "\000" 
+    IDC_COMBOO, 0x403, 10, 0
+0x7542, 0x7474, 0x6e6f, 0x3120, 0x0030, 
+    IDC_COMBOKO, 0x403, 4, 0
+0x6154, 0x0062, 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3120, "\000" 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3220, "\000" 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3320, "\000" 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3420, "\000" 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3520, "\000" 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3620, "\000" 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3720, "\000" 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3820, "\000" 
+    IDC_COMBOB, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3920, "\000" 
+    IDC_COMBOB, 0x403, 10, 0
+0x7542, 0x7474, 0x6e6f, 0x3120, 0x0030, 
+    IDC_COMBOKB, 0x403, 2, 0
+0x0058, 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3120, "\000" 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3220, "\000" 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3320, "\000" 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3420, "\000" 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3520, "\000" 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3620, "\000" 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3720, "\000" 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3820, "\000" 
+    IDC_COMBOA, 0x403, 9, 0
+0x7542, 0x7474, 0x6e6f, 0x3920, "\000" 
+    IDC_COMBOA, 0x403, 10, 0
+0x7542, 0x7474, 0x6e6f, 0x3120, 0x0030, 
+    IDC_COMBOKA, 0x403, 2, 0
+0x005a, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_ACCEL ACCELERATORS DISCARDABLE 
+BEGIN
+    VK_ESCAPE,      ID_OPTIONS_FULLSCREEN,  VIRTKEY, NOINVERT
+    VK_F1,          ID_GAME_LOADROM,        VIRTKEY, NOINVERT
+    VK_F11,         ID_FRAMESKIP_LESS,      VIRTKEY, NOINVERT
+    VK_F12,         ID_FRAMESKIP_MORE,      VIRTKEY, NOINVERT
+    VK_F3,          ID_GAME_RESET,          VIRTKEY, NOINVERT
+    VK_F4,          ID_GAME_EXIT,           VIRTKEY, ALT, NOINVERT
+    VK_F6,          ID_GAME_SAVESTATE,      VIRTKEY, NOINVERT
+    VK_F8,          ID_OPTIONS_MUTE,        VIRTKEY, NOINVERT
+    VK_F9,          ID_GAME_LOADSTATE,      VIRTKEY, NOINVERT
+    VK_PAUSE,       ID_GAME_PAUSE,          VIRTKEY, NOINVERT
+    VK_RETURN,      ID_OPTIONS_FULLSCREEN,  VIRTKEY, ALT, NOINVERT
+END
+
+#endif    // English (U.K.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

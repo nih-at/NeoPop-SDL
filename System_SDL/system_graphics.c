@@ -21,15 +21,9 @@ system_graphics_init(void)
     /* set window caption */
     SDL_WM_SetCaption(PROGRAM_NAME, NULL);
 
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    rm = 0x0f00;
-    gm = 0x00f0;
-    bm = 0x000f;
-#else
     rm = 0x000f;
     gm = 0x00f0;
     bm = 0x0f00;
-#endif
     corescr = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT,
 				   16, rm, gm, bm, 0);
     if(corescr == NULL) {

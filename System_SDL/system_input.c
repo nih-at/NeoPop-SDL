@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.12 2004/06/22 22:04:34 dillo Exp $ */
+/* $NiH: system_input.c,v 1.13 2004/06/22 22:46:43 dillo Exp $ */
 /*
   system_input.c -- input support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -28,6 +28,8 @@
 
 #include "NeoPop-SDL.h"
 
+enum neopop_event bindings[NPKS_SIZE];
+
 static const int joy_mask[] = {
     0x01, /* up */
     0x02, /* down */
@@ -37,71 +39,26 @@ static const int joy_mask[] = {
     0x20, /* button b */
     0x40  /* option */
 };
+#define JOYPORT_ADDR	0x6F82
 
-/*
-  0..SDLK_LAST			 keys
-  SDLK_LAST..2*SDLK_LAST	control keys
-  2*SDLK_LAST..3*SDLK_LAST	alt keys
-  3*SDLK_LAST..			joysticks
-
-  joysticks:
-
-  0..14		axis
-  14..18	hat
-  18..38	buttons
-*/
-
-enum npks_shift {
-    NPKS_SH_NONE,
-    NPKS_SH_CTRL,
-    NPKS_SH_ALT,
-    NPKS_NKEY
-};
-
-#define NPKS_UP			0	/* key being pressed */
-#define NPKS_DOWN		1	/* key being released */
-
-#define NPKS_KEY_BASE		0
-#define NPKS_KEY_SIZE		SDLK_LAST
-#define NPKS_JOY_BASE		(NPKS_KEY_BASE+NPKS_NKEY*NPKS_KEY_SIZE)
-#define NPKS_NJOY		1
-#define NPKS_JOY_NAXIS		7
-#define NPKS_JOY_NHAT		1
-#define NPKS_JOY_NBUTTON	20
-#define NPKS_JOY_AXIS_OFFSET	0
-#define NPKS_JOY_HAT_OFFSET	(2*NPKS_JOY_NAXIS)
-#define NPKS_JOY_BUTTON_OFFSET	(NPKS_JOY_HAT_OFFSET+4*NPKS_JOY_NHAT)
-#define NPKS_JOY_SIZE		(NPKS_JOY_BUTTON_OFFSET+NPKS_JOY_NBUTTON)
-#define NPKS_SIZE		(NPKS_NKEY*NPKS_KEY_SIZE	\
-				 +NPKS_NJOY*NPKS_JOY_SIZE)
-
-#define NPKS_KEY(c, k)		(NPKS_KEY_BASE+(c)*NPKS_KEY_SIZE+(k))
-#define NPKS_JOY(n)		(NPKS_JOY_BASE+(n)*NPKS_JOY_SIZE)
-#define NPKS_JOY_AXIS(n, i)	(NPKS_JOY(n)+NPKS_JOY_AXIS_OFFSET+2*(i))
-#define NPKS_JOY_HAT(n, i)	(NPKS_JOY(n)+NPKS_JOY_HAT_OFFSET+4*(i))
-#define NPKS_JOY_BUTTON(n, i)	(NPKS_JOY(n)+NPKS_JOY_BUTTON_OFFSET+(i))
-
-enum neopop_event bindings[NPKS_SIZE];
-
-int joy_axis[NPKS_NJOY*NPKS_JOY_NAXIS];
-int joy_hat[NPKS_NJOY*NPKS_JOY_NHAT];
+static int joy_axis[NPKS_NJOY*NPKS_JOY_NAXIS];
+static int joy_hat[NPKS_NJOY*NPKS_JOY_NHAT];
 
 #define JOY_AXIS(n, k)	(joy_axis[(n)*NPKS_JOY_NAXIS+(k)])
 #define JOY_HAT(n, k)	(joy_hat[(n)*NPKS_JOY_NHAT+(k)])
 
+
 static const char *shift_name[] = {
     "", "C-", "M-"
 };
-const char *axis_name[] = {
+static const char *axis_name[] = {
     "neg", "pos"
 };
-const char *hat_name[] = {
+static const char *hat_name[] = {
     "up", "down", "left", "right"
 };
 
 #define NAME_SIZE(x)	(sizeof(x)/sizeof((x)[0]))
-
-#define JOYPORT_ADDR	0x6F82
 
 int find_name(const char *p, char **end, const char **names, int n);
 void handle_event(enum neopop_event ev, int down);
@@ -509,17 +466,8 @@ read_bindings(const char *fname)
     int k;
     int ev;
 
-    if ((f=fopen("keysyms.txt", "w")) != NULL) {
-	for (k=0; k<SDLK_LAST; k++)
-	    fprintf(f, "%d\t%s\n", k, SDL_GetKeyName(k));
-	fclose(f);
-    }
-
-    if ((f=fopen(fname, "r")) == NULL) {
-	printf("cannot open file `%s': %s\n",
-	       fname, strerror(errno));
+    if ((f=fopen(fname, "r")) == NULL)
 	return;
-    }
 
     lno = 0;
     while (fgets(b, sizeof(b), f)) {

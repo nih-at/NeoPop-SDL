@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.26 2004/06/20 23:43:31 dillo Exp $ */
+/* $NiH: system_main.c,v 1.27 2004/06/22 22:04:34 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2003 Thomas Klausner
@@ -34,6 +34,8 @@ struct timeval throttle_last;
 _u8 system_frameskip_key;
 _u32 throttle_rate;
 int do_exit = 0;
+
+void readrc(void);
 
 static void
 printversion(void)
@@ -206,7 +208,8 @@ main(int argc, char *argv[])
 	SDL_JoystickEventState(SDL_ENABLE);
     }
 
-    read_bindings("neopoprc");
+    bindings_init();
+    readrc();
 
     if (system_graphics_init() == FALSE) {
 	fprintf(stderr, "cannot create window: %s\n", SDL_GetError());
@@ -253,4 +256,17 @@ main(int argc, char *argv[])
     system_sound_shutdown();
 
     return 0;
+}
+
+
+
+void
+readrc(void)
+{
+    char b[8192], *home;
+
+    if ((home=getenv("HOME")) == NULL)
+	return;
+    snprintf(b, sizeof(b), "%s/.neopop/neopoprc", home);
+    read_bindings(b);
 }

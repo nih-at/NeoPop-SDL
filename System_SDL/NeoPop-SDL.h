@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.3 2003/10/16 17:29:44 wiz Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.4 2004/06/22 22:04:33 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2003 Thomas Klausner
@@ -62,6 +62,47 @@ enum neopop_event {
     NPEV_LAST
 };
 
+
+/* defines for keys */
+
+#define NPKS_UP			0	/* key being pressed */
+#define NPKS_DOWN		1	/* key being released */
+
+/* modifiers */
+
+enum npks_shift {
+    NPKS_SH_NONE,
+    NPKS_SH_CTRL,
+    NPKS_SH_ALT,
+    NPKS_NKEY
+};
+
+/* size and layout of bindings array */
+
+#define NPKS_KEY_BASE		0
+#define NPKS_KEY_SIZE		SDLK_LAST
+#define NPKS_JOY_BASE		(NPKS_KEY_BASE+NPKS_NKEY*NPKS_KEY_SIZE)
+#define NPKS_NJOY		1
+#define NPKS_JOY_NAXIS		7
+#define NPKS_JOY_NHAT		1
+#define NPKS_JOY_NBUTTON	20
+#define NPKS_JOY_AXIS_OFFSET	0
+#define NPKS_JOY_HAT_OFFSET	(2*NPKS_JOY_NAXIS)
+#define NPKS_JOY_BUTTON_OFFSET	(NPKS_JOY_HAT_OFFSET+4*NPKS_JOY_NHAT)
+#define NPKS_JOY_SIZE		(NPKS_JOY_BUTTON_OFFSET+NPKS_JOY_NBUTTON)
+#define NPKS_SIZE		(NPKS_NKEY*NPKS_KEY_SIZE	\
+				 +NPKS_NJOY*NPKS_JOY_SIZE)
+
+#define NPKS_KEY(c, k)		(NPKS_KEY_BASE+(c)*NPKS_KEY_SIZE+(k))
+#define NPKS_JOY(n)		(NPKS_JOY_BASE+(n)*NPKS_JOY_SIZE)
+#define NPKS_JOY_AXIS(n, i)	(NPKS_JOY(n)+NPKS_JOY_AXIS_OFFSET+2*(i))
+#define NPKS_JOY_HAT(n, i)	(NPKS_JOY(n)+NPKS_JOY_HAT_OFFSET+4*(i))
+#define NPKS_JOY_BUTTON(n, i)	(NPKS_JOY(n)+NPKS_JOY_BUTTON_OFFSET+(i))
+
+extern enum neopop_event bindings[];
+extern const char *event_names[];
+
+
 void system_graphics_fullscreen_toggle(void);
 BOOL system_graphics_init(void);
 void system_graphics_update(void);
@@ -88,6 +129,5 @@ extern int do_exit;
 extern int graphics_mag_req;
 extern int graphics_mag_smooth;
 
-extern const char *event_names[];
-
 void read_bindings(const char *fname);
+void bindings_init(void);

@@ -1,4 +1,4 @@
-/* $NiH: system_rom.c,v 1.10 2004/06/21 03:27:13 wiz Exp $ */
+/* $NiH: system_rom.c,v 1.11 2004/06/21 03:29:25 wiz Exp $ */
 /*
   system_rom.c -- ROM loading support
   Copyright (C) 2002-2003 Thomas Klausner
@@ -60,18 +60,22 @@ rom_load(char *filename)
 		l = strlen(zst.name);
 		if (l < 4)
 		    continue;
-		if (strcasecmp(zst.name+l-4, ".ngp") == 0) {
+		if (strcasecmp(zst.name+l-4, ".ngp") == 0
+		    || strcasecmp(zst.name+l-4, ".ngc") == 0
+		    || strcasecmp(zst.name+l-4, ".npc") == 0) {
 		    rom.length = zst.size;
 		    rom.data = (char *)calloc(rom.length, 1);
 
 		    if ((zf=zip_fopen_index(z, i, 0)) == NULL
 			|| zip_fread(zf, rom.data, rom.length) != rom.length) {
-			/* XXX: free(rom.data); ?! */
+			free(rom.data);
+			rom.data = NULL;
 			system_message("%s `%s': %s",
 				       system_get_string(IDS_EROMOPEN),
 				       filename, zip_strerror(z));
 			return FALSE;
 		    }
+		    /* XXX: return value */
 		    zip_fclose(zf);
 		    zip_close(z);
 			
@@ -94,6 +98,8 @@ rom_load(char *filename)
 
     system_message("%s `%s': %s", system_get_string(IDS_EROMOPEN),
 		   filename, strerror(errno));
+    free(rom.data);
+    rom.data = NULL;
     return FALSE;
 }
 

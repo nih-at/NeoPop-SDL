@@ -1,4 +1,4 @@
-/* $NiH: system_comms.c,v 1.7 2004/06/23 17:19:04 dillo Exp $ */
+/* $NiH: system_comms.c,v 1.8 2004/06/23 19:10:00 wiz Exp $ */
 /*
   system_comms.c -- comm port support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -186,7 +186,7 @@ system_comms_read(_u8* buffer)
     if (buffered_data != -1) {
 #ifdef COMMS_DEBUG
 	printf("%s (buffered) byte %02x\n",
-	       (buffer ? "read" : "peeked"), msg[1]);
+	       (buffer ? "read" : "peeked"), buffered_data);
 #endif
 	if (buffer) {
 	    *buffer = buffered_data;

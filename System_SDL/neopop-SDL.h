@@ -19,3 +19,4 @@ void system_rom_unload(void);
 
 extern int do_exit;
 extern int graphics_mag_req;
+extern int graphics_mag_smooth;

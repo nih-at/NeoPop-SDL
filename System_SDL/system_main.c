@@ -90,6 +90,8 @@ main(int argc, char *argv[])
     system_colour = COLOURMODE_AUTO;
     /* default to English as language for now */
     language_english = TRUE;
+    /* default to smooth graphics magnification */
+    graphics_mag_smooth = 1;
     /* default to sound on */
     mute = FALSE;
 

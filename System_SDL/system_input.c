@@ -41,7 +41,10 @@ system_input_update(void)
 		break;
 	    case SDLK_l:
 		ram[0x6F82] |= INPUT_MASK_RIGHT;
-		break;	
+		break;
+	    case SDLK_m:
+		graphics_mag_smooth = graphics_mag_smooth ? 0 : 1;
+		break;
 	    case SDLK_LSHIFT:
 	    case SDLK_RSHIFT:
 	    case SDLK_a:

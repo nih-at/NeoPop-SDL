@@ -1,0 +1,41 @@
+	* Core/sound.c (sample_chip_tone, sample_chip_noise): don't
+	compute voices that are not played.
+
+	* font.xpm, system_osd.h, system_main.c (system_VBL): add
+	on-screen display.
+	
+	* NeoPop-SDL.h, mknames.sh, system_bindings.c, neopoprc.mdoc,
+	system_input.c (system_input_update, emit_key, handle_event,
+	set_mute, set_fullscreen, set_paused): make key bindings
+	configurable, add joystick support.
+
+	* system_comms.c: implement network play (not working)
+
+	* system_graphics.c: add yuv overlay support, rewrite pixel format
+	conversion and blocky scaling.
+
+	* system_graphics.c (system_graphics_update), system_hq_intern.h,
+	system_hq2x.c, system_hq2x.h, system_hq3x.c, system_hq3x.h: add
+	HQ2x/HQ3x scaler (from scummvm).
+
+	* system_io.c (validate_dir): create all non-existing components
+	of directory, not only last.
+
+	* system_io.c (system_state_load, system_state_save,
+	system_io_flash_read, system_io_flash_write,
+	system_make_file_name), system_screenshot.c (get_screenshot_name):
+	make directories used configurable, allow use of ROM name rather
+	than file name to derive file to use.
+
+	* system_main.c (system_VBL): rewrite throttling code, when
+	playing sound, sync on sound thread.
+
+	* system_rc.c, system_main.c (main): read config file.
+
+	* system_rom.c (rom_load), unzip.c, unzip.h: add support to load
+	ROMs from zip archives.
+
+	* system_screenshot.c (converter): use full range of 8bit colour
+	components.
+
+	* system_sound.c: rewrite

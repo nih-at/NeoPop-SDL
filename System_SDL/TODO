@@ -9,3 +9,4 @@
 . comm support
 x cleanup:
  . add license to all files
+ . find a reasonable place for readmes/todos...

@@ -1,7 +1,7 @@
 AM_CPPFLAGS=	-I$(top_srcdir)/Core/z80  -I$(top_srcdir)/Core/TLCS-900h \
 		-I$(top_srcdir)/Core
 AM_CFLAGS=	-D__cdecl= @SDL_CFLAGS@ -Wall
-LDADD=		@SDL_LIBS@
+LDADD=		@SDL_LIBS@ -lSDL_mixer
 
 # gmake support
 VPATH=$(top_srcdir)/Core:$(top_srcdir)/Core/TLCS-900h:$(top_srcdir)/Core/z80

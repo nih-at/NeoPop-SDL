@@ -1,58 +1,90 @@
-#include <SDL_audio.h>
+#include <SDL_mixer.h>
 
 #include "neopop.h"
 
-void
-system_sound_callback(void *userdata, Uint8 *stream, int len)
-{
-    /* XXX: DAC update? */
-    sound_update((_u16 *)stream, len);
+#define CHIPBUFFERLENGTH	35280
+#define DACBUFFERLENGTH		3200
+#define DEFAULT_SAMPLERATE	44100
+#define DEFAULT_CHANNELS	2
+#define DEFAULT_CHUNKSIZE	4096
 
-    return;
-}
-
-/* dummy function for now */
-BOOL
-system_sound_init(void)
-{
-#ifdef I_WANT_UNTESTED_AUDIO
-    SDL_AudioSpec desired;
-    SDL_AudioSpec obtained;
-
-    memset(&desired, '\0', sizeof(desired));
-
-    /* XXX: DAC support */
-
-    desired.freq = 44100;
-    desired.channels = 2;
-    /* XXX: True (for both LE and BE)? */
-    desired.format = AUDIO_S16LSB;
-    /* following may need to be set higher power of two */
-    desired.samples = 512;
-    desired.callback = system_sound_callback;
-    desired.userdata = NULL;
-
-    if (SDL_OpenAudio(&desired, &obtained) == -1) {
-	fprintf(stderr, "Cannot initialize audio: %s\n", SDL_GetError());
-	return FALSE;
-    }
-
-    return TRUE;
-#else
-    return FALSE;
+#ifndef MAX
+#define MAX(a, b)	((a) > (b) ? (a) : (b))
 #endif
-}
 
-/* dummy function for now */
+static unsigned char *sound_data;
+
 void
 system_sound_chipreset(void)
 {
+
+    (void)Mix_HaltMusic();
     return;
 }
 
-/* dummy function for now */
+BOOL
+system_sound_init(void)
+{
+
+    /* 44.1 kHz, S16*SB, 2-channel, 16-bit */
+    if (Mix_OpenAudio(DEFAULT_SAMPLERATE, MIX_DEFAULT_FORMAT,
+		      DEFAULT_CHANNELS, DEFAULT_CHUNKSIZE) < 0)
+	return FALSE;
+    else {
+	int rate, channels;
+	Uint16 format;
+
+	Mix_QuerySpec(&rate, &format, &channels);
+	printf("Opened audio at %dHz %d-bit %s\n", rate,
+	       format&0xFF, channels > 1 ? "stereo" : "mono");
+    }
+
+    if (Mix_AllocateChannels(2) < 0)
+	return FALSE;
+
+    if ((sound_data=(unsigned char *)malloc(MAX(CHIPBUFFERLENGTH,
+						DACBUFFERLENGTH))) == NULL) {
+	Mix_CloseAudio();
+	return FALSE;
+    }
+
+    sound_init(DEFAULT_SAMPLERATE);
+
+    return TRUE;
+}
+
+void
+system_sound_shutdown(void)
+{
+
+    Mix_CloseAudio();
+    free(sound_data);
+    sound_data = NULL;
+    return;
+}
+
 void
 system_sound_silence(void)
 {
+
+    (void)Mix_HaltMusic();
     return;
+}
+
+void
+system_sound_update(void)
+{
+    Mix_Chunk *sdchunk;
+
+    sound_update((_u16*)sound_data, DEFAULT_CHUNKSIZE);
+    sdchunk = Mix_QuickLoad_RAW(sound_data, DEFAULT_CHUNKSIZE);
+    Mix_PlayChannel(0, sdchunk, 0);
+#if 0
+    Mix_FreeChunk(sdchunk);
+#endif
+
+    dac_update(sound_data, DEFAULT_CHUNKSIZE);
+    sdchunk = Mix_QuickLoad_RAW(sound_data, DEFAULT_CHUNKSIZE);
+    Mix_PlayChannel(1, sdchunk, 0);
+    Mix_FreeChunk(sdchunk);
 }

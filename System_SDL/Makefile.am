@@ -29,8 +29,8 @@ NeoPop_SDL_SOURCES=system_comms.c system_graphics.c \
 	system_input.c system_io.c system_language.c \
 	system_main.c system_rom.c system_screenshot.c system_sound.c
 
-NeoPop-SDL.6: NeoPop-SDL.${MANFMT}
-	sed "s|DOCDIR|${docdir}|g" ${.ALLSRC} $< > $@.$$$$ && \
+NeoPop-SDL.6: NeoPop-SDL.${MANFMT} Makefile
+	sed "s|DOCDIR|${docdir}|g" NeoPop-SDL.${MANFMT} > $@.$$$$ && \
 		mv $@.$$$$ $@
 	
 EXTRA_DIST=	NeoPop-SDL.mdoc NeoPop-SDL.man

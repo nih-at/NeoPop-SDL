@@ -1,4 +1,4 @@
-/* $NiH: system_sound.c,v 1.17 2004/06/23 21:35:44 dillo Exp $ */
+/* $NiH: system_sound.c,v 1.17.2.1 2004/07/07 20:22:51 dillo Exp $ */
 /*
   system_sound.c -- sound support functions
   Copyright (C) 2002-2003 Thomas Klausner
@@ -23,6 +23,13 @@
 #include <assert.h>
 #include "NeoPop-SDL.h"
 
+#define MAX_FRAMES	60
+
+#define BUFFER_SIZE	(MAX_FRAMES*bpf)
+
+#define FRAME_INC(f)	(((f)+bpf)%BUFFER_SIZE)
+#define FRAME_DIFF(a, b)	((((a)-(b))/bpf+MAX_FRAMES)%MAX_FRAMES)
+
 #define DEFAULT_FORMAT		AUDIO_U16SYS
 #define DEFAULT_CHANNELS	1
 /* following may need to be set higher power of two */
@@ -37,7 +44,9 @@ static Uint8 silence_value;
 
 static char *sound_buffer;
 static char *dac_data;
-static int sound_read;
+static int sound_frame_read;		/* read position */
+static int sound_frame_read_old;	/* read position at last VBL */
+static int sound_frame_write;		/* write position */
 
 static SDL_sem *rsem, *wsem;
 
@@ -88,7 +97,7 @@ system_sound_init(void)
 
     dac_bpf = (bpf+acvt.len_mult-1)/acvt.len_mult;
 
-    if ((sound_buffer=malloc(bpf)) == NULL) {
+    if ((sound_buffer=malloc(BUFFER_SIZE)) == NULL) {
 	fprintf(stderr, "Cannot allocate sound buffer (%d bytes)\n",
 		bpf);
 	SDL_CloseAudio();
@@ -104,7 +113,9 @@ system_sound_init(void)
 
     sound_init(samplerate);
     silence_value = desired.silence;
-    sound_read = 1;
+    sound_frame_read = 0;
+    sound_frame_read_old = 0;
+    sound_frame_write = 0;
 
     return TRUE;
 }
@@ -136,66 +147,74 @@ system_sound_silence(void)
 void
 system_sound_callback(void *userdata, Uint8 *stream, int len)
 {
-#if 0
-    /* plays sound when host too slow, but bad sound even if fast enough */
-
-    static _u16 ls;
-    _u16 *p;
-#endif
-
     if (sound_buffer == NULL)
 	return;
 
-#if 0
-    /* plays sound when host too slow, but bad sound even if fast enough */
-
-    if (SDL_SemTryWait(rsem) == 0) {
-	memcpy(stream, sound_buffer, len);
-	ls = *(_u16 *)(sound_buffer+len-2);
-	sound_read = 1;
-    }
-    else {
-	p = (_u16 *)stream;
-	while (len-- > 0)
-	    *(p++) = ls;
-    }
-#else
     SDL_SemWait(rsem);
-    sound_read = 1;
-    memcpy(stream, sound_buffer, len);
-#endif
+    memcpy(stream, sound_buffer+sound_frame_read, len);
+    sound_frame_read = FRAME_INC(sound_frame_read);
     SDL_SemPost(wsem);
 }
 
 void
-system_sound_update(void)
+system_sound_update(int nframes)
 {
+    int i;
+    int consumed;
+
     if (mute == TRUE)
 	return;
 
-    if (sound_read) {
+    /* SDL_LockAudio(); */
+
+    /* number of unread frames  */
+    i = FRAME_DIFF(sound_frame_write, sound_frame_read);
+    /* number of frames read since last call */
+    consumed = FRAME_DIFF(sound_frame_read, sound_frame_read_old);
+    sound_frame_read_old = sound_frame_read;
+
+    /* SDL_UnlockAudio(); */
+
+#if 1
+    printf("update: left: %d, consumed: %d, wanted: %d\n",
+	   i, consumed, nframes);
+#endif
+
+    for (; i<nframes; i++) {
 #if 1
 	dac_update(dac_data, dac_bpf);
 	/* convert to standard format */
 	acvt.buf = dac_data;
 	acvt.len = dac_bpf;
 	if (SDL_ConvertAudio(&acvt) == -1) {
-	    fprintf(stderr, "DAC data conversion failed: %s\n", SDL_GetError());
+	    fprintf(stderr,
+		    "DAC data conversion failed: %s\n", SDL_GetError());
 	    return;
 	}
 #endif
 	
 	/* get sound data */
-	sound_update((_u16 *)sound_buffer, bpf);
+	sound_update((_u16 *)(sound_buffer+sound_frame_write), bpf);
 	
 #if 1
 	/* mix both streams into one */
-	SDL_MixAudio(sound_buffer, dac_data, bpf, SDL_MIX_MAXVOLUME);
+	SDL_MixAudio(sound_buffer+sound_frame_write,
+		     dac_data, bpf, SDL_MIX_MAXVOLUME);
 #endif
-	
-	sound_read = 0;
-	
+	sound_frame_write = FRAME_INC(sound_frame_write);
+	if (sound_frame_write == sound_frame_read) {
+	    fprintf(stderr, "your machine is much too slow.\n");
+	    /* XXX: handle this */
+	    exit(1);
+	}
+
 	SDL_SemPost(rsem);
     }
-    SDL_SemWait(wsem);
+
+    if (nframes > 1) {
+	for (i=0; i<consumed; i++)
+	    SDL_SemWait(wsem);
+    }
+    else
+	SDL_SemWait(wsem);
 }

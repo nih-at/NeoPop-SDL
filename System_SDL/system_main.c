@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.33 2004/07/05 12:34:27 dillo Exp $ */
+/* $NiH: system_main.c,v 1.33.2.1 2004/07/07 20:22:50 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -85,7 +85,7 @@ system_VBL(void)
     static int frame_counter = 0;
     struct timeval current_time, time_diff, t2;
     int newsec;
-    long throttle_diff;
+    long frames_spent, throttle_diff;
     struct timespec ts, tsrem;
 
     system_graphics_update();
@@ -94,11 +94,21 @@ system_VBL(void)
 
     newsec = 0;
     if (mute == FALSE) {
-	system_sound_update();
 	gettimeofday(&current_time, NULL);
 	if (current_time.tv_sec != throttle_last.tv_sec)
 	    newsec = 1;
+	timersub(&current_time, &throttle_last, &time_diff);
+	frames_spent = ((time_diff.tv_sec*1000000 + time_diff.tv_usec)
+			/ throttle_rate);
+
+#if 0
+	printf("time spent: %ld.%06ld, frames spent: %ld\n",
+	       time_diff.tv_sec, time_diff.tv_usec, frames_spent);
+#endif
+
 	throttle_last = current_time;
+
+	system_sound_update(frames_spent+1);
     }
     else {
 	/* throttling */
@@ -144,6 +154,8 @@ system_VBL(void)
 	    printf("sleep: %06ld\n", throttle_diff);
 #endif
 	}
+
+	throttle_last = current_time;
     }
 
     frame_counter++;
@@ -163,8 +175,6 @@ system_VBL(void)
 
 	frame_counter = 0;
     }
-
-    throttle_last = current_time;
 
     return;
 }

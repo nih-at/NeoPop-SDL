@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.8 2004/06/23 17:19:04 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.8.2.1 2004/07/07 20:22:50 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -158,7 +158,7 @@ void system_sound_chipreset(void);
 BOOL system_sound_init(void);
 void system_sound_shutdown(void);
 void system_sound_silence(void);
-void system_sound_update(void);
+void system_sound_update(int);
 
 void system_state_load(void);
 void system_state_save(void);

@@ -1,7 +1,7 @@
-/* $NiH: system_screenshot.c,v 1.5 2003/10/16 17:29:46 wiz Exp $ */
+/* $NiH: system_screenshot.c,v 1.6 2003/10/20 12:57:44 wiz Exp $ */
 /*
   system_screenshot.c -- screenshot functions
-  Copyright (C) 2002-2003 Thomas Klausner
+  Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
 
   This file is part of NeoPop-SDL, a NeoGeo Pocket emulator
   The author can be contacted at <wiz@danbala.tuwien.ac.at>
@@ -118,9 +118,9 @@ converter(png_structp ptr, png_row_infop row_info, png_bytep row)
     outp = out;
     inp = (_u16 *)row;
     for (i=0; i<SCREEN_WIDTH; i++) {
-	*outp++ = (_u8)((*inp & 0x000f)<<4); /* red */
-	*outp++ = (_u8)(*inp & 0x00f0);      /* green */
-	*outp++ = (_u8)((*inp & 0x0f00)>>4); /* blue */
+	*outp++ = (_u8)CONV4TO8(*inp & 0x000f);		/* red */
+	*outp++ = (_u8)CONV4TO8((*inp & 0x00f0)>>4);	/* green */
+	*outp++ = (_u8)CONV4TO8((*inp & 0x0f00)>>8);	/* blue */
 	inp++;
     }
 

@@ -1,4 +1,4 @@
-/* $NiH: NeoPop-SDL.h,v 1.13 2004/07/11 23:32:11 dillo Exp $ */
+/* $NiH: NeoPop-SDL.h,v 1.14 2004/07/14 09:48:29 dillo Exp $ */
 /*
   NeoPop-SDL.h -- common header file
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -149,6 +149,9 @@ enum {
 
 #define PAUSED_LOCAL	1
 #define PAUSED_REMOTE	2
+
+/* convert 4bit colour component to 8bit */
+#define CONV4TO8(x)	(((x)<<4)|(x))
 
 void system_bindings_init(void);
 

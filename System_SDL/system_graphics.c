@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.17 2004/07/14 00:38:54 dillo Exp $ */
+/* $NiH: system_graphics.c,v 1.18 2004/07/14 09:48:30 dillo Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -62,9 +62,6 @@ static BOOL system_graphics_mag_smooth(void);
 static Uint32 rgb_lookup[16*16*16];
 /* lookup table for YUV overlay pixels */
 static Uint32 yuv_lookup[16*16*16];
-
-/* convert 4bit colour component to 8bit */
-#define CONV4TO8(x)	(((x)<<4)|(x))
 
 BOOL
 system_graphics_init(void)

@@ -9,7 +9,14 @@ system_sound_init(void)
 
 /* dummy function for now */
 void
-system_sound_clear(void)
+system_sound_chipreset(void)
+{
+    return;
+}
+
+/* dummy function for now */
+void
+system_sound_silence(void)
 {
     return;
 }

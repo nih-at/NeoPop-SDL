@@ -5,6 +5,7 @@
 #define VERSION "0.01"
 
 char *prg;
+_u8 system_frameskip_key = 1;
 
 void
 usage(int exitcode)

@@ -1,10 +1,10 @@
 #include <SDL.h>
-#include "neopop.h"
+#include "neopop-SDL.h"
 
 /* display structure */
-SDL_Surface *disp;
+static SDL_Surface *disp;
 /* SDL Surface containing the data returned from neopop Core */
-SDL_Surface *corescr;
+static SDL_Surface *corescr;
  
 BOOL
 system_graphics_init(void)
@@ -20,17 +20,6 @@ system_graphics_init(void)
 
     /* set window caption */
     SDL_WM_SetCaption(PROGRAM_NAME, NULL);
-
-#if 0
-    /* make red screen */
-    pixel = SDL_MapRGB(disp->format, 0xff, 0, 0);
-    SDL_LockSurface(disp);
-    SDL_FillRect(disp, NULL, pixel);
-    SDL_UnlockSurface(disp);
-    SDL_Flip(disp);
-
-    sleep(4);
-#endif
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     rm = 0x0f00;

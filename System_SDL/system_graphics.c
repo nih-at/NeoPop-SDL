@@ -9,11 +9,8 @@ SDL_Surface *corescr;
 BOOL
 system_graphics_init(void)
 {
-    SDL_Surface *scr;
-    SDL_Surface *corescr;
     Uint32 pixel;
-    Uint8 r, g, b;
-    Uint32 rm, gm, bm, am;
+    Uint32 rm, gm, bm;
 
     if ((disp=SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 16,
 			       SDL_HWSURFACE|SDL_DOUBLEBUF)) == NULL) {

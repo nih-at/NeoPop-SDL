@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.39 2004/07/14 09:48:30 dillo Exp $ */
+/* $NiH: system_main.c,v 1.40 2004/07/21 10:10:40 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -50,7 +50,7 @@ usage(int exitcode)
     printversion();
     printf("NeoGeo Pocket emulator\n\n"
 	   "Usage: %s [-cefghjMmSsv] [-C mode] [-P port] [-R remove] [game]\n"
-	   "\t-C mode\tspecify comms mode (none, server, client; default: none)\n"
+	   "\t-C mode\t\tspecify comms mode (none, server, client; default: none)\n"
 	   "\t-c\t\tstart in colour mode (default: automatic)\n"
 	   "\t-e\t\temulate English language NeoGeo Pocket (default)\n"
 	   "\t-f count\tframeskip: show one in `count' frames (default: 1)\n"
@@ -60,8 +60,8 @@ usage(int exitcode)
 	   "\t-l state\tload start state from file `state'\n"
 	   "\t-M\t\tdo not use smoothed magnification modes\n"
 	   "\t-m\t\tuse smoothed magnification modes (default)\n"
-	   "\t-P port\tspecify port number to use for comms (default: 7846)\n"
-	   "\t-R host\tspecify host to connect to as comms client\n"
+	   "\t-P port\t\tspecify port number to use for comms (default: 7846)\n"
+	   "\t-R host\t\tspecify host to connect to as comms client\n"
 	   "\t-S\t\tsilent mode\n"
 	   "\t-s\t\twith sound (default)\n"
 	   "\t-v\t\tshow version number\n", prg);
@@ -205,6 +205,13 @@ main(int argc, char *argv[])
     /* state save slot */
     state_slot = 0;
 
+    /* initialize SDL and create standard-sized surface */
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0) {
+       fprintf(stderr, "cannot initialize SDL: %s\n", SDL_GetError());
+       exit(1);
+    }
+    atexit(SDL_Quit);
+
     system_bindings_init();
     system_rc_read();
 
@@ -283,13 +290,6 @@ main(int argc, char *argv[])
 	fprintf(stderr, "cannot install BIOS\n");
 	exit(1);
     }
-
-    /* initialize SDL and create standard-sized surface */
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0) {
-       fprintf(stderr, "cannot initialize SDL: %s\n", SDL_GetError());
-       exit(1);
-    }
-    atexit(SDL_Quit);
 
     if (SDL_NumJoysticks() > 0) {
 	SDL_JoystickOpen(0);

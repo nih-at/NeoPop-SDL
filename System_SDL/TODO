@@ -1,12 +1,15 @@
+x command line options
+ . no audio
+ . jap/eng
+ . color/bw
 . video
  . fps
- . throttled mode
+ x throttled mode
  . screenshot
-. menus
- . pause
- . reset
+. pause game
+. reset game
 . joystick support
 . input configurable
 . zip support
 . config file
-. save states
+x save states

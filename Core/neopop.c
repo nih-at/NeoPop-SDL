@@ -63,6 +63,8 @@ COLOURMODE system_colour;
 
 _u8 frameskip_count;
 
+_u32 frame_count;
+
 //=============================================================================
 
 static BOOL debug_abort_instruction = FALSE;

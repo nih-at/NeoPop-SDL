@@ -1,5 +1,7 @@
 2004-07-24  Dieter Baron  <dillo@danbala.tuwien.ac.at>
 
+	* configure.ac: bump version to 0.2
+
 	* system_osd.c (osd_init, display_string, string_width),
 	system_main (main), system_rc (system_rc_read_file), font.xpm,
 	NeoPop-SDL.h, neopoprc.mdoc: use proportional font with black

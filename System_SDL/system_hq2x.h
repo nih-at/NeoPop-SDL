@@ -1,3 +1,6 @@
+/* $NiH$ */
+/* Adapted for NeoPop-SDL by Dieter Baron and Thomas Klausner */
+
 /* ScummVM - Scumm Interpreter
  * Copyright (C) 2001  Ludvig Strigeus
  * Copyright (C) 2001-2004 The ScummVM project
@@ -26,38 +29,40 @@
  * Adapted for ScummVM to 16 bit output and optimized by Max Horn.
  */
 
-	register int w1, w2, w3, w4, w5, w6, w7, w8, w9;
+	int w1, w2, w3, w4, w5, w6, w7, w8, w9;
 
-	const uint32 nextlineSrc = srcPitch / sizeof(uint16);
-	const uint16 *p = (const uint16 *)srcPtr;
+	const Uint32 nextlineSrc = srcPitch / sizeof(Uint16);
+	const Uint16 *p = (const Uint16 *)srcPtr;
 
-	const uint32 nextlineDst = dstPitch / sizeof(uint16);
-	uint16 *q = (uint16 *)dstPtr;
-	
-	//	 +----+----+----+
-	//	 |    |    |    |
-	//	 | w1 | w2 | w3 |
-	//	 +----+----+----+
-	//	 |    |    |    |
-	//	 | w4 | w5 | w6 |
-	//	 +----+----+----+
-	//	 |    |    |    |
-	//	 | w7 | w8 | w9 |
-	//	 +----+----+----+
+	const Uint32 nextlineDst = dstPitch / sizeof(Uint16);
+	Uint16 *q = (Uint16 *)dstPtr;
+
+	/*
+		 +----+----+----+
+		 |    |    |    |
+		 | w1 | w2 | w3 |
+		 +----+----+----+
+		 |    |    |    |
+		 | w4 | w5 | w6 |
+		 +----+----+----+
+		 |    |    |    |
+		 | w7 | w8 | w9 |
+		 +----+----+----+
+	*/
 
 #ifdef USE_ALTIVEC
-	// The YUV threshold.
+	/* The YUV threshold. */
 	static const vector unsigned char vThreshold = (vector unsigned char)((vector unsigned int)0x00300706);
 
-	// Bit pattern mask.
+	/* Bit pattern mask. */
 	static const vector signed int vPatternMask1 = (vector signed int)(0x01, 0x02, 0x04, 0x08);
 	static const vector signed int vPatternMask2 = (vector signed int)(0x10, 0x20, 0x40, 0x80);
 
-	// Permutation masks for the incremental vector loading (see below for more information).
+	/* Permutation masks for the incremental vector loading (see below for more information). */
 	static const vector unsigned char vPermuteToV1234 = (vector unsigned char)( 4, 5, 6, 7,  8,9,10,11,  20,21,22,23,  16,17,18,19);
 	static const vector unsigned char vPermuteToV6789 = (vector unsigned char)(24,25,26,27,  8,9,10,11,  12,13,14,15,  28,29,30,31);
 
-	// The YUV vectors.
+	/* The YUV vectors. */
 	vector signed char vecYUV5555;
 	vector signed char vecYUV1234;
 	vector signed char vecYUV6789;
@@ -73,7 +78,7 @@
 		w8 = *(p + nextlineSrc);
 
 #ifdef USE_ALTIVEC
-		// Load inital values of vecYUV1234 / vecYUV6789
+		/* Load inital values of vecYUV1234 / vecYUV6789 */
 		const int arr1234[4] = {0, YUV(1), YUV(2), 0};
 		const int arr6789[4] = {YUV(5), 0, YUV(7), YUV(8)};
 
@@ -128,32 +133,34 @@
 			Beautiful, isn't it? :-)
 			*/
 
-			// Load the new values into a temporary vector (see above for an explanation)
+			/* Load the new values into a temporary vector (see above for an explanation) */
 			const int tmpArr[4] = {YUV(4), YUV(3), YUV(6), YUV(9)};
 			vector signed char vTmp = *(const vector signed char *)tmpArr;
 			
-			// Next update the data vectors
+			/* Next update the data vectors */
 			vecYUV5555 = (vector signed char)vec_splat((vector unsigned int)vecYUV6789, 0);
 			vecYUV1234 = vec_perm(vecYUV1234, vTmp, vPermuteToV1234);
 			vecYUV6789 = vec_perm(vecYUV6789, vTmp, vPermuteToV6789);
 
-			// Compute the absolute difference between the center point's YUV and the outer points
+			/* Compute the absolute difference between the center point's YUV and the outer points */
 			const vector signed char vDiff1 = vec_abs(vec_sub(vecYUV5555, vecYUV1234));
 			const vector signed char vDiff2 = vec_abs(vec_sub(vecYUV5555, vecYUV6789));
 			
-			// Compare the difference to the threshold (byte-wise)
+			/* Compare the difference to the threshold (byte-wise) */
 			const vector bool char vCmp1 = vec_cmpgt((vector unsigned char)vDiff1, vThreshold);
 			const vector bool char vCmp2 = vec_cmpgt((vector unsigned char)vDiff2, vThreshold);
 			
-			// Convert all non-zero (long) vector elements to 0xF...F, keep 0 at 0.
-			// Then and in the patter masks. The idea is that for 0 components, we get 0,
-			// while for the other components we get exactly the mask value.
+			/*
+			Convert all non-zero (long) vector elements to 0xF...F, keep 0 at 0.
+			Then and in the patter masks. The idea is that for 0 components, we get 0,
+			while for the other components we get exactly the mask value. */
 			const vector signed int vPattern1 = vec_and(vec_cmpgt((vector unsigned int)vCmp1, (vector unsigned int)0), vPatternMask1);
 			const vector signed int vPattern2 = vec_and(vec_cmpgt((vector unsigned int)vCmp2, (vector unsigned int)0), vPatternMask2);
 			
-			// Now sum up the components of all vectors. Since our pattern mask values
-			// are all "orthogonal", this is effectively the same as ORing them all
-			// together. In the end, the rightmost word of vSum contains the 'pattern'
+			/*
+			Now sum up the components of all vectors. Since our pattern mask values
+			are all "orthogonal", this is effectively the same as ORing them all
+			together. In the end, the rightmost word of vSum contains the 'pattern' */
 			vector signed int vSum = vec_sums(vPattern1, (vector signed int)0);
 			vSum = vec_sums(vPattern2, vSum);
 			pattern = ((int *)&vSum)[3];

@@ -1,1 +1,20 @@
-SDL port of NeoPop, a portable SNK NeoGeo Pocket emulator
+SDL port of NeoPop, a portable SNK NeoGeo Pocket emulator.
+
+Keys
+----
+
+Movement:
+   I
+J     L
+   K
+
+Button A: A or SHIFT.
+Button B: S or CTRL.
+Option button: D or TAB.
+ 
+1, 2, 3 set the magnication factor: 1 is normal (160x152),
+2 is doubled in both directions, 3 tripled (bigger == slower).
+
+F switches between full-screen and windowed mode.
+
+ESC quits the emulator.

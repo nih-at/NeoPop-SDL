@@ -1,14 +1,12 @@
 . movie captures
 . pause game
 . reset game
+. turn sound off/on during game
 . joystick support
 . input keys configurable
 . zip support
 . config file
-. keys for frameskipping
-x save states
 . comm support
 x cleanup:
  . SDL -> System_SDL
- . make 'make distribution' work
  . add license to all files

@@ -287,7 +287,12 @@ BOOL bios_install(void)
 	//System Call Table, install iBIOSHLE instructions
 	for (i = 0; i <= 0x1A; i++)
 	{
-		*(_u32*)(bios + 0xFE00 + (i * 4)) = vectable[i];
+		_u8 *addr;
+		addr = (_u8*)(bios + 0xFE00 + (i * 4));
+		addr[0] = vectable[i] & 0xff;
+		addr[1] = (vectable[i]>>8) & 0xff;
+		addr[2] = (vectable[i]>>16) & 0xff;
+		addr[3] = (vectable[i]>>24) & 0xff;
 		bios[vectable[i] & 0xFFFF] = 0x1F;	//iBIOSHLE
 	}
 

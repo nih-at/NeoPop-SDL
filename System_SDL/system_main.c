@@ -13,7 +13,7 @@ void
 usage(int exitcode)
 {
     printf(PROGRAM_NAME " (SDL) " NEOPOP_VERSION " (" VERSION ")\n");
-    printf("Usage: %s [-hv]\n"
+    printf("Usage: %s [-hv] [game]\n"
 	   "\t-h\tshow short help\n"
 	   "\t-v\tshow version number\n", prg);
 

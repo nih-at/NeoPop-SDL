@@ -37,9 +37,11 @@ system_VBL(void)
     system_graphics_update();
 
     system_input_update();
+#if 0
     if (mute == FALSE)
 	system_sound_update();
-
+#endif
+    
 #if 0
     /* XXX: do throttling */
     /* XXX: show frame rate */
@@ -110,9 +112,14 @@ main(int argc, char *argv[])
     reset();
     SDL_PauseAudio(0);
 
+    i = 0;
     do {
 	i++;
 	emulate();
+	if (i == 1000) {
+	    SDL_Delay(1);
+	    i = 0;
+	}
     } while (do_exit == 0);
 
     system_rom_unload();

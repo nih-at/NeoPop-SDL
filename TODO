@@ -1,8 +1,12 @@
+. rc variables for path names
+. option to use rom name for saved state file names
+. option: yuv for fullscreen, rgb for windowed
+. convert DAC sound ourselves (SDL is broken)
 . movie captures
 . pause game
 . reset game
-. turn sound off/on during game
+. turning sound on during game disables throttling for about 2s
 . test comm support
 . comm: handle pause/unpause packets
 . gui
-. speedup
+. speedup (sound, cpu)

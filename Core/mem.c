@@ -457,7 +457,6 @@ void reset_memory(void)
 		*(_u32*)(ram + 0x6C00) = htole32(rom_header->startPC);	//Start
 		*(_u16*)(ram + 0x6E82) = 				//Catalog
 			*(_u16*)(ram + 0x6C04) = htole16(rom_header->catalog);
-
 		*( _u8*)(ram + 0x6E84) = 
 			*( _u8*)(ram + 0x6C06) = rom_header->subCatalog;	//Sub-Cat
 		memcpy(ram + 0x6C08, rom.data + 0x24, 12);			//name
@@ -476,7 +475,6 @@ void reset_memory(void)
 	{
 		*(_u32*)(ram + 0x6C00) = htole32(0x00FF970A);	//Start
 		*(_u16*)(ram + 0x6C04) = htole16(0xFFFF);	//Catalog
-
 		*( _u8*)(ram + 0x6C06) = 0x00;			//Sub-Cat
 		sprintf(ram + 0x6C08, "NEOGEOPocket");	//bios rom 'Name'
 
@@ -511,10 +509,8 @@ void reset_memory(void)
 	}
 
 	//Interrupt table
-	for (i = 0; i < 0x12; i++) {
+	for (i = 0; i < 0x12; i++)
 		*(_u32*)(ram + 0x6FB8 + (i * 4)) = htole32(0x00FF23DF);
-	}
-
 
 
 //=============================================================================

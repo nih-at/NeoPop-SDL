@@ -38,8 +38,7 @@
 #include "neopop.h"
 #include "TLCS900h_registers.h"
 
-#include <sys/endian.h>
-#if _BYTE_ORDER == _BIG_ENDIAN
+#ifdef MSB_FIRST
 #define BYTE0	3
 #define BYTE1	2
 #define BYTE2	1

@@ -82,7 +82,7 @@ static void Plot(_u8 x, _u16* palette_ptr, _u8 palette, _u8 index, _u8 depth)
 	zbuffer[x] = depth;
 
 	//Get the colour of the pixel
-	data16 = palette_ptr[(palette << 2) + index];
+	data16 = le16toh(palette_ptr[(palette << 2) + index]);
 
 	if (negative)
 		cfb_scanline[x] = ~data16;
@@ -269,12 +269,10 @@ void gfx_draw_scanline_colour(void)
 			//In range?
 			if (scanline >= y && scanline <= y + 7)
 			{
-				_u16 pal_data = le16toh(*(_u16*)(ram + 0x8200));
-			
 				row = (scanline - y) & 7;	//Which row?
 				drawPattern((_u8)x, data16 & 0x01FF, 
 					(data16 & 0x4000) ? 7 - row : row, data16 & 0x8000,
-					&pal_data, ram[0x8C00 + spr] & 0xF, priority << 1); 
+					(_u16*)(ram + 0x8200), ram[0x8C00 + spr] & 0xF, priority << 1); 
 			}
 		}
 

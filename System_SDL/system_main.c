@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.41 2004/07/22 00:35:32 wiz Exp $ */
+/* $NiH: system_main.c,v 1.42 2004/07/22 09:38:42 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -221,7 +221,9 @@ main(int argc, char *argv[])
 	case 'C':
 	    i = system_rc_parse_comms_mode(optarg);
 	    if (i == -1) {
-		/* XXX: error message */
+		fprintf(stderr, "%s: unknown comms mode `%s'\n",
+			prg, optarg);
+		exit(1);
 	    }
 	    else
 		comms_mode = i;
@@ -234,8 +236,12 @@ main(int argc, char *argv[])
 	    break;
 	case 'f':
 	    i = atoi(optarg);
-	    if (i >=1 && i <= 7)
-		system_frameskip_key = i;
+	    if (i <1 || i > 7) {
+		fprintf(stderr, "%s: illegal frame skip `%s'\n",
+			prg, optarg);
+		exit(1);
+	    }		
+	    system_frameskip_key = i;
 	    break;
 	case 'g':
 	    system_colour = COLOURMODE_GREYSCALE;
@@ -258,7 +264,9 @@ main(int argc, char *argv[])
 	case 'P':
 	    i = atoi(optarg);
 	    if (i == 0) {
-		/* XXX: error message */
+		fprintf(stderr, "%s: unknown YUV mode `%s'\n",
+			prg, optarg);
+		exit(1);
 	    }
 	    else
 		comms_port = i;

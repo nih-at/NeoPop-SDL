@@ -99,7 +99,8 @@ main(int argc, char *argv[])
     }
 
     if (argc > 0) {
-	system_load_rom(argv[0]);
+	if (system_load_rom(argv[0]) == FALSE)
+	    exit(1);
     }
 
     reset();

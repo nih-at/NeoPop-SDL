@@ -2,6 +2,9 @@
 
 	* configure.ac: bump version to 0.2
 
+	* System_SDL/system_graphics.c (system_graphics_init): set
+	use_yuv_now to 0 if YUV is unusable.
+
 	* System_SDL/system_main.c (system_VBL): update screen if
 	frameskip_count > frame skip also.  fixes screen freeze when frame
 	skip is decremented.

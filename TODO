@@ -3,7 +3,6 @@ bugs:
 . convert DAC sound ourselves (SDL is broken)
 . comm: send and handle pause/unpause packets
 . comm support not working
-. fix segfault when YUV overlay is used by other application
 
 features:
 . auto frame skip rate

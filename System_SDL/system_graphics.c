@@ -1,4 +1,4 @@
-/* $NiH: system_graphics.c,v 1.24 2004/07/23 09:54:33 wiz Exp $ */
+/* $NiH: system_graphics.c,v 1.25 2004/07/23 13:16:39 dillo Exp $ */
 /*
   system_graphics.c -- graphics support functions
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -104,16 +104,16 @@ system_graphics_init(void)
 	if ((over=SDL_CreateYUVOverlay(SCREEN_WIDTH*2, SCREEN_HEIGHT,
 				       SDL_YUY2_OVERLAY, disp)) == NULL) {
 	    fprintf(stderr, "cannot create YUV overlay\n");
-	    use_yuv = 0;
+	    use_yuv = use_yuv_now = 0;
 	}
 	if (over->format != SDL_YUY2_OVERLAY || over->planes != 1) {
 	    fprintf(stderr, "unsupported YUV overlay format\n");
-	    use_yuv = 0;
+	    use_yuv = use_yuv_now = 0;
 	}
 	if (!use_software_yuv && !over->hw_overlay) {
 	    fprintf(stderr, "not using software YUV overlay\n");
 	    SDL_FreeYUVOverlay(over);
-	    use_yuv = 0;
+	    use_yuv = use_yuv_now = 0;
 	}
     }
 	    

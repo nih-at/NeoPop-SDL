@@ -1,4 +1,4 @@
-/* $NiH: system_input.c,v 1.4 2002/12/02 14:29:19 wiz Exp $ */
+/* $NiH: system_input.c,v 1.5 2002/12/03 13:09:37 wiz Exp $ */
 
 #include "neopop-SDL.h"
 
@@ -49,6 +49,9 @@ system_input_update(void)
 	    case SDLK_3:
 		graphics_mag_req = 3;
 		break;
+	    case SDLK_b:
+		graphics_mag_smooth = graphics_mag_smooth ? 0 : 1;
+		break;
 	    case SDLK_f:
 		system_graphics_fullscreen_toggle();
 		break;
@@ -65,7 +68,7 @@ system_input_update(void)
 		ram[0x6F82] |= INPUT_MASK_RIGHT;
 		break;
 	    case SDLK_m:
-		graphics_mag_smooth = graphics_mag_smooth ? 0 : 1;
+		mute = mute ? 0: 1;
 		break;
 	    case SDLK_LSHIFT:
 	    case SDLK_RSHIFT:

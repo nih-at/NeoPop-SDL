@@ -21,10 +21,12 @@ J     L
 Button A: A or SHIFT.
 Button B: S or CTRL.
 Option button: D or TAB.
- 
+
+M toggles music and sound effects during game.
+
 1, 2, and 3 set the magnication factor: 1 is normal (160x152),
 2 is doubled in both directions, 3 tripled (bigger == slower).
-M toggles between smooth and blocky magnification (defaults
+B toggles between blocky and smooth magnification (defaults
 to smooth); 2x magnification for smooth magnification (without
 blur) is AdvanceMAME Scale2x, 3x is homebrewn.
 

@@ -95,6 +95,7 @@ static void drawPattern(_u8 screenx, _u16 tile, _u8 tiley, _u16 mirror,
 {
 	//Get the data for th e "tiley'th" line of "tile".
 	_u16 data = *(_u16*)(ram + 0xA000 + (tile * 16) + (tiley * 2));
+	le16toh(data);
 
 	//Horizontal Flip
 	if (mirror)
@@ -134,6 +135,7 @@ static void gfx_draw_scroll1(_u8 depth)
 	for (tx = 0; tx < 32; tx++)
 	{
 		data16 = *(_u16*)(ram + 0x9000 + ((tx + ((line >> 3) << 5)) << 1));
+		le16toh(data16);
 		
 		//Draw the line of the tile
 		drawPattern((tx << 3) - scroll1x, data16 & 0x01FF, 
@@ -154,6 +156,7 @@ static void gfx_draw_scroll2(_u8 depth)
 	for (tx = 0; tx < 32; tx++)
 	{
 		data16 = *(_u16*)(ram + 0x9800 + ((tx + ((line >> 3) << 5)) << 1));
+		le16toh(data16);
 		
 		//Draw the line of the tile
 		drawPattern((tx << 3) - scroll2x, data16 & 0x01FF, 
@@ -178,6 +181,7 @@ void gfx_draw_scanline_colour(void)
 
 	//Window colour
 	data16 = *(_u16*)(ram + 0x83F0 + (oowc << 1));
+	le16toh(data16);
 	if (negative) data16 = ~data16;
 
 	//Top
@@ -211,6 +215,7 @@ void gfx_draw_scanline_colour(void)
 	//	if ((bgc & 0xC0) == 0x80)
 		{
 			data16 = *(_u16*)(_u8*)(ram + 0x83E0 + ((bgc & 7) << 1));
+			le16toh(data16);
 		}
 	//	else data16 = 0;
 
@@ -246,6 +251,7 @@ void gfx_draw_scanline_colour(void)
 			_u16 data16;
 			
 			data16 = *(_u16*)(ram + 0x8800 + (spr * 4));
+			le16toh(data16);
 			priority = (data16 & 0x1800) >> 11;
 
 			if (data16 & 0x0400) x = lastSpriteX + sx;	//Horizontal chain?
@@ -269,10 +275,13 @@ void gfx_draw_scanline_colour(void)
 			//In range?
 			if (scanline >= y && scanline <= y + 7)
 			{
+				_u16 pal_data = *(_u16*)(ram + 0x8200);
+				le16toh(pal_data);
+			
 				row = (scanline - y) & 7;	//Which row?
 				drawPattern((_u8)x, data16 & 0x01FF, 
 					(data16 & 0x4000) ? 7 - row : row, data16 & 0x8000,
-					(_u16*)(ram + 0x8200), ram[0x8C00 + spr] & 0xF, priority << 1); 
+					&pal_data, ram[0x8C00 + spr] & 0xF, priority << 1); 
 			}
 		}
 

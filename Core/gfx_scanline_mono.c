@@ -101,6 +101,7 @@ static void drawPattern(_u8 screenx, _u16 tile, _u8 tiley, _u16 mirror,
 {
 	//Get the data for th e "tiley'th" line of "tile".
 	_u16 data = *(_u16*)(ram + 0xA000 + (tile * 16) + (tiley * 2));
+	le16toh(data);
 
 	//Horizontal Flip
 	if (mirror)
@@ -140,6 +141,7 @@ static void gfx_draw_scroll1(_u8 depth)
 	for (tx = 0; tx < 32; tx++)
 	{
 		data16 = *(_u16*)(ram + 0x9000 + ((tx + ((line >> 3) << 5)) << 1));
+		le16toh(data16);
 		
 		//Draw the line of the tile
 		drawPattern((tx << 3) - scroll1x, data16 & 0x01FF, 
@@ -160,6 +162,7 @@ static void gfx_draw_scroll2(_u8 depth)
 	for (tx = 0; tx < 32; tx++)
 	{
 		data16 = *(_u16*)(ram + 0x9800 + ((tx + ((line >> 3) << 5)) << 1));
+		le16toh(data16);
 		
 		//Draw the line of the tile
 		drawPattern((tx << 3) - scroll2x, data16 & 0x01FF, 
@@ -259,6 +262,7 @@ void gfx_draw_scanline_mono(void)
 			_s16 y = sy;
 			
 			data16 = *(_u16*)(ram + 0x8800 + (spr * 4));
+			le16toh(data16);
 			priority = (data16 & 0x1800) >> 11;
 
 			if (data16 & 0x0400) x = lastSpriteX + sx;	//Horizontal chain?

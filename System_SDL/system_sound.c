@@ -1,4 +1,4 @@
-/* $NiH$ */
+/* $NiH: system_sound.c,v 1.11 2002/12/02 14:23:35 wiz Exp $ */
 
 #include <assert.h>
 #include "neopop-SDL.h"
@@ -70,9 +70,9 @@ void
 system_sound_shutdown(void)
 {
 
+    SDL_CloseAudio();
     free(sound_buffer);
     sound_buffer = NULL;
-    SDL_CloseAudio();
 
     return;
 }
@@ -97,12 +97,19 @@ system_sound_callback(void *userdata, Uint8 *stream, int len)
     assert(len != 0);
     assert(stream != NULL);
 
+    if (sound_buffer != NULL)
+	return;
+
     if (len > CHIPBUFFERLENGTH - sound_buffer_offset) {
 	fprintf(stderr, "warn: system_sound_callback: len from %d to %d\n",
 		len, CHIPBUFFERLENGTH - sound_buffer_offset);
 	len = CHIPBUFFERLENGTH - sound_buffer_offset;
     }
 
+#if 0
+    printf("%p stream, %p sb, %d sbo, %d len\n", stream, sound_buffer,
+	   sound_buffer_offset, len);
+#endif
     memcpy(stream, sound_buffer+sound_buffer_offset, len);
     sound_buffer_offset += len;
 }

@@ -1,3 +1,5 @@
+/* $NiH$ */
+
 #include "neopop.h"
 
 BOOL

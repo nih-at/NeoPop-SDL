@@ -1,7 +1,8 @@
+/* $NiH$ */
+
 #include <sys/stat.h>
 #include <errno.h>
 #include <string.h>
-#include <SDL.h>
 
 #include "neopop-SDL.h"
 

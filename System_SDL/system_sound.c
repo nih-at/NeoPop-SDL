@@ -1,6 +1,6 @@
-#include <assert.h>
-#include <SDL.h>
+/* $NiH$ */
 
+#include <assert.h>
 #include "neopop-SDL.h"
 
 #define CHIPBUFFERLENGTH	35280

@@ -163,8 +163,6 @@
 #include "system_language.h"
 #include "system_comms.h"
 
-#include "font8.h"
-
 #ifdef NEOPOP_DEBUG
 #include "Debugger/system_debug.h"
 #endif

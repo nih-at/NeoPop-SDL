@@ -37,10 +37,10 @@ system_VBL(void)
     system_graphics_update();
 
     system_input_update();
-#if 0
     if (mute == FALSE)
 	system_sound_update();
 
+#if 0
     /* XXX: do throttling */
     /* XXX: show frame rate */
 #endif
@@ -85,6 +85,9 @@ main(int argc, char *argv[])
     }
     atexit(SDL_Quit);
 
+    /* auto-select colour mode */
+    system_colour = COLOURMODE_AUTO;
+
     if (system_graphics_init() == FALSE) {
 	fprintf(stderr, "cannot create window: %s\n", SDL_GetError());
 	exit(1);
@@ -106,15 +109,10 @@ main(int argc, char *argv[])
     do {
 	i++;
 	emulate();
-	system_input_update();
     } while (do_exit == 0);
 
     system_rom_unload();
-#if 0
     system_sound_shutdown();
-    system_input_shutdown();
-    system_graphics_shutdown();
-#endif
 
     return 0;
 }

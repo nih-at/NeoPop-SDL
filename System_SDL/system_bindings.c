@@ -1,4 +1,4 @@
-/* $NiH: system_bindings.c,v 1.2 2004/06/23 17:19:04 dillo Exp $ */
+/* $NiH: system_bindings.c,v 1.3 2004/07/10 02:29:20 dillo Exp $ */
 /*
   system_bindings.c -- default key bindings
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -36,7 +36,7 @@ static struct binding builtin[] = {
     { NPKS_KEY(NPKS_SH_NONE, '3'),          NPEV_GUI_MAGNIFY_3 },
     { NPKS_KEY(NPKS_SH_NONE, 'm'),          NPEV_GUI_MUTE_TOGGLE },
     { NPKS_KEY(NPKS_SH_NONE, 'b'),          NPEV_GUI_SMOOTH_TOGGLE },
-    { NPKS_KEY(NPKS_SH_NONE, 'p'),	    NPEV_GUI_PAUSE_TOGGLE },
+    { NPKS_KEY(NPKS_SH_NONE, 'p'),          NPEV_GUI_PAUSE_TOGGLE },
     { NPKS_KEY(NPKS_SH_NONE, SDLK_PAUSE),   NPEV_GUI_PAUSE_TOGGLE },
     { NPKS_KEY(NPKS_SH_NONE, 'f'),          NPEV_GUI_FULLSCREEN_TOGGLE },
     { NPKS_KEY(NPKS_SH_ALT , SDLK_RETURN),  NPEV_GUI_FULLSCREEN_TOGGLE },

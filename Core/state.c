@@ -48,15 +48,17 @@
 #include "interrupt.h"
 #include "dma.h"
 #include "mem.h"
+#include "chunk.h"
 
 //=============================================================================
 
-static void read_state_0050(char* filename);
+static BOOL read_state_0050(const char* filename);
+static BOOL read_state_0060(const char* filename);
 
 //-----------------------------------------------------------------------------
 // state_restore()
 //-----------------------------------------------------------------------------
-void state_restore(char* filename)
+BOOL state_restore(const char* filename)
 {
 	_u16 version;
 
@@ -64,11 +66,18 @@ void state_restore(char* filename)
 	{
 		switch(version)
 		{
-		case 0x0050:	read_state_0050(filename);	break;
+		case 0x0050:
+			return read_state_0050(filename);
 
+#ifdef MSB_FIRST
+		case 0x0060:
+#else
+		case 0x6000:
+#endif
+			return read_state_0060(filename);
 		default:
 			system_message(system_get_string(IDS_BADSTATE));
-			return;
+			return FALSE;
 		}
 
 #ifdef NEOPOP_DEBUG
@@ -76,6 +85,8 @@ void state_restore(char* filename)
 		system_debug_refresh();
 #endif
 	}
+
+	return FALSE;
 }
 
 //=============================================================================
@@ -83,69 +94,30 @@ void state_restore(char* filename)
 //-----------------------------------------------------------------------------
 // state_store()
 //-----------------------------------------------------------------------------
-void state_store(char* filename)
+BOOL state_store(const char* filename)
 {
-	NEOPOPSTATE0050	state;
-	int i,j;
+	FILE *fp;
+	int ret, options;
 
-	//Build a state description
-	state.valid_state_id = 0x0050;
-	memcpy(&state.header, rom_header, sizeof(RomHeader));
+	/* XXX: user settable */
+	options = OPT_ROMH;
+	
+	if ((fp=fopen(filename, "wb")) == NULL)
+		return FALSE;
+	
+	ret = write_header(fp);
+	ret = write_SNAP(fp, options);
+	ret = write_EOD(fp);
 
-	state.eepromStatusEnable = eepromStatusEnable;
+	if (fclose(fp) < 0)
+		ret = FALSE;
 
-	//TLCS-900h Registers
-	state.pc = pc;
-	state.sr = sr;
-	state.f_dash = f_dash;
-
-	for (i = 0; i < 4; i++)
-	{
-		state.gpr[i] = gpr[i];
-		for (j = 0; j < 4; j++)
-			state.gprBank[i][j] = gprBank[i][j];
-	}
-
-	//Z80 Registers
-	memcpy(&state.Z80_regs, &Z80_regs, sizeof(Z80));
-
-	//Sound Chips
-	memcpy(&state.toneChip, &toneChip, sizeof(SoundChip));
-	memcpy(&state.noiseChip, &noiseChip, sizeof(SoundChip));
-
-	//Memory
-	memcpy(&state.ram, ram, 0xC000);
-
-	//Timers
-	state.timer_hint = timer_hint;
-
-	for (i = 0; i < 4; i++)	//Up-counters
-		state.timer[i] = timer[i];
-
-	state.timer_clock0 = timer_clock0;
-	state.timer_clock1 = timer_clock1;
-	state.timer_clock2 = timer_clock2;
-	state.timer_clock3 = timer_clock3;
-
-	//DMA
-	for (i = 0; i < 4; i++)
-	{
-		state.dmaS[i] = dmaS[i];
-		state.dmaD[i] = dmaD[i];
-		state.dmaC[i] = dmaC[i];
-		state.dmaM[i] = dmaM[i];
-	}
-
-#ifdef NEOPOP_DEBUG
-	system_debug_message("Saving State ...");
-#endif
-
-	system_io_state_write(filename, (_u8*)&state, sizeof(NEOPOPSTATE0050));
+	return ret;
 }
 
 //=============================================================================
 
-static void read_state_0050(char* filename)
+static BOOL read_state_0050(const char* filename)
 {
 	NEOPOPSTATE0050	state;
 	int i,j;
@@ -156,7 +128,7 @@ static void read_state_0050(char* filename)
 		if (memcmp(rom_header, &state.header, sizeof(RomHeader)) != 0)
 		{
 			system_message(system_get_string(IDS_WRONGROM));
-			return;
+			return FALSE;
 		}
 
 		//Apply state description
@@ -207,7 +179,36 @@ static void read_state_0050(char* filename)
 
 		//Memory
 		memcpy(ram, &state.ram, 0xC000);
+		return TRUE;
 	}
+
+	return FALSE;
+}
+
+static BOOL read_state_0060(const char* filename)
+{
+	FILE *fp;
+	_u32 tag, size;
+	
+	if ((fp=fopen(filename, "rb")) == NULL)
+		return FALSE;
+
+	if (read_header(fp) != TRUE) {
+		fclose(fp);
+		return FALSE;
+	}
+
+	if (read_chunk(fp, &tag, &size) != TRUE) {
+	    fclose(fp);
+	    return FALSE;
+	}
+
+	if (tag != TAG_SNAP) {
+	    fclose(fp);
+	    return FALSE;
+	}
+
+	return read_SNAP(fp, size);
 }
 
 //=============================================================================

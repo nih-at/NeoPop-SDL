@@ -17,7 +17,7 @@ man_MANS=NeoPop-SDL.6 neopoprc.5
 noinst_HEADERS=NeoPop-SDL.h system_hq2x.h system_hq3x.h system_hq_intern.h \
 	unzip.h font.xpm
 
-nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c dma.c flash.c gfx.c \
+nodist_NeoPop_SDL_SOURCES= bios.c biosHLE.c chunk.c dma.c flash.c gfx.c \
 	gfx_scanline_mono.c gfx_scanline_colour.c interrupt.c mem.c neopop.c \
 	rom.c sound.c state.c Z80_interface.c \
 	TLCS900h_disassemble_extra.c TLCS900h_disassemble_reg.c \

@@ -191,6 +191,7 @@ void updateTimers(_u8 cputicks)
 			frameskip_count = (frameskip_count + 1) % system_frameskip_key;
 
 			ram[0x8010] = 0x40;	//Character Over / Vblank Status
+			frame_count++;
 			system_VBL();	//Update the screen
 
 			//Vertical Interrupt? (Confirmed IRQ Level)

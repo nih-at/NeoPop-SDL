@@ -105,7 +105,7 @@
 #define __NEOPOP__
 //=============================================================================
 
-#define NEOPOP_VERSION	"v0.71"
+#define NEOPOP_VERSION	"v0.71a"
 
 #ifdef NEOPOP_DEBUG
 #define PROGRAM_NAME "NeoPop (D)"
@@ -229,6 +229,9 @@ RomHeader;
 	extern RomInfo rom;
 
 	extern RomHeader* rom_header;
+
+	/* number of frames since start of emulation */
+	extern _u32 frame_count;
 
 	// false = Japanese.
 	extern BOOL language_english;
@@ -355,8 +358,8 @@ RomHeader;
 // Core <--> System-IO Interface
 //-----------------------------------------------------------------------------
 
-	void state_restore(char* filename);
-	void state_store(char* filename);
+	BOOL state_restore(const char* filename);
+	BOOL state_store(const char* filename);
 
 		//=========================================
 

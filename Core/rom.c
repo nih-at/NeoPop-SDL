@@ -256,11 +256,14 @@ void rom_loaded(void)
 	}
 	rom.name[i] = 0;
 
-	rom_hack();	//Apply a hack if reuqired!
+	rom_hack();	//Apply a hack if required!
 
 	rom_display_header();	//Show the header (debugger only)
 
 	flash_read();
+
+	/* initialize frame counter */
+	frame_count = 0;
 }
 
 //-----------------------------------------------------------------------------

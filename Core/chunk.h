@@ -19,6 +19,12 @@
 #define OPT_ROMH	0x0002
 #define OPT_FLSH	0x0004
 #define OPT_TIME	0x0008
+#define OPT_RAM		0x0010
+#define OPT_REGS	0x0020
+
+BOOL read_chunk(FILE *, _u32 *, _u32 *);
+BOOL read_header(FILE *);
+BOOL read_SNAP(FILE *, _u32);
 
 BOOL write_header(FILE *);
 BOOL write_EOD(FILE *);

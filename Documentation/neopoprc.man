@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: neopoprc.mdoc,v 1.8 2004/07/24 00:19:55 wiz Exp 
-.\" $NiH: neopoprc.mdoc,v 1.8 2004/07/24 00:19:55 wiz Exp $
+.\" from NiH: neopoprc.mdoc,v 1.9 2004/07/25 10:58:42 wiz Exp 
+.\" $NiH: neopoprc.mdoc,v 1.9 2004/07/25 10:58:42 wiz Exp $
 .\"
 .\" Copyright (c) 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -37,7 +37,7 @@ neopoprc \- NeoPop-SDL config file
 The
 .B neopoprc
 file contains the configuration of
-NeoPop-SDL(1).
+NeoPop-SDL(6).
 .PP
 Lines starting with a hash mark
 .Pq Sq #
@@ -93,7 +93,7 @@ Defaults to
 \fBcomms-mode\fR
 .Bq enum
 Describes the role
-NeoPop-SDL(1)
+NeoPop-SDL(6)
 should play with regard to network play:
 .RS
 .TP 11
@@ -158,7 +158,7 @@ Not used in YUV fullscreen mode.
 .TP 13
 \fBmap\fR
 Assign a
-NeoPop-SDL(1)
+NeoPop-SDL(6)
 event to a key.
 For details, please see the
 BINDINGS
@@ -400,7 +400,7 @@ flash-dir ~/.neopop/flash
 state-dir ~/.neopop/states
 .PP
 .SH "SEE ALSO"
-NeoPop-SDL(1)
+NeoPop-SDL(6)
 .PP
 \fIhttp://www.nih.at/NeoPop-SDL/\fR
 .SH "AUTHORS"

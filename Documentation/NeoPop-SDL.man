@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: NeoPop-SDL.mdoc,v 1.18 2004/07/25 10:47:27 wiz Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.18 2004/07/25 10:47:27 wiz Exp $
+.\" from NiH: NeoPop-SDL.mdoc,v 1.19 2004/07/25 10:58:42 wiz Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.19 2004/07/25 10:58:42 wiz Exp $
 .\"
 .\" Copyright (c) 2003, 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -30,7 +30,7 @@
 .\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 .\" OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
-.TH NEOPOP-SDL 1 "July 25, 2004" NiH
+.TH NEOPOP-SDL 6 "July 25, 2004" NiH
 .SH "NAME"
 NeoPop-SDL \- NeoGeo Pocket (Color) emulator
 .SH "SYNOPSIS"

@@ -37,10 +37,9 @@ system_VBL(void)
     system_graphics_update();
 
     system_input_update();
-#if 0
+
     if (mute == FALSE)
 	system_sound_update();
-#endif
     
 #if 0
     /* XXX: do throttling */
@@ -116,7 +115,7 @@ main(int argc, char *argv[])
     do {
 	i++;
 	emulate();
-	if (i == 1000) {
+	if (i == 200) {
 	    SDL_Delay(1);
 	    i = 0;
 	}

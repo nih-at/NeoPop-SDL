@@ -114,7 +114,7 @@ void interrupt(_u8 index)
 		setStatusIFF(((sr & 0x7000) >> 12) + 1);
 
 	//Access the interrupt vector table to find the jump destination
-	pc = le16toh(*(_u32*)(ram + 0x6FB8 + (index * 4)));
+	pc = le32toh(*(_u32*)(ram + 0x6FB8 + (index * 4)));
 
 #ifdef NEOPOP_DEBUG
 //	if (index != 5 && index != 7 && index != 10)

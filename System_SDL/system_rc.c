@@ -1,4 +1,4 @@
-/* $NiH: system_rc.c,v 1.11 2004/07/22 10:31:20 dillo Exp $ */
+/* $NiH: system_rc.c,v 1.12 2004/07/22 12:25:08 dillo Exp $ */
 /*
   system_rc.c -- config file handling
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -359,20 +359,38 @@ system_rc_read_file(const char *filename)
 
 		p += strspn(p, " \t");
 		if (p[0] != '=') {
-		    printf("missing = in map [%s]", p);
+		    rc_error("missing = in map [%s]", p);
 		    break;
 		}
 		p++;
 		
 		if ((ev=system_npev_parse(p, &p)) < 0) {
-		    printf("cannot parse event [%s]", p);
+		    rc_error("cannot parse event [%s]", p);
 		    break;
 		}
 		
 		bindings[k] = ev;
 	    }
 	    break;
-	    
+
+	case NPRC_OSD_COLOUR:
+	    p += strspn(p, " \t");
+	    switch (strspn(p, "0123456789abcdefABCDEF")) {
+	    case 3:
+		osd_colour = strtol(p, &p, 16);
+		break;
+	    case 6:
+		i = strtol(p, &p, 16);
+		i = ((i>>12)&0xf00) | ((i>>8)&0xf0) | (i&0xf);
+		break;
+	    default:
+		i = -1;
+		rc_error("cannot parse OSD colour [%s]", p);
+	    }
+	    if (i != -1)
+		osd_colour = ((i&0xf00)>>8) | (i&0x0f0) | ((i&0x00f)<<8);
+	    break;
+
 	case NPRC_SCREENSHOT_DIR:
 	    p += strspn(p, " \t");
 	    free(screenshot_dir);

@@ -1,4 +1,4 @@
-/* $NiH: system_main.c,v 1.47 2004/07/22 15:23:10 dillo Exp $ */
+/* $NiH: system_main.c,v 1.48 2004/07/23 13:16:39 dillo Exp $ */
 /*
   system_main.c -- main program
   Copyright (C) 2002-2004 Thomas Klausner and Dieter Baron
@@ -205,6 +205,8 @@ main(int argc, char *argv[])
     use_rom_name = FALSE;
     /* state save slot */
     state_slot = 0;
+    /* colour to display OSD in */
+    osd_colour = 0xfff;
 
     /* initialize SDL */
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0) {

@@ -1,4 +1,4 @@
-/* $NiH: system_osd.c,v 1.4 2004/07/22 12:13:07 dillo Exp $
+/* $NiH: system_osd.c,v 1.5 2004/07/22 14:10:02 dillo Exp $
 
   system_osd.c -- on-screen display
   Copyright (C) 2004 Thomas Klausner and Dieter Baron
@@ -29,17 +29,27 @@
 
 #include "NeoPop-SDL.h"
 
+int osd_colour;
+
 #define OSD_DISPLAY_SECONDS	2	/* seconds to display OSD message */
 
-#define FONT_WIDTH	8	/* char width in pixels */
-#define FONT_HEIGHT	8	/* char height in pixels */
+#define FONT_WIDTH	9	/* char width in pixels */
+#define FONT_HEIGHT	9	/* char height in pixels */
 #define FONT_NCHAR	64	/* number of chars */
 #define CHAR_SIZE	(FONT_WIDTH*FONT_HEIGHT)
 
+#define OSD_BORDER	0x000
+
+#define BLEND(c1, c2, c3, a, b, s)					\
+	((( (((c1)>>s)&0xf) * (a)					\
+	  + (((c2)>>s)&0xf) * (b)					\
+	  + (((c3)>>s)&0xf) * (0x100-a-b) ) & 0xf00) >> (8-(s)))
+
 #include "font.xpm"
 
-static _u16 font[CHAR_SIZE*FONT_NCHAR];
-
+static _u8 font_c[CHAR_SIZE*FONT_NCHAR];
+static _u8 font_b[CHAR_SIZE*FONT_NCHAR];
+static int font_w[FONT_NCHAR];
 static int font_usable;
 
 static char osd[SCREEN_WIDTH/FONT_WIDTH+1];
@@ -54,16 +64,19 @@ static _u16 pause_line[SCREEN_WIDTH*FONT_HEIGHT];
 #define DARKEN(x)	(((x)>>1) & 0x0777)
 
 static void display_string(int, int, const char *);
+static int string_width(const char *);
 
 
 
 int
 system_osd_init(void)
 {
-    _u16 pal[128];
+    _u8 pal_b[128], pal_c[128];
+    int trans;
     int w, h;
-    int i, n, pixel;
+    int i, n;
     int x, y, c;
+    int off, pixel;
     char *p;
 
     font_usable = FALSE;
@@ -72,27 +85,47 @@ system_osd_init(void)
     h = strtol(p, &p, 10);
     n = strtol(p, &p, 10);
 
-    if (w%FONT_WIDTH || h%FONT_HEIGHT || w*h != CHAR_SIZE*FONT_NCHAR)
+    if (w%FONT_WIDTH || h%FONT_HEIGHT || w*h != CHAR_SIZE*FONT_NCHAR) {
+	printf("font has wrong dimensions\n");
 	return FALSE;
-
-    if (strtol(p, &p, 10) != 1)
-	return FALSE;
-
-    for (i=0; i<n; i++) {
-	if ((p=strrchr(font_xpm[i+1], '#')) == NULL)
-	    return FALSE;
-	    
-	pixel = strtol(p+1, NULL, 16);
-	pal[(int)font_xpm[i+1][0]] = ((pixel&0xff0000)>>12)
-	    | ((pixel&0xff00)>>8)
-	    | ((pixel&0xff)>>4);
     }
+
+    if (strtol(p, &p, 10) != 1) {
+	printf("font uses multi-char pixels\n");
+	return FALSE;
+    }
+
+    trans = -1;
+    for (i=0; i<n; i++) {
+	c = font_xpm[i+1][0];
+
+	if ((p=strrchr(font_xpm[i+1], '#')) == NULL)
+	    trans = c;
+	else {
+	    pixel = strtol(p+1, NULL, 16);
+	    pal_c[c] = pixel&0xff;
+	    pal_b[c] = (pixel>>8)&0xff;
+	}
+	if (pal_b[c] + pal_c[c] > 0x100)
+	    pal_b[c] = 0x100 - pal_c[c];
+    }
+
+    for (c=0; c<FONT_NCHAR; c++)
+	font_w[c] = FONT_WIDTH;
 
     for (y=0; y<h; y++) {
 	for (x=0; x<w; x++) {
 	    c = (y/FONT_HEIGHT) * (w/FONT_WIDTH) + (x/FONT_WIDTH);
-	    font[c*CHAR_SIZE + (y%FONT_HEIGHT)*FONT_HEIGHT + x%FONT_WIDTH]
-		= pal[(int)font_xpm[y+n+1][x]];
+	    off = c*CHAR_SIZE + (y%FONT_HEIGHT)*FONT_HEIGHT + x%FONT_WIDTH;
+	    pixel = font_xpm[y+n+1][x];
+	    if (pixel == trans) {
+		if ((x%FONT_WIDTH) < font_w[c])
+		    font_w[c] = x%FONT_WIDTH;
+	    }
+	    else {
+		font_c[off] = pal_c[pixel];
+		font_b[off] = pal_b[pixel];
+	    }
 	}
     }
 
@@ -178,7 +211,7 @@ system_osd_pause(int which)
 	   SCREEN_WIDTH*sizeof(_u16)*FONT_HEIGHT);
     
     s = (which & PAUSED_LOCAL) ? "PAUSED" : "REMOTE PAUSED";
-    display_string((SCREEN_WIDTH-strlen(s)*FONT_WIDTH)/2, PAUSE_LINE, s);
+    display_string((SCREEN_WIDTH-string_width(s))/2, PAUSE_LINE, s);
 
     system_graphics_update();
 }
@@ -190,14 +223,39 @@ display_string(int x0, int y0, const char *s)
 {
     int i, x, y;
     _u16 *base;
+    int alpha_c, alpha_b, c;
 
     base = cfb + SCREEN_WIDTH*y0+x0;
     
     for (i=0; s[i]; i++) {
 	for (y=0; y<FONT_HEIGHT; y++)
-	    for (x=0; x<FONT_WIDTH; x++)
-		base[y*SCREEN_WIDTH+x]
-		    = font[(s[i]-32)*CHAR_SIZE+y*FONT_HEIGHT+x];
-	base += FONT_WIDTH;
+	    for (x=0; x<font_w[s[i]-32]; x++) {
+		c = base[y*SCREEN_WIDTH+x];
+		alpha_c = font_c[(s[i]-32)*CHAR_SIZE+y*FONT_WIDTH+x];
+		if (alpha_c == 0xff)
+		    alpha_c = 0x100;
+		alpha_b = font_b[(s[i]-32)*CHAR_SIZE+y*FONT_WIDTH+x];
+		if (alpha_b == 0xff)
+		    alpha_b = 0x100;
+		base[y*SCREEN_WIDTH+x] =
+		    BLEND(osd_colour, OSD_BORDER, c, alpha_c, alpha_b, 8)
+		    | BLEND(osd_colour, OSD_BORDER, c, alpha_c, alpha_b, 4)
+		    | BLEND(osd_colour, OSD_BORDER, c, alpha_c, alpha_b, 0);
+	    }
+	base += font_w[s[i]-32]-1;
     }
+}
+
+
+
+static int
+string_width(const char *s)
+{
+    int w;
+
+    w = 0;
+    for (; *s; s++)
+	w += font_w[*s-32]-1;
+
+    return w+1;
 }

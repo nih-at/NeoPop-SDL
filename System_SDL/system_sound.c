@@ -5,8 +5,7 @@
 
 #define CHIPBUFFERLENGTH	35280
 #define DACBUFFERLENGTH		3200
-/* XXX: True (for both LE and BE)? */
-#define DEFAULT_FORMAT		AUDIO_U16LSB
+#define DEFAULT_FORMAT		AUDIO_U16SYS
 #define DEFAULT_SAMPLERATE	44100
 #define DEFAULT_CHANNELS	1
 /* following may need to be set higher (power of two?) */

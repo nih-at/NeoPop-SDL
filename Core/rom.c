@@ -103,19 +103,19 @@ static void rom_hack(void)
 	//=============================
 	// GRAPHICS HACKS
 	//=============================
-	if (MATCH_CATALOG(89, 5)||	//Sonic
-		MATCH_CATALOG(149, 36)||	//LastBlade(US)
-		MATCH_CATALOG(100, 31)||	//LastBlade(J)
-		MATCH_CATALOG(2, 8)||		//NG.Cup
-		MATCH_CATALOG(57, 14)||	//NG.Cup+Colour
-		MATCH_CATALOG(133, 8)||	//Ogre
-		MATCH_CATALOG(148, 4)||	//Rockman
-		MATCH_CATALOG(105, 21)||	//SNKvsCAPCOM
-		MATCH_CATALOG(48, 26)||	//Sam.Shodown2
-		MATCH_CATALOG(102, 241)||	//Wrestle-Beta
-		MATCH_CATALOG(102, 2)||	//Pro-Wrestle
-		MATCH_CATALOG(1, 10)||	//KOF-R1
-		MATCH_CATALOG(35, 21))	//KOF-R2
+	if (MATCH_CATALOG(89, 5) ||		//Sonic
+		MATCH_CATALOG(149, 36) ||	//LastBlade(US)
+		MATCH_CATALOG(100, 31) ||	//LastBlade(J)
+		MATCH_CATALOG(2, 8) ||		//NG.Cup
+		MATCH_CATALOG(57, 14) ||	//NG.Cup+Colour
+		MATCH_CATALOG(133, 8) ||	//Ogre
+		MATCH_CATALOG(148, 4) ||	//Rockman
+		MATCH_CATALOG(105, 21) ||	//SNKvsCAPCOM
+		MATCH_CATALOG(48, 26) ||	//Sam.Shodown2
+		MATCH_CATALOG(102, 241) ||	//Wrestle-Beta
+		MATCH_CATALOG(102, 2) ||	//Pro-Wrestle
+		MATCH_CATALOG(1, 10) ||		//KOF-R1
+		MATCH_CATALOG(35, 21))		//KOF-R2
 	{
 		gfx_hack = TRUE;
 #ifdef NEOPOP_DEBUG

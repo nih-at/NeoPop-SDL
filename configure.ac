@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.54)
-AC_REVISION([$NiH: configure.ac,v 1.20 2004/08/07 13:41:25 wiz Exp $])
+AC_REVISION([$NiH: configure.ac,v 1.21 2004/08/08 16:56:55 dillo Exp $])
 AC_INIT([NeoPop-SDL],[0.2a], [wiz@danbala.tuwien.ac.at], [NeoPop-SDL])
 AC_CONFIG_SRCDIR([System_SDL/system_main.c])
 AC_CONFIG_HEADERS([System_SDL/config.h])
@@ -15,7 +15,7 @@ AC_PROG_CC
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_STRUCT_TM
-AC_C_BIGENDIAN(CFLAGS="${CFLAGS} -DMSB_FIRST", CFLAGS="${CFLAGS} -DLSB_FIRST")
+AC_C_BIGENDIAN([CFLAGS="${CFLAGS} -DMSB_FIRST"], [CFLAGS="${CFLAGS} -DLSB_FIRST"])
 
 # Checks for header files.
 AC_HEADER_STDC

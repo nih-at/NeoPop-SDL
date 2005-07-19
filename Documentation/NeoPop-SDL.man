@@ -1,6 +1,6 @@
 .\" Converted with mdoc2man 0.2
-.\" from NiH: NeoPop-SDL.mdoc,v 1.21 2004/07/25 11:10:25 wiz Exp 
-.\" $NiH: NeoPop-SDL.mdoc,v 1.21 2004/07/25 11:10:25 wiz Exp $
+.\" from NiH: NeoPop-SDL.mdoc,v 1.23 2004/07/26 14:51:50 wiz Exp 
+.\" $NiH: NeoPop-SDL.mdoc,v 1.23 2004/07/26 14:51:50 wiz Exp $
 .\"
 .\" Copyright (c) 2003, 2004 Thomas Klausner and Dieter Baron.
 .\" All rights reserved.
@@ -48,9 +48,9 @@ NeoPop-SDL \- NeoGeo Pocket (Color) emulator
 is the SDL port of NeoPop, a portable NeoGeo Pocket emulator.
 It supports black\*[Am]white and color games, game state saving,
 screenshots (BMP and PNG), sound and music, double- and
-triple-size both in software and hardware scaling as well as
-full-screen-modes, joysticks and keyboard input, and reading from
-ZIP files.
+triple-size scaling (both in software and hardware),
+full-screen-mode, joysticks and keyboard input, and the ability
+to read from ZIP files.
 .PP
 All options can be specified in the config file,
 neopoprc(5),

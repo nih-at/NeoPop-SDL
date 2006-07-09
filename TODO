@@ -1,4 +1,5 @@
 bugs:
+. fix build with ffmpeg-0.4.9pre1 (av_write_frame signature change)
 . get exactly one frame's worth of DAC data each frame
 . convert DAC sound ourselves (SDL is broken)
 . comm: send and handle pause/unpause packets

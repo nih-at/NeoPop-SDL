@@ -1,3 +1,4 @@
+- adapt to ffmpeg av_write_frame signature change (now only 2 args)
 bugs:
 . fix build with ffmpeg-0.4.9pre1 (av_write_frame signature change)
 . get exactly one frame's worth of DAC data each frame

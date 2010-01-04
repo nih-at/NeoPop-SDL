@@ -134,6 +134,7 @@ void HQ3x(const Uint8 *srcPtr, Uint32 srcPitch, Uint8 *dstPtr, Uint32 dstPitch, 
 		HQ3x_Altivec(srcPtr, srcPitch, dstPtr, dstPitch, width, height);
 	else
 		HQ3x_c(srcPtr, srcPitch, dstPtr, dstPitch, width, height);
+	}
 }
 
 #endif /* HAS_ALTIVEC */

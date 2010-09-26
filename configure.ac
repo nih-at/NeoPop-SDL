@@ -58,7 +58,7 @@ else
 	XPKG_CONFIG_PATH="$PKG_CONFIG_PATH"
 	PKG_CONFIG_PATH="$with_png:$with_png/lib/pkgconfig"
     fi
-    PKG_CHECK_MODULES(PNG, libpng12 >= 1.2.0,
+    PKG_CHECK_MODULES(PNG, libpng >= 1.2.0,
 	[ # png library found
 	CPPFLAGS="$CPPFLAGS $PNG_CFLAGS"
 	LDFLAGS="$LDFLAGS $PNG_LDFLAGS" ],

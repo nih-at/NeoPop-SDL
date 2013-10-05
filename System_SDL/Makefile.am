@@ -28,7 +28,7 @@ NeoPop_SDL_SOURCES=system_bindings.c system_comms.c system_graphics.c \
 	system_input.c system_io.c system_language.c system_video.c \
 	system_main.c system_names.c system_osd.c system_rc.c system_rom.c \
 	system_screenshot.c system_sound.c unzip.c
-BUILT_SOURCES=system_names.c
+DISTCLEANFILES=system_names.c
 
 system_names.c: mknames.sh NeoPop-SDL.h
 	sh ${srcdir}/mknames.sh ${srcdir}/NeoPop-SDL.h > $@.$$$$ && \

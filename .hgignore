@@ -32,3 +32,9 @@
 ^stamp-h1$
 ^test-driver$
 ~$
+^System_SDL/NeoPop-SDL$
+^System_SDL/config.h$
+^System_SDL/config.h.in$
+^System_SDL/stamp-h1$
+^Documentation/NeoPop-SDL.6$
+^System_SDL/system_names.c$

@@ -1,8 +1,10 @@
 SDL port of NeoPop, a portable SNK NeoGeo Pocket emulator.
 
+Development of NeoPop-SDL has stopped.
+
 For installation, you'll need [SDL (Simple DirectMedia Layer)](https://www.libsdl.org/).
 
-If you want to save screenshots in PNG format, you'll need [libpng](http://libpng.org/pub/png/libpng.html)
+If you want to save screenshots in PNG format, you'll need [libpng](http://libpng.org/pub/png/libpng.html).
 
 To read ROMs from zips, you should have [zlib](http://www.zlib.net/) installed.
 
@@ -16,12 +18,10 @@ contains a known-bugs list, also from the original NeoPop source
 distribution; and [recording.format.txt](Documentation/recording.format.txt) describes the save state
 format NeoPop-SDL is using.
 
-Development of NeoPop-SDL has stopped.
-
 You can find the NeoPop-SDL homepage at
 >	https://www.nih.at/NeoPop-SDL/
 
-and an archive of the NeoPop core homepage at (archive.org)[https://web.archive.org/web/20120829133920/http://www.emuxhaven.net/~neopop/].
+and an archive of the NeoPop core homepage at [archive.org](https://web.archive.org/web/20120829133920/http://www.emuxhaven.net/~neopop/).
 
 If you package this program, please reference
 >       https://www.nih.at/NeoPop-SDL/

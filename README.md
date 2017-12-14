@@ -28,4 +28,4 @@ If you package this program, please reference
 
 as the master distribution site.
 
-Send comments, bug reports, and praise to nih@giga.or.at.
+Send comments, bug reports, and praise to neopop-sdl@nih.at.

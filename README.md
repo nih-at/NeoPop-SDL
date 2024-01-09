@@ -27,5 +27,3 @@ If you package this program, please reference
 >       https://www.nih.at/NeoPop-SDL/
 
 as the master distribution site.
-
-Send comments, bug reports, and praise to neopop-sdl@nih.at.
